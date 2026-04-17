@@ -102,61 +102,59 @@ class ParketSEO extends HTMLElement {
   }
 }
 
-// ── Global Lightbox Logic ──
-window.addEventListener('DOMContentLoaded', () => {
-  // Inject zoom-in cursor style for all carousels
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .carousel-slide { cursor: zoom-in !important; }
-  `;
-  document.head.appendChild(style);
-
-  // Inject DOM element safely
+// ── Global Lightbox Logic (Vanilla CSS) ──
+window.addEventListener('load', () => {
   const lbContainer = document.createElement('div');
   lbContainer.innerHTML = `
-    <div id="parket-global-lightbox" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-3xl hidden items-center justify-center transition-all duration-500 opacity-0 cursor-zoom-out" style="display: none;">
-      <img id="parket-lightbox-img" class="max-w-[95vw] max-h-[95vh] object-contain transform scale-90 transition-transform duration-700 select-none shadow-2xl" src="" alt="View" />
+    <style>
+      .carousel-slide { cursor: zoom-in !important; cursor: -webkit-zoom-in !important; }
+      #parket-lb-overlay {
+        position: fixed; inset: 0; z-index: 999999;
+        background: rgba(0,0,0,0.95);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+        cursor: zoom-out; cursor: -webkit-zoom-out;
+      }
+      #parket-lb-overlay.lb-active { opacity: 1; visibility: visible; }
+      #parket-lb-img {
+        max-width: 95vw; max-height: 95vh; object-fit: contain;
+        transform: scale(0.9);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); user-select: none;
+      }
+      #parket-lb-overlay.lb-active #parket-lb-img { transform: scale(1); }
+    </style>
+    <div id="parket-lb-overlay">
+      <img id="parket-lb-img" src="" alt="Zoom detalhe">
     </div>
   `;
   document.body.appendChild(lbContainer);
 
-  const lb = document.getElementById('parket-global-lightbox');
-  const img = document.getElementById('parket-lightbox-img');
+  const lb = document.getElementById('parket-lb-overlay');
+  const img = document.getElementById('parket-lb-img');
   
-  lb.addEventListener('click', () => {
-    lb.style.opacity = '0';
-    img.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-      lb.style.display = 'none';
-    }, 500);
-  });
+  lb.addEventListener('click', () => { lb.classList.remove('lb-active'); });
 
   window.openParketLightbox = (src) => {
     img.src = src;
-    lb.style.display = 'flex';
-    // Trigger paint reflow for animation
-    void lb.offsetWidth;
-    lb.style.opacity = '1';
-    img.style.transform = 'scale(1)';
+    requestAnimationFrame(() => lb.classList.add('lb-active'));
   };
   
-  // Attach delegated click listener to trigger zoom without modifying separate HTML files
   document.body.addEventListener('click', (e) => {
     const slide = e.target.closest('.carousel-slide');
-    // We only want to zoom the ACTIVE slide, so arrows/background don't accidentally trigger it. 
-    // And actually, if you click the arrows, e.target is .material-symbols-outlined which is inside .carousel-arrow.
-    const isArrow = e.target.closest('.carousel-arrow');
-    if (slide && !isArrow) {
-      const imgTarget = slide.querySelector('img');
-      if (imgTarget && imgTarget.src) window.openParketLightbox(imgTarget.src);
+    const arrow = e.target.closest('.carousel-arrow');
+    
+    if (slide && !arrow) {
+      e.stopPropagation();
+      const slideImg = slide.querySelector('img');
+      if (slideImg && slideImg.src) window.openParketLightbox(slideImg.src);
     }
   });
 
-  // Close with Esc key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lb.style.display === 'flex') {
-      lb.click();
-    }
+    if (e.key === 'Escape') lb.classList.remove('lb-active');
   });
 });
 
