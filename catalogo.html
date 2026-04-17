@@ -421,7 +421,7 @@
           const info = CARD_INFO[n];
           const el = document.createElement('a');
           el.href = info ? `${info.folder}.html` : '#';
-          el.className = 'scene-card block group relative overflow-hidden rounded-xl liquid-glass flex-1 min-h-[307px] cursor-pointer';
+          el.className = 'scene-card block group relative overflow-hidden rounded-xl liquid-glass flex-1 cursor-pointer';
           el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-70" src="${src}${BUST}">${labelHTML(n, 'bottom')}`;
           return el;
         }
