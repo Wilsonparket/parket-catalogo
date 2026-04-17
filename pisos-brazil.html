@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html class="dark" lang="pt-BR">
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Parket - Brazil</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -18,11 +21,16 @@
     }
   </script>
   <style>
-    body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
 
     /* ── Navigation ── */
     .nav-blur {
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.6);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
@@ -69,7 +77,10 @@
       scroll-behavior: smooth;
       padding: 4px 0;
     }
-    .thumb-track::-webkit-scrollbar { display: none; }
+
+    .thumb-track::-webkit-scrollbar {
+      display: none;
+    }
 
     .thumb {
       flex-shrink: 0;
@@ -82,20 +93,34 @@
       opacity: 0.4;
       transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
     }
-    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
-    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.6); }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .thumb:hover {
+      opacity: 0.7;
+      transform: scale(1.08);
+    }
+
+    .thumb.active {
+      opacity: 1;
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     /* ── Progress bar ── */
     .progress-bar {
       height: 2px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 1px;
       overflow: hidden;
     }
+
     .progress-fill {
       height: 100%;
-      background: rgba(255,255,255,0.6);
+      background: rgba(255, 255, 255, 0.6);
       transition: width 0.3s ease;
     }
 
@@ -108,9 +133,9 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -118,10 +143,22 @@
       opacity: 0;
       transition: opacity 0.4s ease, background 0.3s ease;
     }
-    .carousel-viewport:hover .carousel-arrow { opacity: 1; }
-    .carousel-arrow:hover { background: rgba(255,255,255,0.15); }
-    .carousel-arrow.left { left: 20px; }
-    .carousel-arrow.right { right: 20px; }
+
+    .carousel-viewport:hover .carousel-arrow {
+      opacity: 1;
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .carousel-arrow.left {
+      left: 20px;
+    }
+
+    .carousel-arrow.right {
+      right: 20px;
+    }
 
     /* ── Floating title letters ── */
     .float-letter {
@@ -133,9 +170,13 @@
     .fade-up {
       opacity: 0;
       transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     /* ── Lightbox ── */
     #lightbox {
@@ -151,7 +192,12 @@
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    #lightbox.active { display: flex; opacity: 1; }
+
+    #lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
     #lightbox-img {
       max-width: 90vw;
       max-height: 85vh;
@@ -161,7 +207,11 @@
       transform: scale(0.95);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    #lightbox.active #lightbox-img { transform: scale(1); }
+
+    #lightbox.active #lightbox-img {
+      transform: scale(1);
+    }
+
     .lb-btn {
       position: absolute;
       z-index: 110;
@@ -177,14 +227,29 @@
       color: white;
       transition: all 0.3s ease;
     }
-    .lb-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.1); }
-    .lb-close { top: 40px; right: 40px; }
-    .lb-prev { left: 40px; }
-    .lb-next { right: 40px; }
+
+    .lb-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.1);
+    }
+
+    .lb-close {
+      top: 40px;
+      right: 40px;
+    }
+
+    .lb-prev {
+      left: 40px;
+    }
+
+    .lb-next {
+      right: 40px;
+    }
   </style>
   <script src="assets/js/components.js"></script>
   <parket-seo title="Parket Brazil"></parket-seo>
 </head>
+
 <body class="antialiased selection:bg-white selection:text-black">
   <parket-loader></parket-loader>
 
@@ -195,10 +260,12 @@
 
     <!-- Title -->
     <div class="fade-up mb-16">
-      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-1">Pisos</span>
-      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">Brazil</h1>
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Pisos</span>
+      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8 -ml-[20px]">
+        Brazil</h1>
       <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
-        A autenticidade das madeiras brasileiras traduzida em réguas de beleza única. Uma coleção que exalta a alma tropical com cores profundas e fibras marcantes.
+        A autenticidade das madeiras brasileiras traduzida em réguas de beleza única. Uma coleção que exalta a alma
+        tropical com cores profundas e fibras marcantes.
       </p>
     </div>
 
@@ -248,181 +315,182 @@
   </div>
 
   <script>
-    (function () {
-      // ── Autoload: procura imagens na pasta pisos/brazil/ ──
-      const FOLDER = 'pisos/brazil';
-      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
-      const MAX_IMAGES = 30;
+      (function () {
+        // ── Autoload: procura imagens na pasta pisos/brazil/ ──
+        const FOLDER = 'pisos/brazil';
+        const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+        const MAX_IMAGES = 30;
 
-      function probe(src) {
-        return new Promise((res, rej) => {
-          const img = new Image();
-          img.onload = () => res(src);
-          img.onerror = () => rej();
-          img.src = src + '?v=' + Date.now();
-        });
-      }
-
-      async function findAllImages() {
-        const found = [];
-        for (let i = 1; i <= MAX_IMAGES; i++) {
-          const num = String(i).padStart(2, '0');
-          let hit = false;
-          for (const ext of EXTS) {
-            try {
-              const src = await probe(`${FOLDER}/${num}.${ext}`);
-              found.push(src);
-              hit = true;
-              break;
-            } catch {}
-          }
-          if (!hit && i > found.length + 3) break; // stop after 3 consecutive misses
+        function probe(src) {
+          return new Promise((res, rej) => {
+            const img = new Image();
+            img.onload = () => res(src);
+            img.onerror = () => rej();
+            img.src = src + '?v=' + Date.now();
+          });
         }
-        return found;
-      }
 
-      // ── Carousel logic ──
-      let current = 0;
-      let images = [];
-      let autoplayTimer = null;
+        async function findAllImages() {
+          const found = [];
+          for (let i = 1; i <= MAX_IMAGES; i++) {
+            const num = String(i).padStart(2, '0');
+            let hit = false;
+            for (const ext of EXTS) {
+              try {
+                const src = await probe(`${FOLDER}/${num}.${ext}`);
+                found.push(src);
+                hit = true;
+                break;
+              } catch { }
+            }
+            if (!hit && i > found.length + 3) break; // stop after 3 consecutive misses
+          }
+          return found;
+        }
 
-      const carousel = document.getElementById('carousel');
-      const thumbTrack = document.getElementById('thumb-track');
-      const counter = document.getElementById('slide-counter');
-      const progressFill = document.getElementById('progress-fill');
-      const arrowLeft = document.getElementById('arrow-left');
-      const arrowRight = document.getElementById('arrow-right');
+        // ── Carousel logic ──
+        let current = 0;
+        let images = [];
+        let autoplayTimer = null;
 
-      function goTo(idx) {
-        if (idx < 0) idx = images.length - 1;
-        if (idx >= images.length) idx = 0;
-        current = idx;
+        const carousel = document.getElementById('carousel');
+        const thumbTrack = document.getElementById('thumb-track');
+        const counter = document.getElementById('slide-counter');
+        const progressFill = document.getElementById('progress-fill');
+        const arrowLeft = document.getElementById('arrow-left');
+        const arrowRight = document.getElementById('arrow-right');
 
-        // Update slides
-        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => {
-          s.classList.toggle('active', i === current);
-        });
+        function goTo(idx) {
+          if (idx < 0) idx = images.length - 1;
+          if (idx >= images.length) idx = 0;
+          current = idx;
 
-        // Update thumbs
-        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
-          t.classList.toggle('active', i === current);
-          if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        });
+          // Update slides
+          carousel.querySelectorAll('.carousel-slide').forEach((s, i) => {
+            s.classList.toggle('active', i === current);
+          });
+
+          // Update thumbs
+          thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === current);
+            if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          });
 
 
-        progressFill.style.width = `${((current + 1) / total) * 100}%`;
+          progressFill.style.width = `${((current + 1) / total) * 100}%`;
 
-        resetAutoplay();
-      }
+          resetAutoplay();
+        }
 
-      function next() { goTo(current + 1); }
-      function prev() { goTo(current - 1); }
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
 
-      function resetAutoplay() {
-        clearInterval(autoplayTimer);
-        autoplayTimer = setInterval(next, 5000);
-      }
+        function resetAutoplay() {
+          clearInterval(autoplayTimer);
+          autoplayTimer = setInterval(next, 5000);
+        }
 
-      // ── Lightbox Logic ──
-      const lb = document.getElementById('lightbox');
-      const lbImg = document.getElementById('lightbox-img');
+        // ── Lightbox Logic ──
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
 
-      window.openLightbox = function(idx) {
-        current = idx;
-        updateLightbox();
-        lb.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      };
+        window.openLightbox = function (idx) {
+          current = idx;
+          updateLightbox();
+          lb.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        };
 
-      window.closeLightbox = function() {
-        lb.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        goTo(current); // sync main carousel
-      };
+        window.closeLightbox = function () {
+          lb.classList.remove('active');
+          document.body.style.overflow = 'auto';
+          goTo(current); // sync main carousel
+        };
 
-      function updateLightbox() {
-        lbImg.src = images[current];
-      }
+        function updateLightbox() {
+          lbImg.src = images[current];
+        }
 
-      window.lbNext = function() {
-        current = (current + 1) % images.length;
-        updateLightbox();
-      };
+        window.lbNext = function () {
+          current = (current + 1) % images.length;
+          updateLightbox();
+        };
 
-      window.lbPrev = function() {
-        current = (current - 1 + images.length) % images.length;
-        updateLightbox();
-      };
+        window.lbPrev = function () {
+          current = (current - 1 + images.length) % images.length;
+          updateLightbox();
+        };
 
-      document.addEventListener('keydown', (e) => {
-        if (!lb.classList.contains('active')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') lbNext();
-        if (e.key === 'ArrowLeft') lbPrev();
-      });
-
-      function buildCarousel(srcs) {
-        images = srcs;
-
-        // Create slides
-        srcs.forEach((src, i) => {
-          const slide = document.createElement('div');
-          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
-          slide.innerHTML = `<img src="${src}" alt="Brazil ${i + 1}">`;
-          slide.addEventListener('click', () => openLightbox(i));
-          carousel.insertBefore(slide, arrowLeft);
-        });
-
-        // Create thumbnails
-        srcs.forEach((src, i) => {
-          const thumb = document.createElement('div');
-          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
-          thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
-          thumb.addEventListener('click', () => goTo(i));
-          thumbTrack.appendChild(thumb);
-        });
-
-        // Init progress
-        progressFill.style.width = `${(1 / srcs.length) * 100}%`;
-
-        // Arrows
-        arrowLeft.addEventListener('click', prev);
-        arrowRight.addEventListener('click', next);
-
-        // Keyboard
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft') prev();
-          if (e.key === 'ArrowRight') next();
+          if (!lb.classList.contains('active')) return;
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowRight') lbNext();
+          if (e.key === 'ArrowLeft') lbPrev();
         });
 
-        // Touch swipe
-        let touchStartX = 0;
-        carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
-        carousel.addEventListener('touchend', (e) => {
-          const diff = touchStartX - e.changedTouches[0].clientX;
-          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
-        }, { passive: true });
+        function buildCarousel(srcs) {
+          images = srcs;
 
-        // Autoplay
-        resetAutoplay();
-        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
-        carousel.addEventListener('mouseleave', resetAutoplay);
-      }
+          // Create slides
+          srcs.forEach((src, i) => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+            slide.innerHTML = `<img src="${src}" alt="Brazil ${i + 1}">`;
+            slide.addEventListener('click', () => openLightbox(i));
+            carousel.insertBefore(slide, arrowLeft);
+          });
 
-      // ── Entry animations ──
-      function animateEntry() {
-        document.querySelectorAll('.fade-up').forEach((el, i) => {
-          setTimeout(() => el.classList.add('visible'), 100 + i * 150);
+          // Create thumbnails
+          srcs.forEach((src, i) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+            thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
+            thumb.addEventListener('click', () => goTo(i));
+            thumbTrack.appendChild(thumb);
+          });
+
+          // Init progress
+          progressFill.style.width = `${(1 / srcs.length) * 100}%`;
+
+          // Arrows
+          arrowLeft.addEventListener('click', prev);
+          arrowRight.addEventListener('click', next);
+
+          // Keyboard
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prev();
+            if (e.key === 'ArrowRight') next();
+          });
+
+          // Touch swipe
+          let touchStartX = 0;
+          carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+          carousel.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+          }, { passive: true });
+
+          // Autoplay
+          resetAutoplay();
+          carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+          carousel.addEventListener('mouseleave', resetAutoplay);
+        }
+
+        // ── Entry animations ──
+        function animateEntry() {
+          document.querySelectorAll('.fade-up').forEach((el, i) => {
+            setTimeout(() => el.classList.add('visible'), 100 + i * 150);
+          });
+        }
+
+        // ── Init ──
+        window.addEventListener('load', async () => {
+          const srcs = await findAllImages();
+          if (srcs.length) buildCarousel(srcs);
+          animateEntry();
         });
-      }
-
-      // ── Init ──
-      window.addEventListener('load', async () => {
-        const srcs = await findAllImages();
-        if (srcs.length) buildCarousel(srcs);
-        animateEntry();
-      });
-    })();
+      })();
   </script>
 </body>
+
 </html>
