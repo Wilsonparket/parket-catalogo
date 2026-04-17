@@ -164,38 +164,7 @@
       display: inline-block;
       will-change: transform, opacity;
     }
-
-    /* ── Marquee de espécies ── */
-    .marquee-track {
-      display: flex;
-      width: max-content;
-      will-change: transform;
-    }
-
-    .marquee-wrap {
-      overflow: hidden;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 18px 0;
-      margin-bottom: 60px;
-    }
-
-    /* ── Marquee items: hover glow ── */
-    .marquee-item {
-      display: inline-block;
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.3);
-      transition: color 0.5s ease, text-shadow 0.5s ease, letter-spacing 0.5s ease;
-    }
-
-    .marquee-item:hover {
-      color: #ffffff;
-      text-shadow:
-        0 0 8px rgba(255, 255, 255, 0.9),
-        0 0 20px rgba(255, 255, 255, 0.6),
-        0 0 40px rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.4em;
-    }
+    /* ── Cards de categorias ── */
   </style>
 </head>
 
@@ -217,11 +186,6 @@
         </div>
       </div>
     </section>
-    <!-- Marquee espécies -->
-    <div class="marquee-wrap px-0 mb-0">
-      <div id="marquee-track"
-        class="marquee-track font-['Inter'] text-[11px] tracking-[0.35em] uppercase text-white/30"></div>
-    </div>
 
     <!-- Image Gallery (gerada dinamicamente) -->
     <section class="px-12 mb-20 max-w-screen-2xl mx-auto">
@@ -489,25 +453,6 @@
   <script>
     (function () {
 
-      // ── Marquee ──────────────────────────────────────────────────
-      const species = [
-        { name: 'Pisos', url: 'pisos.html' },
-        { name: 'Decks', url: 'decks.html' },
-        { name: 'Escadas', url: 'escadas.html' },
-        { name: 'Fachadas', url: 'fachadas.html' },
-        { name: 'Forros', url: 'forros.html' },
-        { name: 'Painéis', url: 'paineis.html' },
-        { name: 'Portas', url: 'portas.html' },
-      ];
-      const track = document.getElementById('marquee-track');
-      if (track) {
-        const sep = '<span style="margin:0 32px;opacity:0.3">·</span>';
-        const items = species.map(s => `<a href="${s.url}" class="marquee-item hover:text-white transition-colors duration-300">${s.name}</a>`);
-        const content = items.join(sep) + sep;
-        // Duplica para loop contínuo
-        track.innerHTML = (content + content + content + content);
-      }
-
       // ── Split letras do título ───────────────────────────────────
       const titleEl = document.getElementById('Categorias-title');
       let letters = [];
@@ -539,10 +484,7 @@
           letter.style.opacity = opacity;
         });
 
-        // Marquee desliza na direção oposta ao scroll (velocidade lenta)
-        if (track) {
-          track.style.transform = `translateX(${-sy * 0.18}px)`;
-        }
+
 
         // Cards: parallax de profundidade individual
         document.querySelectorAll('.scene-card.risen').forEach((card, i) => {
