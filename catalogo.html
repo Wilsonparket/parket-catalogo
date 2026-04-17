@@ -203,8 +203,136 @@
     </div>
 
     <!-- Image Gallery (gerada dinamicamente) -->
-    <section class="px-12 mb-40 max-w-screen-2xl mx-auto">
+    <section class="px-12 mb-20 max-w-screen-2xl mx-auto">
       <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-12 gap-8"></div>
+    </section>
+
+    <!-- Seção Técnica: Material Vivo -->
+    <section class="px-12 max-w-screen-2xl mx-auto pb-40">
+      <div class="border-t border-white/10 pt-24 fade-up">
+        <!-- Typography Headers -->
+        <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Guia Técnico</span>
+        <h2 class="text-[clamp(2.5rem,4vw,5rem)] font-extralight tracking-[-0.04em] leading-[0.9] -ml-[6px] mb-16 max-w-3xl">
+          Madeira, um material vivo
+        </h2>
+
+        <!-- Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+          
+          <!-- COLUNA ESQUERDA (Col 5) -->
+          <div class="md:col-span-5 flex flex-col gap-8">
+            
+            <!-- CARD: AMOSTRAS -->
+            <div class="liquid-glass rounded-2xl p-8 flex flex-col justify-between scene-card">
+              <div>
+                <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                  <span class="w-1 h-1 bg-white/50 rounded-full"></span> Amostras
+                </h3>
+                <div class="text-white/40 text-sm font-light leading-relaxed space-y-4">
+                  <p>A madeira é um material natural, irregular e variegado por sua própria natureza; cada peça é única e inimitável. Por isso, amostras compostas por poucas tábuas podem apenas fornecer uma ideia geral de como será o aspecto de um parquete, não sendo possível mostrar com fidelidade todas as nuances, veios e características únicas.</p>
+                  <p>Como mencionado acima, a cor da madeira tende a mudar com o tempo devido à exposição à luz e ao ar. Por isso, um piso de madeira recém-instalado costuma ter aparência e tonalidade diferentes das de um painel de amostra do mesmo produto que já foi exposto à luz natural por algum período.</p>
+                </div>
+              </div>
+              
+              <!-- Gráfico CSS Swatches -->
+              <div class="mt-8 pt-8 border-t border-white/5">
+                 <div class="flex items-center justify-between text-[8px] uppercase tracking-[0.2em] text-white/30 mb-4 font-label">
+                   <span>Escuro</span>
+                   <span>Claro</span>
+                 </div>
+                 <div class="flex items-center justify-between w-full overflow-hidden relative">
+                   <div class="flex -space-x-4">
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[7]" style="background: #2a1b14"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[6]" style="background: #4a2f20"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[5]" style="background: #6c4634"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[4]" style="background: #a4765b"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[3]" style="background: #bf9583"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[2]" style="background: #dbbfae"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[1]" style="background: #efdcd3"></div>
+                   </div>
+                 </div>
+              </div>
+            </div>
+
+            <!-- CARD: CLIMA -->
+            <div class="liquid-glass rounded-2xl p-8 flex flex-col justify-between scene-card">
+              <div>
+                <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                  <span class="w-1 h-1 bg-white/50 rounded-full"></span> Condições Climáticas
+                </h3>
+                <div class="text-white/40 text-[13px] font-light leading-relaxed space-y-4">
+                  <p>A madeira sofre naturalmente dilatação ou retração dependendo das condições de umidade e temperatura a que está exposta. Para que o piso esteja sempre em perfeitas condições, a temperatura do ar deve ser mantida entre <span class="text-white/80 font-normal">15ºC e 30ºC</span> e a umidade relativa do ar entre <span class="text-white/80 font-normal">45% e 65%</span>.</p>
+                  <p>Essas condições climáticas devem ser mantidas durante a instalação, bem como depois dela, inclusive quando os ambientes não estiverem em uso.</p>
+                  <p>Em certas situações, especialmente durante os meses de inverno, pode ser necessário utilizar sistemas de umidificação do ar para garantir o cumprimento das condições indicadas. No caso de aquecimento pelo piso, o limite de temperatura da superfície com o sistema em funcionamento de <span class="text-white/80 font-normal">27ºC</span> nunca deve ser ultrapassado.</p>
+                  <p>Os produtos Parket com suporte de compensado de bétula também podem ser utilizados em condições particulares severas de temperatura e umidade, ou seja, com umidade relativa do ar a partir de 30% e temperatura da superfície do piso de até 29ºC. Nessas condições, o produto mantém sua integridade.</p>
+                </div>
+              </div>
+              
+              <!-- Gráfico CSS Retração -->
+              <div class="mt-8 pt-8 border-t border-white/5">
+                 <div class="flex justify-between items-end h-20 mb-4 relative px-2">
+                   <!-- Icons -->
+                   <div class="absolute inset-0 flex justify-around items-center opacity-30 text-2xl pb-8">
+                     <span class="material-symbols-outlined font-light">brightness_5</span>
+                     <span class="material-symbols-outlined font-light">rainy</span>
+                   </div>
+                   <!-- Shape Trapezoid -->
+                   <div class="w-full h-8 bg-gradient-to-r from-[#996e53]/30 to-[#d6bdae]/50 border-t border-white/10 relative overflow-hidden" style="clip-path: polygon(0 60%, 100% 0, 100% 100%, 0 100%);">
+                   </div>
+                 </div>
+                 <div class="flex justify-between font-label text-[8px] uppercase tracking-[0.2em] text-white/30 text-center">
+                    <span>◀ Clima Seco</span>
+                    <span>▼ Retração/Dilatação ▲</span>
+                    <span>Clima Úmido ▶</span>
+                 </div>
+              </div>
+            </div>
+            
+          </div>
+
+          <!-- COLUNA DIREITA (Col 7) -->
+          <div class="md:col-span-7 flex flex-col gap-8">
+            
+            <!-- CARD: COR -->
+            <div class="liquid-glass rounded-2xl p-8 lg:p-12 scene-card flex-1">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-8 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Cor da Madeira
+              </h3>
+              
+              <div class="text-white/40 text-sm font-light leading-relaxed space-y-6">
+                <p>A cor da madeira depende em grande parte de certas substâncias que ela contém, conhecidas como extrativos. A cor dessas substâncias é modificada pela exposição ao ar e à luz, de modo que a cor original de qualquer piso de parquete sofre transformações mais ou menos acentuadas ao longo do tempo.</p>
+                
+                <p>Devido ao alto teor de extrativos nas espécies de madeira tropical, estas são especialmente propensas a mudanças cromáticas, geralmente evoluindo para tons de marrom mais escuro.</p>
+                
+                <div class="pl-6 border-l border-white/10 italic text-white/30">
+                  <p>Iroko e Parket são duas espécies que sofrem as alterações de cor mais intensas. O Parket, em particular, pode apresentar em alguns casos fenômenos localizados de alterações fortes e rápidas. Tábuas com cores originalmente semelhantes podem reagir de forma diferente e, com o tempo, assumir tonalidades bem distintas.</p>
+                </div>
+                
+                <p>Em condições especificas, essas alterações de cor podem tornar mais evidentes os traços de substâncias minerais, uma parte natural da estrutura da madeira.</p>
+                
+                <p>O Teak pode apresentar variações de cor bastante visíveis. Essas variações tendem a diminuir e desaparecer com o tempo, e a cor se torna um tom médio de luz uniforme. O Wengé apresenta boa estabilidade de cor.</p>
+                
+                <p>Com a exposição à luz, a madeira evolui para tons mais quentes, com o componente amarelo se tornando mais predominante. Esse fenômeno ocorre mesmo em produtos com acabamento pigmentado (por exemplo, a linha "Michelangelo").</p>
+                
+                <p>A exposição prolongada de algumas espécies de madeira à luz solar intensa e direta — por exemplo, próximo a uma janela de vidro — pode causar descoloração (os raios UV produzem esses efeitos em muitos materiais além da madeira). Para limitar esse fenômeno, recomendamos o uso de cortinas ou filmes especiais de filtro UV aplicados aos vidros.</p>
+              </div>
+            </div>
+
+            <!-- CARD: GRÃO PRATEADO -->
+            <div class="liquid-glass rounded-2xl p-8 lg:p-12 scene-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Grão Prateado
+              </h3>
+              <div class="text-white/40 text-sm font-light leading-relaxed space-y-4 md:columns-2 gap-12">
+                <p>Tábuas de madeira obtidas de uma seção perfeitamente radial do tronco apresentam grão reto, bem como reflexos iridescentes e figuras lustrosas características, chamadas de grão prateado.</p>
+                <p>O grão prateado sempre foi valorizado como um indicador de qualidade e prestígio.</p>
+                <p>A madeira é um material "vivo" que interage com o ambiente e é influenciado por fatores externos como luz solar, temperatura, umidade do ar e uso diário. Além do fator estético relacionado ao veio mais uniforme, indica também melhor desempenho técnico (estabilidade dimensional, impermeabilidade, etc.).</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </section>
   </main>
   <parket-footer></parket-footer>
