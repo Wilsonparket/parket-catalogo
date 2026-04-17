@@ -34,12 +34,6 @@
     }
     .text-glow { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
     
-    /* ── Floating Letters Style ── */
-    .Pisos-letter {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-    
     /* ── Custom Navigation Blur ── */
     .nav-blur {
       background: rgba(0, 0, 0, 0.6);
@@ -240,49 +234,21 @@
     const wrapper = document.querySelector('.scroll-wrapper');
     const panels = document.querySelectorAll('.panel');
 
-    // ── Letter Parallax Logic ──
-    (function() {
-      const titleEl = document.getElementById('Pisos-title');
-      let letters = [];
-      if (titleEl) {
-        const text = titleEl.textContent.trim();
-        titleEl.innerHTML = text.split('').map((ch, i) => 
-          `<span class="Pisos-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
-        ).join('');
-        letters = titleEl.querySelectorAll('.Pisos-letter');
-      }
-
-      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55];
-      const driftsX = [-1, 0.5, 0, -0.3, 0.8];
-
-      window.addEventListener('scroll', () => {
-        const sy = window.scrollY;
-        const vh = window.innerHeight;
-        
-        // Horizontal translation progress
-        // Total scrollable height = scroll-wrapper height - viewport height
-        const totalScrollable = wrapper.offsetHeight - vh;
-        const scrollProgress = Math.max(0, Math.min(sy / totalScrollable, 1));
-        
-        // Translate track
-        // We move it from 0 to -(totalWidth - viewportWidth)
-        const trackWidth = track.scrollWidth;
-        const translateX = -scrollProgress * (trackWidth - window.innerWidth);
-        track.style.transform = `translateX(${translateX}px)`;
-
-        // Title Parallax (Slide 1 specific)
-        const progressHero = Math.min(sy / (vh * 0.7), 1);
-        letters.forEach((letter, i) => {
-          const s = speeds[i] ?? 0.4;
-          const dx = driftsX[i] ?? 0;
-          const dy = -(sy * s);
-          const opacity = Math.max(0, 1 - progressHero * 1.5);
-          letter.style.transform = `translate(${0}px, ${dy}px)`;
-          letter.style.opacity = opacity;
-        });
-
-      }, { passive: true });
-    })();
+    window.addEventListener('scroll', () => {
+      const sy = window.scrollY;
+      const vh = window.innerHeight;
+      
+      // Horizontal translation progress
+      // Total scrollable height = scroll-wrapper height - viewport height
+      const totalScrollable = wrapper.offsetHeight - vh;
+      const scrollProgress = Math.max(0, Math.min(sy / totalScrollable, 1));
+      
+      // Translate track
+      // We move it from 0 to -(totalWidth - viewportWidth)
+      const trackWidth = track.scrollWidth;
+      const translateX = -scrollProgress * (trackWidth - window.innerWidth);
+      track.style.transform = `translateX(${translateX}px)`;
+    }, { passive: true });
   </script>
 </body>
 </html>
