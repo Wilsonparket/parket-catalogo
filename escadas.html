@@ -7,36 +7,129 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  <script id="tailwind-config">
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
-          "colors": {
-            "surface": "#131313",
-            "background": "#000000",
-            "primary": "#ffffff"
-          },
-          "fontFamily": {
-            "headline": ["Inter"],
-            "body": ["Inter"],
-            "label": ["Inter"]
-          }
-        },
-      },
+          fontFamily: { headline: ["Inter"], body: ["Inter"], label: ["Inter"] }
+        }
+      }
     }
   </script>
   <style>
-    body { background-color: #000000; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    
-    .liquid-glass {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
+    body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── Navigation ── */
+    .nav-blur {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
 
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+    /* ── Carousel ── */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      margin: 0 auto;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1.04);
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      border-radius: 1.5rem;
+    }
+
+    /* ── Thumbnails ── */
+    .thumb-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 4px 0;
+    }
+    .thumb-track::-webkit-scrollbar { display: none; }
+
+    .thumb {
+      flex-shrink: 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.4;
+      transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
+    }
+    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.6); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      transition: width 0.3s ease;
+    }
+
+    /* ── Arrow buttons ── */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s ease, background 0.3s ease;
+    }
+    .carousel-viewport:hover .carousel-arrow { opacity: 1; }
+    .carousel-arrow:hover { background: rgba(255,255,255,0.15); }
+    .carousel-arrow.left { left: 20px; }
+    .carousel-arrow.right { right: 20px; }
+
+    /* ── Entry animation ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
     /* ── Lightbox ── */
     #lightbox {
@@ -82,181 +175,70 @@
     .lb-close { top: 40px; right: 40px; }
     .lb-prev { left: 40px; }
     .lb-next { right: 40px; }
-    
-    /* ── Floating Letters Style ── */
-    .Escadas-letter {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-    
-    /* ── Custom Navigation Blur ── */
-    .nav-blur {
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-    }
-
-    /* ── Carousel ── */
-    .carousel-viewport {
-      position: relative;
-      width: 100%;
-      max-width: 900px;
-      height: 55vh;
-      max-height: 560px;
-      overflow: hidden;
-      border-radius: 1.5rem;
-      margin: 0 auto;
-    }
-
-    .carousel-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: scale(1.04);
-    }
-
-    .carousel-slide.active {
-      opacity: 1;
-      transform: scale(1);
-      z-index: 1;
-    }
-
-    .carousel-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
-      border-radius: 1.5rem;
-    }
-
-    /* ── Thumbnails ── */
-    .thumb-tray {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 10px 0;
-    }
-    .thumb-tray::-webkit-scrollbar { display: none; }
-
-    .thumb {
-      flex-shrink: 0;
-      width: 80px;
-      height: 80px;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      cursor: pointer;
-      border: 2px solid transparent;
-      opacity: 0.3;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.4); }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* ── UI ── */
-    .p-track {
-      height: 2px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 1px;
-      overflow: hidden;
-    }
-    .p-bar {
-      height: 100%;
-      background: rgba(255,255,255,0.8);
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .move-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: all 0.4s ease;
-    }
-    .carousel-view:hover .move-btn { opacity: 1; }
-    .move-btn:hover { background: rgba(255,255,255,0.1); }
-    .btn-l { left: 30px; }
-    .btn-r { right: 30px; }
   </style>
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
 
-  <!-- Top Navigation -->
+  <!-- Navigation -->
   <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
     <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
       <a href="catalogo.html" class="flex items-center gap-4 group">
         <span class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
         <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">Voltar ao Catálogo</span>
       </a>
+      <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/30">Escadas</span>
     </div>
   </nav>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="min-h-[70vh] flex items-center justify-center px-12 pt-40 pb-20 max-w-screen-2xl mx-auto reveal text-center">
-      <div class="max-w-3xl mx-auto">
-        <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/40 mb-8 block">Engenharia e Design</span>
-        <h1 id="Escadas-title" class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.05em] leading-[0.85] mb-12 uppercase" style="text-transform: none; font-family: 'Inter', sans-serif;">
-          Escadas
-        </h1>
-        <p class="text-white/60 font-body text-xl leading-relaxed mx-auto mb-12 max-w-xl">
-          Elevamos o conceito de circulação vertical a uma forma de arte. Nossas escadas em madeira maciça combinam engenharia de precisão com o toque artesanal da Parket.
-        </p>
-        <div class="flex flex-col items-center gap-6">
-          <div class="h-[1px] w-20 bg-white/20"></div>
-          <p class="text-white/40 text-sm italic font-light">Escultura funcional em cada degrau.</p>
-        </div>
-      </div>
-    </section>
+  <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
 
-    <!-- Carousel Section -->
-    <section class="px-12 pb-40 reveal" style="transition-delay: 0.2s">
-      <div class="carousel-viewport" id="gallery-container">
-        <button class="move-btn btn-l" id="go-prev">
-          <span class="material-symbols-outlined text-white text-2xl">chevron_left</span>
+    <!-- Title -->
+    <div class="fade-up mb-16">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Design Vertical</span>
+      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8 uppercase">Escadas</h1>
+      <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
+        Elevamos o conceito de circulação vertical a uma forma de arte. Nossas escadas combinam engenharia de precisão com o toque artesanal da Parket.
+      </p>
+    </div>
+
+    <!-- Carousel -->
+    <div class="fade-up" style="transition-delay: 0.15s">
+      <div class="carousel-viewport" id="carousel">
+        <!-- Slides generated by JS -->
+        <button class="carousel-arrow left" id="arrow-left">
+          <span class="material-symbols-outlined text-white text-xl">chevron_left</span>
         </button>
-        <button class="move-btn btn-r" id="go-next">
-          <span class="material-symbols-outlined text-white text-2xl">chevron_right</span>
+        <button class="carousel-arrow right" id="arrow-right">
+          <span class="material-symbols-outlined text-white text-xl">chevron_right</span>
         </button>
       </div>
 
-      <div class="max-w-[900px] mx-auto mt-12">
-        <div class="flex items-center justify-between gap-12">
-
-          <div class="p-track flex-1">
-            <div id="p-bar" class="p-bar"></div>
+      <!-- Progress -->
+      <div class="max-w-[900px] mx-auto">
+        <div class="flex items-center gap-6 mt-6">
+          <div class="progress-bar flex-1">
+            <div class="progress-fill" id="progress-fill"></div>
           </div>
         </div>
-        <div class="thumb-tray mt-12 justify-center" id="thumbs-container"></div>
+
+        <!-- Thumbnails -->
+        <div class="thumb-track mt-6 justify-center" id="thumb-track"></div>
       </div>
-    </section>
+    </div>
 
   </main>
 
   <!-- Footer -->
-  <footer class="w-full py-24 px-12 bg-black border-t border-white/10">
+  <footer class="w-full py-24 px-12 bg-black border-t border-white/5">
     <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
-      <div class="text-2xl font-bold text-white tracking-widest uppercase">PARKET</div>
+      <div><img src="logo-parket.png" alt="Parket" class="h-4 w-auto" /></div>
       <div class="flex gap-12 opacity-40 hover:opacity-100 transition-opacity duration-500">
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Instagram</a>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">LinkedIn</a>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Pinterest</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Instagram</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">LinkedIn</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Pinterest</a>
       </div>
       <div class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">
-        © 2024 PARKET INTERNAZIONALE. ALL RIGHTS RESERVED.
+        &copy; 2024 PARKET. ALL RIGHTS RESERVED.
       </div>
     </div>
   </footer>
@@ -276,7 +258,7 @@
   </div>
 
   <script>
-    (function() {
+    (function () {
       const images = [
         "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-03.jpg",
         "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-05.jpg",
@@ -290,23 +272,35 @@
       ];
 
       let current = 0;
-      const container = document.getElementById('gallery-container');
-      const thumbs = document.getElementById('thumbs-container');
-      const bar = document.getElementById('p-bar');
+      let autoplayTimer = null;
 
-      function sync(idx) {
+      const carousel = document.getElementById('carousel');
+      const thumbTrack = document.getElementById('thumb-track');
+      const progressFill = document.getElementById('progress-fill');
+      const arrowLeft = document.getElementById('arrow-left');
+      const arrowRight = document.getElementById('arrow-right');
+
+      function goTo(idx) {
         if (idx < 0) idx = images.length - 1;
         if (idx >= images.length) idx = 0;
         current = idx;
 
-        container.querySelectorAll('.carousel-slide').forEach((s, i) => s.classList.toggle('active', i === current));
-        thumbs.querySelectorAll('.thumb').forEach((t, i) => {
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => s.classList.toggle('active', i === current));
+        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
           t.classList.toggle('active', i === current);
           if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
 
+        progressFill.style.width = `${((current + 1) / images.length) * 100}%`;
+        resetAutoplay();
+      }
 
-        bar.style.width = `${((current + 1) / images.length) * 100}%`;
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(next, 5000);
       }
 
       // ── Lightbox Logic ──
@@ -323,7 +317,7 @@
       window.closeLightbox = function() {
         lb.classList.remove('active');
         document.body.style.overflow = 'auto';
-        sync(current); // sync main carousel
+        goTo(current);
       };
 
       function updateLightbox() {
@@ -347,73 +341,52 @@
         if (e.key === 'ArrowLeft') lbPrev();
       });
 
-      function boot() {
-        images.forEach((url, i) => {
-          const s = document.createElement('div');
-          s.className = 'carousel-slide' + (i === 0 ? ' active' : '');
-          s.innerHTML = `<img src="${url}" alt="Slide ${i+1}">`;
-          s.addEventListener('click', () => openLightbox(i));
-          container.insertBefore(s, document.getElementById('go-prev'));
+      function buildCarousel() {
+        images.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img src="${src}" alt="Escadas ${i + 1}">`;
+          slide.addEventListener('click', () => openLightbox(i));
+          carousel.insertBefore(slide, arrowLeft);
 
-          const t = document.createElement('div');
-          t.className = 'thumb' + (i === 0 ? ' active' : '');
-          t.innerHTML = `<img src="${url}" alt="Thumb ${i+1}">`;
-          t.onclick = () => sync(i);
-          thumbs.appendChild(t);
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+          thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
+          thumb.addEventListener('click', () => goTo(i));
+          thumbTrack.appendChild(thumb);
         });
 
-        document.getElementById('go-next').onclick = () => sync(current + 1);
-        document.getElementById('go-prev').onclick = () => sync(current - 1);
-        
-        bar.style.width = `${(1 / images.length) * 100}%`;
+        progressFill.style.width = `${(1 / images.length) * 100}%`;
+        arrowLeft.addEventListener('click', prev);
+        arrowRight.addEventListener('click', next);
 
-        // ── Letter Parallax Logic ──
-        const titleEl = document.getElementById('Escadas-title');
-        let letters = [];
-        if (titleEl) {
-          const text = titleEl.textContent.trim();
-          titleEl.innerHTML = text.split('').map((ch, i) => 
-            `<span class="Escadas-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
-          ).join('');
-          letters = titleEl.querySelectorAll('.Escadas-letter');
-        }
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') prev();
+          if (e.key === 'ArrowRight') next();
+        });
 
-        const speeds = [0.6, 0.25, 0.45, 0.35, 0.55, 0.4, 0.5];
-        const driftsX = [-1, 0.5, 0, -0.3, 0.8, -0.2, 0.4];
-
-        window.addEventListener('scroll', () => {
-          const sy = window.scrollY;
-          const vh = window.innerHeight;
-          const progress = Math.min(sy / (vh * 0.7), 1);
-
-          letters.forEach((letter, i) => {
-            const s = speeds[i] ?? 0.4;
-            const dx = driftsX[i] ?? 0;
-            const dy = -(sy * s);
-            const opacity = Math.max(0, 1 - progress * 1.5);
-            letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
-            letter.style.opacity = opacity;
-          });
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
         }, { passive: true });
 
-        // Keyboard
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft') sync(current - 1);
-          if (e.key === 'ArrowRight') sync(current + 1);
-        });
-
-        // Autoplay
-        setInterval(() => sync(current + 1), 6000);
+        resetAutoplay();
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        carousel.addEventListener('mouseleave', resetAutoplay);
       }
 
-      // Smooth Reveal Animation on Scroll
-      const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-      }, observerOptions);
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      function animateEntry() {
+        document.querySelectorAll('.fade-up').forEach((el, i) => {
+          setTimeout(() => el.classList.add('visible'), 100 + i * 150);
+        });
+      }
 
-      window.onload = boot;
+      window.addEventListener('load', () => {
+        buildCarousel();
+        animateEntry();
+      });
     })();
   </script>
 </body>

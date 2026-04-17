@@ -62,72 +62,74 @@
     }
 
     /* ── Thumbnails ── */
-    .thumb-scroll {
+    .thumb-track {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 10px 0;
+      padding: 4px 0;
     }
-    .thumb-scroll::-webkit-scrollbar { display: none; }
+    .thumb-track::-webkit-scrollbar { display: none; }
 
-    .thumb-item {
+    .thumb {
       flex-shrink: 0;
-      width: 80px;
-      height: 80px;
-      border-radius: 0.75rem;
+      width: 72px;
+      height: 72px;
+      border-radius: 0.5rem;
       overflow: hidden;
       cursor: pointer;
       border: 2px solid transparent;
-      opacity: 0.3;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0.4;
+      transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
     }
-    .thumb-item.active { opacity: 1; border-color: rgba(255,255,255,0.4); }
-    .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.6); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* ── UI ── */
-    .prog-track {
+    /* ── Progress bar ── */
+    .progress-bar {
       height: 2px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.1);
       border-radius: 1px;
       overflow: hidden;
     }
-    .prog-bar {
+    .progress-fill {
       height: 100%;
-      background: rgba(255,255,255,0.8);
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(255,255,255,0.6);
+      transition: width 0.3s ease;
     }
 
-    .ctrl-btn {
+    /* ── Arrow buttons ── */
+    .carousel-arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       opacity: 0;
-      transition: all 0.4s ease;
+      transition: opacity 0.4s ease, background 0.3s ease;
     }
-    .gallery-view:hover .ctrl-btn { opacity: 1; }
-    .ctrl-btn:hover { background: rgba(255,255,255,0.1); }
-    .btn-prev { left: 30px; }
-    .btn-next { right: 30px; }
+    .carousel-viewport:hover .carousel-arrow { opacity: 1; }
+    .carousel-arrow:hover { background: rgba(255,255,255,0.15); }
+    .carousel-arrow.left { left: 20px; }
+    .carousel-arrow.right { right: 20px; }
 
-    .entry-fade {
+    /* ── Entry animation ── */
+    .fade-up {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease, transform 1s ease;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
     }
-    .entry-fade.active { opacity: 1; transform: translateY(0); }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
     /* ── Lightbox ── */
     #lightbox {
@@ -190,34 +192,37 @@
 
   <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
 
-    <!-- Header -->
-    <div class="entry-fade mb-20 max-w-3xl">
-      <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Madeira Histórica</span>
-      <h1 class="text-[clamp(2.5rem,8vw,6.5rem)] font-extralight tracking-[-0.05em] leading-[0.85] mb-8 uppercase">Pinho de <span class="italic font-normal">Riga</span></h1>
+    <!-- Title -->
+    <div class="fade-up mb-16">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Pisos</span>
+      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">Pinho de Riga</h1>
       <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
-        Resgatado de antigas construções europeias, o Pinho de Riga é sinônimo de resistência térmica e elegância rústica. Uma madeira com alma que traz profundidade histórica a qualquer projeto contemporâneo.
+        Resgatado de antigas construções europeias, o Pinho de Riga é sinônimo de história e resiliência. Uma madeira com alma que traz profundidade a qualquer projeto contemporâneo.
       </p>
     </div>
 
-    <!-- Gallery -->
-    <div class="entry-fade" style="transition-delay: 0.2s">
-      <div class="carousel-viewport" id="gallery">
-        <button class="ctrl-btn btn-prev" id="prev-btn">
-          <span class="material-symbols-outlined text-white text-2xl">chevron_left</span>
+    <!-- Carousel -->
+    <div class="fade-up" style="transition-delay: 0.15s">
+      <div class="carousel-viewport" id="carousel">
+        <!-- Slides generated by JS -->
+        <button class="carousel-arrow left" id="arrow-left">
+          <span class="material-symbols-outlined text-white text-xl">chevron_left</span>
         </button>
-        <button class="ctrl-btn btn-next" id="next-btn">
-          <span class="material-symbols-outlined text-white text-2xl">chevron_right</span>
+        <button class="carousel-arrow right" id="arrow-right">
+          <span class="material-symbols-outlined text-white text-xl">chevron_right</span>
         </button>
       </div>
 
-      <div class="max-w-[900px] mx-auto mt-12">
-        <div class="flex items-center justify-between gap-12">
-
-          <div class="prog-track flex-1">
-            <div id="bar" class="prog-bar"></div>
+      <!-- Progress -->
+      <div class="max-w-[900px] mx-auto">
+        <div class="flex items-center gap-6 mt-6">
+          <div class="progress-bar flex-1">
+            <div class="progress-fill" id="progress-fill"></div>
           </div>
         </div>
-        <div class="thumb-scroll mt-12 justify-center" id="thumbs"></div>
+
+        <!-- Thumbnails -->
+        <div class="thumb-track mt-6 justify-center" id="thumb-track"></div>
       </div>
     </div>
 
@@ -226,14 +231,14 @@
   <!-- Footer -->
   <footer class="w-full py-24 px-12 bg-black border-t border-white/5">
     <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
-      <div class="text-xl font-bold tracking-widest text-white uppercase">PARKET</div>
-      <div class="flex gap-12 opacity-30">
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Instagram</a>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">LinkedIn</a>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Pinterest</a>
+      <div><img src="logo-parket.png" alt="Parket" class="h-4 w-auto" /></div>
+      <div class="flex gap-12 opacity-40 hover:opacity-100 transition-opacity duration-500">
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Instagram</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">LinkedIn</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Pinterest</a>
       </div>
-      <div class="text-white/20 text-[10px] uppercase tracking-[0.2em] font-light">
-        © 2024 PARKET INTERNAZIONALE. ALL RIGHTS RESERVED.
+      <div class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">
+        &copy; 2024 PARKET. ALL RIGHTS RESERVED.
       </div>
     </div>
   </footer>
@@ -253,7 +258,7 @@
   </div>
 
   <script>
-    (function() {
+    (function () {
       const images = [
         "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg",
         "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-02.jpg",
@@ -264,24 +269,35 @@
       ];
 
       let current = 0;
-      const gallery = document.getElementById('gallery');
-      const thumbs = document.getElementById('thumbs');
-      const counter = document.getElementById('counter');
-      const bar = document.getElementById('bar');
+      let autoplayTimer = null;
 
-      function sync(idx) {
+      const carousel = document.getElementById('carousel');
+      const thumbTrack = document.getElementById('thumb-track');
+      const progressFill = document.getElementById('progress-fill');
+      const arrowLeft = document.getElementById('arrow-left');
+      const arrowRight = document.getElementById('arrow-right');
+
+      function goTo(idx) {
         if (idx < 0) idx = images.length - 1;
         if (idx >= images.length) idx = 0;
         current = idx;
 
-        gallery.querySelectorAll('.gallery-slide').forEach((s, i) => s.classList.toggle('active', i === current));
-        thumbs.querySelectorAll('.thumb-item').forEach((t, i) => {
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => s.classList.toggle('active', i === current));
+        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
           t.classList.toggle('active', i === current);
           if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
 
+        progressFill.style.width = `${((current + 1) / images.length) * 100}%`;
+        resetAutoplay();
+      }
 
-        bar.style.width = `${((current + 1) / images.length) * 100}%`;
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(next, 5000);
       }
 
       // ── Lightbox Logic ──
@@ -298,7 +314,7 @@
       window.closeLightbox = function() {
         lb.classList.remove('active');
         document.body.style.overflow = 'auto';
-        sync(current); // sync main carousel
+        goTo(current);
       };
 
       function updateLightbox() {
@@ -322,34 +338,52 @@
         if (e.key === 'ArrowLeft') lbPrev();
       });
 
-      function init() {
-        images.forEach((url, i) => {
-          const s = document.createElement('div');
-          s.className = 'gallery-slide' + (i === 0 ? ' active' : '');
-          s.innerHTML = `<img src="${url}" alt="Slide ${i+1}">`;
-          s.addEventListener('click', () => openLightbox(i));
-          gallery.insertBefore(s, document.getElementById('prev-btn'));
+      function buildCarousel() {
+        images.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img src="${src}" alt="Pinho de Riga ${i + 1}">`;
+          slide.addEventListener('click', () => openLightbox(i));
+          carousel.insertBefore(slide, arrowLeft);
 
-          const t = document.createElement('div');
-          t.className = 'thumb-item' + (i === 0 ? ' active' : '');
-          t.innerHTML = `<img src="${url}" alt="Thumb ${i+1}">`;
-          t.onclick = () => sync(i);
-          thumbs.appendChild(t);
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+          thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
+          thumb.addEventListener('click', () => goTo(i));
+          thumbTrack.appendChild(thumb);
         });
 
-        document.getElementById('next-btn').onclick = () => sync(current + 1);
-        document.getElementById('prev-btn').onclick = () => sync(current - 1);
-        
-        bar.style.width = `${(1 / images.length) * 100}%`;
+        progressFill.style.width = `${(1 / images.length) * 100}%`;
+        arrowLeft.addEventListener('click', prev);
+        arrowRight.addEventListener('click', next);
 
-        document.querySelectorAll('.entry-fade').forEach((el, i) => {
-          setTimeout(() => el.classList.add('active'), 200 + i * 200);
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') prev();
+          if (e.key === 'ArrowRight') next();
         });
-        
-        setInterval(() => sync(current + 1), 6000);
+
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        resetAutoplay();
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        carousel.addEventListener('mouseleave', resetAutoplay);
       }
 
-      window.onload = init;
+      function animateEntry() {
+        document.querySelectorAll('.fade-up').forEach((el, i) => {
+          setTimeout(() => el.classList.add('visible'), 100 + i * 150);
+        });
+      }
+
+      window.addEventListener('load', () => {
+        buildCarousel();
+        animateEntry();
+      });
     })();
   </script>
 </body>
