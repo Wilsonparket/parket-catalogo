@@ -115,7 +115,6 @@ window.addEventListener('load', () => {
         display: flex; align-items: center; justify-content: center;
         opacity: 0; visibility: hidden;
         transition: opacity 0.4s ease, visibility 0.4s ease;
-        cursor: zoom-out; cursor: -webkit-zoom-out;
       }
       #parket-lb-overlay.lb-active { opacity: 1; visibility: visible; }
       #parket-lb-img {
@@ -123,8 +122,14 @@ window.addEventListener('load', () => {
         transform: scale(0.9);
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); user-select: none;
+        cursor: zoom-in; cursor: -webkit-zoom-in;
+        transform-origin: center center;
       }
       #parket-lb-overlay.lb-active #parket-lb-img { transform: scale(1); }
+      #parket-lb-overlay.lb-active #parket-lb-img.extreme-zoom {
+        transform: scale(2.5);
+        cursor: zoom-out; cursor: -webkit-zoom-out;
+      }
     </style>
     <div id="parket-lb-overlay">
       <img id="parket-lb-img" src="" alt="Zoom detalhe">
@@ -134,8 +139,37 @@ window.addEventListener('load', () => {
 
   const lb = document.getElementById('parket-lb-overlay');
   const img = document.getElementById('parket-lb-img');
+  let isZoomed = false;
+
+  function panImage(e) {
+    const x = (e.clientX / window.innerWidth) * 100;
+    const y = (e.clientY / window.innerHeight) * 100;
+    img.style.transformOrigin = `${x}% ${y}%`;
+  }
+
+  img.addEventListener('click', (e) => {
+    e.stopPropagation();
+    isZoomed = !isZoomed;
+    if (isZoomed) {
+      img.classList.add('extreme-zoom');
+      panImage(e);
+    } else {
+      img.classList.remove('extreme-zoom');
+      // Reset after transition or immediately
+      setTimeout(() => { if (!isZoomed) img.style.transformOrigin = 'center center'; }, 400);
+    }
+  });
+
+  lb.addEventListener('mousemove', (e) => {
+    if (isZoomed) panImage(e);
+  });
   
-  lb.addEventListener('click', () => { lb.classList.remove('lb-active'); });
+  lb.addEventListener('click', () => { 
+    lb.classList.remove('lb-active'); 
+    isZoomed = false;
+    img.classList.remove('extreme-zoom');
+    img.style.transformOrigin = 'center center';
+  });
 
   window.openParketLightbox = (src) => {
     img.src = src;
@@ -154,7 +188,9 @@ window.addEventListener('load', () => {
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') lb.classList.remove('lb-active');
+    if (e.key === 'Escape' && lb.classList.contains('lb-active')) {
+      lb.click();
+    }
   });
 });
 
