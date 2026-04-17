@@ -94,7 +94,7 @@ class ParketFooter extends HTMLElement {
 class ParketSEO extends HTMLElement {
   connectedCallback() {
     const title = this.getAttribute('title') || 'Parket Catálogo';
-    const description = this.getAttribute('description') || 'A revolução do luxo em madeira. Descubra nossas coleções exclusivas de pisos, decks, painéis, forros e escadas com design e engenharia de ponta.';
+    const description = this.getAttribute('description') || 'A evolução do design em madeira. Descubra nossas coleções exclusivas de pisos, decks, painéis, forros e escadas com design e engenharia de ponta.';
     const image = this.getAttribute('image') || 'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-01.jpg';
     
     // Inject metadata into <head>
