@@ -9,6 +9,8 @@
     rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet">
+  <script src="assets/js/components.js"></script>
+  <parket-seo is-main></parket-seo>
   <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
@@ -177,6 +179,7 @@
 </head>
 
 <body class="antialiased selection:bg-white selection:text-black">
+  <parket-loader></parket-loader>
 
   <!-- Cinematic entry curtain -->
   <div id="page-curtain"></div>
@@ -204,25 +207,7 @@
       <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-12 gap-8"></div>
     </section>
   </main>
-  <!-- Footer Shell -->
-  <footer class="w-full py-20 px-12 bg-black">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-8 w-full max-w-screen-2xl mx-auto">
-      <div><img src="logo-parket.png" alt="Parket" class="h-4 w-auto" /></div>
-      <div class="flex gap-8">
-        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
-          href="#">Privacy</a>
-        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
-          href="#">Terms</a>
-        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
-          href="#">Specifications</a>
-        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
-          href="#">Sustainability</a>
-      </div>
-      <div class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40">
-        © 2024 PARKET. ALL RIGHTS RESERVED.
-      </div>
-    </div>
-  </footer>
+  <parket-footer></parket-footer>
 
   <script>
       (function () {

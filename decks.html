@@ -78,18 +78,10 @@
 </head>
 
 <body class="antialiased selection:bg-white selection:text-black">
+  <parket-loader></parket-loader>
 
   <!-- Top Navigation -->
-  <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
-    <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
-      <a href="catalogo.html" class="flex items-center gap-4 group">
-        <span
-          class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
-        <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">Voltar
-          ao Catálogo</span>
-      </a>
-    </div>
-  </nav>
+  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category=""></parket-nav>
 
   <main>
     <!-- Hero Section -->
@@ -179,19 +171,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="w-full py-24 px-12 bg-black border-t border-white/10">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
-      <div class="text-2xl font-bold text-white tracking-widest uppercase">PARKET</div>
-      <div class="flex gap-12 opacity-40 hover:opacity-100 transition-opacity duration-500">
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Instagram</a>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">LinkedIn</a>
-        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Pinterest</a>
-      </div>
-      <div class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">
-        © 2024 PARKET INTERNAZIONALE. ALL RIGHTS RESERVED.
-      </div>
-    </div>
-  </footer>
+  <parket-footer></parket-footer>
 
   <script>
       // ── Letter Parallax Logic ──
