@@ -138,6 +138,19 @@
       transform: translateY(0);
     }
 
+    /* Micro-animação Amostras (Bolinhas de cor) */
+    .scene-card .swatch-bubble {
+      opacity: 0;
+      transform: translateX(-15px) scale(0.8);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .scene-card.risen .swatch-bubble {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+
     /* ── Letras "Categorias" ── */
     .Categorias-letter {
       display: inline-block;
@@ -240,14 +253,14 @@
                      <span>Escuro</span>
                      <span>Claro</span>
                    </div>
-                   <div class="flex -space-x-4">
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[7]" style="background: #2a1b14"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[6]" style="background: #4a2f20"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[5]" style="background: #6c4634"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[4]" style="background: #a4765b"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[3]" style="background: #bf9583"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[2]" style="background: #dbbfae"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[1]" style="background: #efdcd3"></div>
+                   <div class="flex -space-x-4 z-10 relative">
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[7] swatch-bubble" style="background: #2a1b14; transition-delay: 0.1s;"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[6] swatch-bubble" style="background: #4a2f20; transition-delay: 0.2s;"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[5] swatch-bubble" style="background: #6c4634; transition-delay: 0.3s;"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[4] swatch-bubble" style="background: #a4765b; transition-delay: 0.4s;"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[3] swatch-bubble" style="background: #bf9583; transition-delay: 0.5s;"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[2] swatch-bubble" style="background: #dbbfae; transition-delay: 0.6s;"></div>
+                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[1] swatch-bubble" style="background: #efdcd3; transition-delay: 0.7s;"></div>
                    </div>
                  </div>
               </div>
