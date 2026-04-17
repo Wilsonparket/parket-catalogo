@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parket - Carvalhos</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { headline: ["Inter"], body: ["Inter"], label: ["Inter"] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── Navigation ── */
+    .nav-blur {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    /* ── Carousel ── */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      margin: 0 auto;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1.04);
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      border-radius: 1.5rem;
+    }
+
+    /* ── Thumbnails ── */
+    .thumb-track {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 0;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+    .thumb-track::-webkit-scrollbar { display: none; }
+
+    .thumb {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.3;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.9);
+    }
+    .thumb:hover { opacity: 0.6; transform: scale(0.95); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.4); transform: scale(1); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0.8));
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── Arrow buttons ── */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .carousel-viewport:hover .carousel-arrow { opacity: 1; }
+    .carousel-arrow:hover { background: rgba(255,255,255,0.1); transform: translateY(-50%) scale(1.1); }
+    .carousel-arrow.left { left: 30px; }
+    .carousel-arrow.right { right: 30px; }
+
+    /* ── Entry animation ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1.2s cubic-bezier(0.16,1,0.3,1), transform 1.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
+    <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
+      <a href="pisos.html" class="flex items-center gap-4 group">
+        <span class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
+        <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">Voltar aos Pisos</span>
+      </a>
+      <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/30">Carvalhos</span>
+    </div>
+  </nav>
+
+  <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto text-center md:text-left">
+
+    <!-- Title Area -->
+    <div class="fade-up mb-20 max-w-3xl">
+      <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Coleção Premium</span>
+      <h1 id="page-title" class="text-[clamp(2.5rem,8vw,6.5rem)] font-extralight tracking-[-0.05em] leading-[0.85] mb-8">Carvalhos</h1>
+      <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
+        A elegância atemporal da madeira europeia. Uma seleção rigorosa de carvalhos que trazem calor, textura e uma história secular para cada ambiente.
+      </p>
+    </div>
+
+    <!-- Carousel Section -->
+    <div class="fade-up" style="transition-delay: 0.2s">
+      <div class="carousel-viewport" id="carousel">
+        <!-- Slides will be generated by JS -->
+        <button class="carousel-arrow left" id="arrow-left">
+          <span class="material-symbols-outlined text-white text-2xl">chevron_left</span>
+        </button>
+        <button class="carousel-arrow right" id="arrow-right">
+          <span class="material-symbols-outlined text-white text-2xl">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Interaction Bar -->
+      <div class="max-w-[900px] mx-auto mt-12">
+        <div class="flex items-center justify-between gap-12">
+
+          <div class="progress-bar flex-1">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Thumbnails track -->
+        <div class="thumb-track mt-12 justify-center" id="thumb-track"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-24 px-12 bg-black border-t border-white/5 mt-20">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
+      <div class="text-xl font-bold tracking-widest text-white uppercase">PARKET</div>
+      <div class="flex gap-12 opacity-30 hover:opacity-100 transition-opacity duration-500">
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Instagram</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">LinkedIn</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Pinterest</a>
+      </div>
+      <div class="text-white/20 text-[10px] uppercase tracking-[0.2em] font-light">
+        &copy; 2024 PARKET INTERNAZIONALE. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const images = [
+        "https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/27e09f2b-808a-4ecb-b60d-c2702e023383-1.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/aa120b24-69d4-48d5-b47f-b73099b875ef-2-1.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/european-oak-capuccino-1.jpeg",
+        "https://parket.com.br/wp-content/uploads/2026/03/European-Oak-Giant-1.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/Imagem_7-30-1.webp",
+        "https://parket.com.br/wp-content/uploads/2026/03/IMG_0150-1-scaled.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/IMG_6862-1-scaled.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/IMG_8925-2-1.jpeg",
+        "https://parket.com.br/wp-content/uploads/2026/03/IMG_8932-2-1.jpeg",
+        "https://parket.com.br/wp-content/uploads/2026/03/oak-flooring-dinesen-victoria-miro-gallery-wide-wooden-floorboards-02-1.jpg",
+        "https://parket.com.br/wp-content/uploads/2026/03/sao_paulo_tch1-1.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-01.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-02.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-03.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-04.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-05.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-06.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-07.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-08.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-09.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-10.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-11.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-12.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-13.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-14.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-15.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-16.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-17.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-18.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-19.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-20.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-21.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-22.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-23.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-24.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-25.jpg"
+      ];
+
+      let current = 0;
+      let autoplayTimer = null;
+
+      const carousel = document.getElementById('carousel');
+      const thumbTrack = document.getElementById('thumb-track');
+      const counter = document.getElementById('slide-counter');
+      const progressFill = document.getElementById('progress-fill');
+      const arrowLeft = document.getElementById('arrow-left');
+      const arrowRight = document.getElementById('arrow-right');
+
+      function goTo(idx) {
+        if (idx < 0) idx = images.length - 1;
+        if (idx >= images.length) idx = 0;
+        current = idx;
+
+        // Update slides
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => {
+          s.classList.toggle('active', i === current);
+        });
+
+        // Update thumbs
+        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+          t.classList.toggle('active', i === current);
+          if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+
+
+        progressFill.style.width = `${((current + 1) / images.length) * 100}%`;
+
+        resetAutoplay();
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(next, 5000);
+      }
+
+      function buildCarousel() {
+        images.forEach((src, i) => {
+          // Slide
+          const slide = document.createElement('div');
+          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img src="${src}" alt="Carvalhos ${i + 1}">`;
+          slide.addEventListener('click', next);
+          carousel.insertBefore(slide, arrowLeft);
+
+          // Thumbnail
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+          thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
+          thumb.addEventListener('click', () => goTo(i));
+          thumbTrack.appendChild(thumb);
+        });
+
+        progressFill.style.width = `${(1 / images.length) * 100}%`;
+        arrowLeft.addEventListener('click', prev);
+        arrowRight.addEventListener('click', next);
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') prev();
+          if (e.key === 'ArrowRight') next();
+        });
+
+        // Swipe
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        resetAutoplay();
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        carousel.addEventListener('mouseleave', resetAutoplay);
+      }
+
+      function animateEntry() {
+        document.querySelectorAll('.fade-up').forEach((el, i) => {
+          setTimeout(() => el.classList.add('visible'), 200 + i * 200);
+        });
+      }
+
+      window.addEventListener('load', () => {
+        buildCarousel();
+        animateEntry();
+      });
+    })();
+  </script>
+</body>
+</html>

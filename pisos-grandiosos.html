@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parket - Grandiosos</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { headline: ["Inter"], body: ["Inter"], label: ["Inter"] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── Navigation ── */
+    .nav-blur {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    /* ── Carousel ── */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      margin: 0 auto;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1.04);
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      border-radius: 1.5rem;
+    }
+
+    /* ── Thumbnails ── */
+    .thumb-strip {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 0;
+    }
+    .thumb-strip::-webkit-scrollbar { display: none; }
+
+    .thumb {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.3;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.4); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── UI ── */
+    .progress-track {
+      height: 2px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: rgba(255,255,255,0.8);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .carousel-view:hover .nav-btn { opacity: 1; }
+    .nav-btn:hover { background: rgba(255,255,255,0.1); }
+    .btn-left { left: 30px; }
+    .btn-right { right: 30px; }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .fade-in.active { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
+    <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
+      <a href="pisos.html" class="flex items-center gap-4 group">
+        <span class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
+        <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">Voltar aos Pisos</span>
+      </a>
+      <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/30">Grandiosos</span>
+    </div>
+  </nav>
+
+  <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
+
+    <!-- Header -->
+    <div class="fade-in mb-20 max-w-3xl">
+      <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Coleção Premium</span>
+      <h1 class="text-[clamp(2.5rem,8vw,6.5rem)] font-extralight tracking-[-0.05em] leading-[0.85] mb-8 uppercase">Grandiosos</h1>
+      <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
+        Réguas de dimensões imponentes que ampliam e valorizam o espaço. Uma coleção que celebra o luxo do formato XL e a continuidade visual da madeira.
+      </p>
+    </div>
+
+    <!-- Carousel -->
+    <div class="fade-in" style="transition-delay: 0.2s">
+      <div class="carousel-viewport" id="carousel">
+        <button class="nav-btn btn-left" id="btn-prev">
+          <span class="material-symbols-outlined text-white text-2xl">chevron_left</span>
+        </button>
+        <button class="nav-btn btn-right" id="btn-next">
+          <span class="material-symbols-outlined text-white text-2xl">chevron_right</span>
+        </button>
+      </div>
+
+      <div class="max-w-[900px] mx-auto mt-12">
+        <div class="flex items-center justify-between gap-12">
+
+          <div class="progress-track flex-1">
+            <div id="progress" class="progress-bar"></div>
+          </div>
+        </div>
+        <div class="thumb-strip mt-12 justify-center" id="thumbs"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-24 px-12 bg-black border-t border-white/5">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
+      <div class="text-xl font-bold tracking-widest text-white uppercase">PARKET</div>
+      <div class="flex gap-12 opacity-30">
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Instagram</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">LinkedIn</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Pinterest</a>
+      </div>
+      <div class="text-white/20 text-[10px] uppercase tracking-[0.2em] font-light">
+        © 2024 PARKET INTERNAZIONALE. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const urls = [
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-05.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-06.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-07.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-08.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-09.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-11.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-12.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-13.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-03.jpg"
+      ];
+
+      let current = 0;
+      const carousel = document.getElementById('carousel');
+      const thumbs = document.getElementById('thumbs');
+      const counter = document.getElementById('counter');
+      const progress = document.getElementById('progress');
+
+      function sync(idx) {
+        if (idx < 0) idx = urls.length - 1;
+        if (idx >= urls.length) idx = 0;
+        current = idx;
+
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => s.classList.toggle('active', i === current));
+        thumbs.querySelectorAll('.thumb').forEach((t, i) => {
+          t.classList.toggle('active', i === current);
+          if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+
+
+        progress.style.width = `${((current + 1) / urls.length) * 100}%`;
+      }
+
+      function init() {
+        urls.forEach((url, i) => {
+          const s = document.createElement('div');
+          s.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          s.innerHTML = `<img src="${url}" alt="Slide ${i+1}">`;
+          s.addEventListener('click', () => sync(current + 1));
+          carousel.insertBefore(s, document.getElementById('btn-prev'));
+
+          const t = document.createElement('div');
+          t.className = 'thumb' + (i === 0 ? ' active' : '');
+          t.innerHTML = `<img src="${url}" alt="Thumb ${i+1}">`;
+          t.onclick = () => sync(i);
+          thumbs.appendChild(t);
+        });
+
+        document.getElementById('btn-next').onclick = () => sync(current + 1);
+        document.getElementById('btn-prev').onclick = () => sync(current - 1);
+        
+        progress.style.width = `${(1 / urls.length) * 100}%`;
+
+        document.querySelectorAll('.fade-in').forEach((el, i) => {
+          setTimeout(() => el.classList.add('active'), 200 + i * 200);
+        });
+        
+        setInterval(() => sync(current + 1), 6000);
+      }
+
+      window.onload = init;
+    })();
+  </script>
+</body>
+</html>

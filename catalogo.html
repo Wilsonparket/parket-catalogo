@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline": "#919191",
+            "surface-container-highest": "#353535",
+            "inverse-surface": "#e2e2e2",
+            "primary-fixed": "#5d5f5f",
+            "on-primary-fixed-variant": "#e2e2e2",
+            "surface-dim": "#131313",
+            "tertiary-fixed": "#5d5f5f",
+            "surface-bright": "#393939",
+            "inverse-primary": "#5d5f5f",
+            "tertiary-fixed-dim": "#454747",
+            "on-secondary-container": "#e2e2e2",
+            "error-container": "#93000a",
+            "surface-variant": "#353535",
+            "primary-fixed-dim": "#454747",
+            "secondary-container": "#454747",
+            "on-surface-variant": "#c6c6c6",
+            "on-surface": "#e2e2e2",
+            "error": "#ffb4ab",
+            "surface": "#131313",
+            "on-tertiary-fixed-variant": "#e2e2e2",
+            "tertiary": "#e2e2e2",
+            "secondary": "#c6c6c7",
+            "background": "#131313",
+            "on-primary": "#1a1c1c",
+            "secondary-fixed": "#c6c6c7",
+            "on-secondary": "#1a1c1c",
+            "secondary-fixed-dim": "#aaabab",
+            "primary": "#ffffff",
+            "on-error": "#690005",
+            "on-secondary-fixed": "#1a1c1c",
+            "primary-container": "#d4d4d4",
+            "outline-variant": "#474747",
+            "on-primary-fixed": "#ffffff",
+            "tertiary-container": "#909191",
+            "inverse-on-surface": "#303030",
+            "on-tertiary-container": "#000000",
+            "on-tertiary-fixed": "#ffffff",
+            "on-background": "#e2e2e2",
+            "on-secondary-fixed-variant": "#3a3c3c",
+            "on-tertiary": "#1a1c1c",
+            "surface-container-high": "#2a2a2a",
+            "surface-container-low": "#1b1b1b",
+            "surface-container": "#1f1f1f",
+            "surface-tint": "#c6c6c7",
+            "on-error-container": "#ffdad6",
+            "surface-container-lowest": "#0e0e0e",
+            "on-primary-container": "#000000"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #000000;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .liquid-glass {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
+
+    .text-glow {
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ── Cinematic entry overlay ── */
+    #page-curtain {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 1s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    #page-curtain.lifted {
+      opacity: 0;
+    }
+
+    /* ── Cards: estado inicial (escondido abaixo) ── */
+    .scene-card {
+      opacity: 0;
+      transform: translateY(90px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scene-hero {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Estado visível */
+    .scene-card.risen,
+    .scene-hero.risen {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Letras "Categorias" ── */
+    .Categorias-letter {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+
+    /* ── Marquee de espécies ── */
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+    }
+
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 0;
+      margin-bottom: 60px;
+    }
+
+    /* ── Marquee items: hover glow ── */
+    .marquee-item {
+      display: inline-block;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.3);
+      transition: color 0.5s ease, text-shadow 0.5s ease, letter-spacing 0.5s ease;
+    }
+
+    .marquee-item:hover {
+      color: #ffffff;
+      text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.6),
+        0 0 40px rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.4em;
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-white selection:text-black">
+
+  <!-- Cinematic entry curtain -->
+  <div id="page-curtain"></div>
+
+  <!-- Top Navigation Shell -->
+  <main class="pt-16">
+    <!-- Hero Section -->
+    <section class="px-12 mb-32 max-w-screen-2xl mx-auto">
+      <div class="scene-hero flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div class="max-w-4xl">
+          <h1 id="Categorias-title"
+            class="text-[clamp(2rem,5vw,6rem)] font-extralight tracking-[-0.04em] leading-[0.85]"
+            style="text-transform: none; font-family: 'Inter', sans-serif;">Categorias</h1>
+        </div>
+      </div>
+    </section>
+    <!-- Marquee espécies -->
+    <div class="marquee-wrap px-0 mb-0">
+      <div id="marquee-track"
+        class="marquee-track font-['Inter'] text-[11px] tracking-[0.35em] uppercase text-white/30"></div>
+    </div>
+
+    <!-- Image Gallery (gerada dinamicamente) -->
+    <section class="px-12 mb-40 max-w-screen-2xl mx-auto">
+      <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-12 gap-8"></div>
+    </section>
+  </main>
+  <!-- Footer Shell -->
+  <footer class="w-full py-20 px-12 bg-black">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8 w-full max-w-screen-2xl mx-auto">
+      <div><img src="logo-parket.png" alt="Parket" class="h-4 w-auto" /></div>
+      <div class="flex gap-8">
+        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
+          href="#">Privacy</a>
+        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
+          href="#">Terms</a>
+        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
+          href="#">Specifications</a>
+        <a class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40 hover:text-white transition-colors duration-300"
+          href="#">Sustainability</a>
+      </div>
+      <div class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-light text-white/40">
+        © 2024 PARKET. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+      (function () {
+        const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+
+        // ── Descrições dos cards ─────────────────────────────────────
+        // Edite aqui para adicionar título, subtítulo e pasta de cada card.
+        // Para adicionar um novo card: crie a pasta, coloque image.jpg dentro,
+        // e adicione uma entrada nova aqui (a posição no layout é automática).
+        const CARD_INFO = {
+          1: { title: 'Escadas', folder: 'escadas' },
+          2: { title: 'Decks', folder: 'decks' },
+          3: { title: 'Portas', folder: 'portas' },
+          4: { title: 'Pisos', folder: 'pisos' },
+          5: { title: 'Painéis', folder: 'paineis' },
+          6: { title: 'Forros', folder: 'forros' },
+        };
+        // ────────────────────────────────────────────────────────────
+
+        function probe(src) {
+          return new Promise((res, rej) => {
+            const img = new Image();
+            img.onload = () => res(src);
+            img.onerror = () => rej();
+            img.src = src + '?v=' + Date.now();
+          });
+        }
+
+        const BUST = '?v=' + Date.now();
+
+        async function findImage(n) {
+          const info = CARD_INFO[n];
+          if (!info || !info.folder) return null;
+          for (const ext of EXTS) {
+            try { return await probe(`${info.folder}/image.${ext}`); } catch { }
+          }
+          return null;
+        }
+
+        function labelHTML(n, position) {
+          const info = CARD_INFO[n];
+          if (!info) return '';
+          const { title, sub } = info;
+          if (position === 'center') {
+            return `<div class="absolute inset-0 flex items-end justify-start p-12">
+        <div>
+          ${sub ? `<p class="font-label text-[11px] tracking-[0.3em] uppercase text-white/50 mb-2">${sub}</p>` : ''}
+          <h2 class="font-headline text-3xl font-light">${title}</h2>
+        </div>
+      </div>`;
+          }
+          return `<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+      <div>
+        ${sub ? `<p class="font-label text-[10px] tracking-[0.2em] uppercase text-white/50 mb-1">${sub}</p>` : ''}
+        <h3 class="font-headline text-xl font-light">${title}</h3>
+      </div>
+    </div>`;
+        }
+
+        // Cria um card grande (col-8)
+        function makeLarge(src, n) {
+          const info = CARD_INFO[n];
+          const el = document.createElement('a');
+          el.href = info ? `${info.folder}.html` : '#';
+          el.className = 'scene-card block md:col-span-8 group relative overflow-hidden rounded-xl h-[640px] liquid-glass cursor-pointer';
+          el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" src="${src}${BUST}">${labelHTML(n, 'bottom')}`;
+          return el;
+        }
+
+        // Cria um card pequeno (para coluna) — divide altura do col
+        function makeSmall(src, n) {
+          const info = CARD_INFO[n];
+          const el = document.createElement('a');
+          el.href = info ? `${info.folder}.html` : '#';
+          el.className = 'scene-card block group relative overflow-hidden rounded-xl liquid-glass flex-1 min-h-[307px] cursor-pointer';
+          el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-70" src="${src}${BUST}">${labelHTML(n, 'bottom')}`;
+          return el;
+        }
+
+        // Cria um card panorâmico (col-12)
+        function makeWide(src, n) {
+          const info = CARD_INFO[n];
+          const el = document.createElement('a');
+          el.href = info ? `${info.folder}.html` : '#';
+          el.className = 'scene-card block md:col-span-12 group relative overflow-hidden rounded-xl h-[400px] liquid-glass cursor-pointer';
+          el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" src="${src}${BUST}">${labelHTML(n, 'center')}`;
+          return el;
+        }
+
+        // Monta a galeria bento em grupos de 4: [grande, coluna(pequeno+pequeno), panorâmico]
+        function buildGrid(cards) {
+          const grid = document.getElementById('cards-grid');
+          for (let i = 0; i < cards.length; i += 4) {
+            const g = cards.slice(i, i + 4);
+
+            // Card 4 (panorâmico) vem primeiro
+            if (g[3]) grid.appendChild(makeWide(g[3].src, g[3].n));
+
+            if (g[0]) grid.appendChild(makeLarge(g[0].src, g[0].n));
+
+            if (g[1] || g[2]) {
+              const col = document.createElement('div');
+              col.className = 'md:col-span-4 flex flex-col gap-8 h-[640px]';
+              if (g[1]) col.appendChild(makeSmall(g[1].src, g[1].n));
+              if (g[2]) col.appendChild(makeSmall(g[2].src, g[2].n));
+              grid.appendChild(col);
+            }
+          }
+        }
+
+        // Anima curtain + cards em cascata
+        function runAnimations() {
+          const curtain = document.getElementById('page-curtain');
+          const hero = document.querySelector('.scene-hero');
+          const cards = document.querySelectorAll('.scene-card');
+
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            curtain.classList.add('lifted');
+            setTimeout(() => hero && hero.classList.add('risen'), 150);
+            cards.forEach((card, i) => {
+              setTimeout(() => card.classList.add('risen'), 200 + i * 150);
+            });
+          }));
+        }
+
+        // Carrega imagens de cada entrada do CARD_INFO; pula cards sem imagem.
+        window.addEventListener('load', async () => {
+          const cards = [];
+          const nums = Object.keys(CARD_INFO).map(Number).sort((a, b) => a - b);
+          for (const n of nums) {
+            const src = await findImage(n);
+            if (src) cards.push({ n, src });
+          }
+          buildGrid(cards);
+          runAnimations();
+        });
+      })();
+  </script>
+
+  <script>
+    (function () {
+
+      // ── Marquee ──────────────────────────────────────────────────
+      const species = [
+        { name: 'Pisos', url: 'pisos.html' },
+        { name: 'Decks', url: 'decks.html' },
+        { name: 'Escadas', url: 'escadas.html' },
+        { name: 'Fachadas', url: 'fachadas.html' },
+        { name: 'Forros', url: 'forros.html' },
+        { name: 'Painéis', url: 'paineis.html' },
+        { name: 'Portas', url: 'portas.html' },
+      ];
+      const track = document.getElementById('marquee-track');
+      if (track) {
+        const sep = '<span style="margin:0 32px;opacity:0.3">·</span>';
+        const items = species.map(s => `<a href="${s.url}" class="marquee-item hover:text-white transition-colors duration-300">${s.name}</a>`);
+        const content = items.join(sep) + sep;
+        // Duplica para loop contínuo
+        track.innerHTML = (content + content + content + content);
+      }
+
+      // ── Split letras do título ───────────────────────────────────
+      const titleEl = document.getElementById('Categorias-title');
+      let letters = [];
+      if (titleEl) {
+        const text = titleEl.textContent.trim();
+        titleEl.innerHTML = text.split('').map((ch, i) =>
+          `<span class="Categorias-letter" data-i="${i}">${ch}</span>`
+        ).join('');
+        letters = titleEl.querySelectorAll('.Categorias-letter');
+      }
+
+      // Speeds individuais por letra (índice)
+      const speeds = [0.6, 0.25, 0.45, 0.15, 0.55];
+      const driftsX = [-1, 0.5, 0, -0.3, 0.8]; // desvio horizontal sutil
+
+      // ── Scroll handler ───────────────────────────────────────────
+      function onScroll() {
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+        const progress = Math.min(sy / (vh * 0.7), 1);
+
+        // Letras: cada uma flutua em velocidade e direção diferentes
+        letters.forEach((letter, i) => {
+          const s = speeds[i] ?? 0.4;
+          const dx = driftsX[i] ?? 0;
+          const dy = -(sy * s);
+          const opacity = Math.max(0, 1 - progress * 1.3);
+          letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
+          letter.style.opacity = opacity;
+        });
+
+        // Marquee desliza na direção oposta ao scroll (velocidade lenta)
+        if (track) {
+          track.style.transform = `translateX(${-sy * 0.18}px)`;
+        }
+
+        // Cards: parallax de profundidade individual
+        document.querySelectorAll('.scene-card.risen').forEach((card, i) => {
+          const rect = card.getBoundingClientRect();
+          const center = rect.top + rect.height / 2 - vh / 2;
+          const depth = 0.04 + (i % 3) * 0.015;
+          card.style.transform = `translateY(${center * depth * -1}px)`;
+        });
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parket - Portas</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface": "#131313",
+            "background": "#000000",
+            "primary": "#ffffff"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body { background-color: #000000; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .liquid-glass {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
+    .text-glow { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    
+    /* ── Floating Letters Style ── */
+    .Portas-letter {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+    
+    /* ── Smooth Scrolling ── */
+    html { scroll-behavior: smooth; }
+    
+    /* ── Custom Navigation Blur ── */
+    .nav-blur {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+  <!-- Top Navigation -->
+  <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
+    <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
+      <a href="catalogo.html" class="flex items-center gap-4 group">
+        <span class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
+        <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">Voltar ao Catálogo</span>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center px-12 pt-32 pb-20 max-w-screen-2xl mx-auto reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center w-full">
+        <div>
+          <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/40 mb-8 block">Entradas Majestosas</span>
+          <h1 id="Portas-title" class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-16" style="text-transform: none; font-family: 'Inter', sans-serif;">
+            Portas
+          </h1>
+          <p class="text-white/60 font-body text-xl leading-relaxed max-w-lg mb-12">
+            A primeira impressão é a que permanece. Nossas portas pivotantes e de correr em madeira de demolição ou nobres são o ápice do design contemporâneo.
+          </p>
+          <div class="flex gap-8">
+            <div class="h-[1px] w-20 bg-white/20 mt-4"></div>
+            <p class="text-white/40 text-sm italic font-light">O umbral do luxo absoluto.</p>
+          </div>
+        </div>
+        <div class="relative aspect-[4/5] lg:aspect-square overflow-hidden rounded-2xl liquid-glass group">
+          <img src="portas/image.jpg" class="w-full h-full object-cover opacity-80 transition-transform duration-[3s] group-hover:scale-110" alt="Portas Parket">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-24 px-12 bg-black border-t border-white/10">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
+      <div class="text-2xl font-bold text-white tracking-widest uppercase">PARKET</div>
+      <div class="flex gap-12 opacity-40 hover:opacity-100 transition-opacity duration-500">
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Instagram</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">LinkedIn</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Pinterest</a>
+      </div>
+      <div class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">
+        © 2024 PARKET INTERNAZIONALE. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Letter Parallax Logic ──
+    (function() {
+      const titleEl = document.getElementById('Portas-title');
+      let letters = [];
+      if (titleEl) {
+        const text = titleEl.textContent.trim();
+        titleEl.innerHTML = text.split('').map((ch, i) => 
+          `<span class="Portas-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
+        ).join('');
+        letters = titleEl.querySelectorAll('.Portas-letter');
+      }
+
+      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55, 0.4];
+      const driftsX = [-1, 0.5, 0, -0.3, 0.8, -0.2];
+
+      window.addEventListener('scroll', () => {
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+        const progress = Math.min(sy / (vh * 0.7), 1);
+
+        letters.forEach((letter, i) => {
+          const s = speeds[i] ?? 0.4;
+          const dx = driftsX[i] ?? 0;
+          const dy = -(sy * s);
+          const opacity = Math.max(0, 1 - progress * 1.5);
+          letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
+          letter.style.opacity = opacity;
+        });
+      }, { passive: true });
+    })();
+
+    // Smooth Reveal Animation on Scroll
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

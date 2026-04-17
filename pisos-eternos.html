@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parket - Eternos</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { headline: ["Inter"], body: ["Inter"], label: ["Inter"] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── Navigation ── */
+    .nav-blur {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    /* ── Carousel ── */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      margin: 0 auto;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1.04);
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      border-radius: 1.5rem;
+    }
+
+    /* ── Thumbnails ── */
+    .thumb-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 4px 0;
+    }
+    .thumb-track::-webkit-scrollbar { display: none; }
+
+    .thumb {
+      flex-shrink: 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.4;
+      transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
+    }
+    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.6); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      transition: width 0.3s ease;
+    }
+
+    /* ── Arrow buttons ── */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s ease, background 0.3s ease;
+    }
+    .carousel-viewport:hover .carousel-arrow { opacity: 1; }
+    .carousel-arrow:hover { background: rgba(255,255,255,0.15); }
+    .carousel-arrow.left { left: 20px; }
+    .carousel-arrow.right { right: 20px; }
+
+    /* ── Floating title letters ── */
+    .float-letter {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+
+    /* ── Entry animation ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5">
+    <div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
+      <a href="pisos.html" class="flex items-center gap-4 group">
+        <span class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
+        <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">Voltar aos Pisos</span>
+      </a>
+      <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/30">Eternos</span>
+    </div>
+  </nav>
+
+  <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
+
+    <!-- Title -->
+    <div class="fade-up mb-16">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Pisos</span>
+      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85]">Eternos</h1>
+    </div>
+
+    <!-- Carousel -->
+    <div class="fade-up" style="transition-delay: 0.15s">
+      <div class="carousel-viewport" id="carousel">
+        <!-- Slides generated by JS -->
+        <button class="carousel-arrow left" id="arrow-left">
+          <span class="material-symbols-outlined text-white text-xl">chevron_left</span>
+        </button>
+        <button class="carousel-arrow right" id="arrow-right">
+          <span class="material-symbols-outlined text-white text-xl">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Progress -->
+      <div class="max-w-[900px] mx-auto">
+        <div class="flex items-center gap-6 mt-6">
+          <span id="slide-counter" class="font-label text-[11px] tracking-[0.2em] text-white/40 tabular-nums min-w-[60px]">01 / 05</span>
+          <div class="progress-bar flex-1">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="thumb-track mt-6 justify-center" id="thumb-track"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-24 px-12 bg-black border-t border-white/5">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
+      <div><img src="logo-parket.png" alt="Parket" class="h-4 w-auto" /></div>
+      <div class="flex gap-12 opacity-40 hover:opacity-100 transition-opacity duration-500">
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Instagram</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">LinkedIn</a>
+        <a href="#" class="text-[10px] uppercase tracking-[0.2em] hover:text-white">Pinterest</a>
+      </div>
+      <div class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">
+        &copy; 2024 PARKET. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // ── Autoload: procura imagens na pasta pisos/eternos/ ──
+      const FOLDER = 'pisos/eternos';
+      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+      const MAX_IMAGES = 30;
+
+      function probe(src) {
+        return new Promise((res, rej) => {
+          const img = new Image();
+          img.onload = () => res(src);
+          img.onerror = () => rej();
+          img.src = src + '?v=' + Date.now();
+        });
+      }
+
+      async function findAllImages() {
+        const found = [];
+        for (let i = 1; i <= MAX_IMAGES; i++) {
+          const num = String(i).padStart(2, '0');
+          let hit = false;
+          for (const ext of EXTS) {
+            try {
+              const src = await probe(`${FOLDER}/${num}.${ext}`);
+              found.push(src);
+              hit = true;
+              break;
+            } catch {}
+          }
+          if (!hit && i > found.length + 3) break; // stop after 3 consecutive misses
+        }
+        return found;
+      }
+
+      // ── Carousel logic ──
+      let current = 0;
+      let images = [];
+      let autoplayTimer = null;
+
+      const carousel = document.getElementById('carousel');
+      const thumbTrack = document.getElementById('thumb-track');
+      const counter = document.getElementById('slide-counter');
+      const progressFill = document.getElementById('progress-fill');
+      const arrowLeft = document.getElementById('arrow-left');
+      const arrowRight = document.getElementById('arrow-right');
+
+      function goTo(idx) {
+        if (idx < 0) idx = images.length - 1;
+        if (idx >= images.length) idx = 0;
+        current = idx;
+
+        // Update slides
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => {
+          s.classList.toggle('active', i === current);
+        });
+
+        // Update thumbs
+        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+          t.classList.toggle('active', i === current);
+          if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+
+        // Update counter & progress
+        const total = images.length;
+        counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+        progressFill.style.width = `${((current + 1) / total) * 100}%`;
+
+        resetAutoplay();
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(next, 5000);
+      }
+
+      function buildCarousel(srcs) {
+        images = srcs;
+
+        // Create slides
+        srcs.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img src="${src}" alt="Eternos ${i + 1}">`;
+          carousel.insertBefore(slide, arrowLeft);
+        });
+
+        // Create thumbnails
+        srcs.forEach((src, i) => {
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+          thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
+          thumb.addEventListener('click', () => goTo(i));
+          thumbTrack.appendChild(thumb);
+        });
+
+        // Init progress
+        progressFill.style.width = `${(1 / srcs.length) * 100}%`;
+
+        // Arrows
+        arrowLeft.addEventListener('click', prev);
+        arrowRight.addEventListener('click', next);
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') prev();
+          if (e.key === 'ArrowRight') next();
+        });
+
+        // Touch swipe
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        // Autoplay
+        resetAutoplay();
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        carousel.addEventListener('mouseleave', resetAutoplay);
+      }
+
+      // ── Entry animations ──
+      function animateEntry() {
+        document.querySelectorAll('.fade-up').forEach((el, i) => {
+          setTimeout(() => el.classList.add('visible'), 100 + i * 150);
+        });
+      }
+
+      // ── Init ──
+      window.addEventListener('load', async () => {
+        const srcs = await findAllImages();
+        if (srcs.length) buildCarousel(srcs);
+        animateEntry();
+      });
+    })();
+  </script>
+</body>
+</html>
