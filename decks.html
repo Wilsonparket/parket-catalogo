@@ -74,6 +74,73 @@
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
+
+    /* ── Horizontal Scroll Utilities ── */
+    .panel {
+      width: 100vw;
+      height: 100vh;
+      flex-shrink: 0;
+    }
+    
+    .horizontal-track {
+      display: flex;
+      width: 200vw;
+      height: 100vh;
+      will-change: transform;
+    }
+
+    /* ── Category Cards ── */
+    .category-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease;
+    }
+    .category-card:hover {
+      transform: scale(1.03);
+      border-color: rgba(255,255,255,0.15);
+    }
+    .category-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .category-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 80%;
+      opacity: 0.6;
+      transition: opacity 0.5s ease, transform 0.7s ease;
+    }
+    .category-card:hover img {
+      opacity: 0.85;
+      transform: scale(1.08);
+    }
+    .category-card .card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      padding: 1.5rem;
+    }
+
+    .scroll-wrapper {
+      height: 200vh; /* 2 panels */
+    }
+
+    .sticky-container {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
   </style>
   <script src="assets/js/components.js"></script>
   <parket-seo title="Parket Decks"></parket-seo>
@@ -85,143 +152,151 @@
   <!-- Top Navigation -->
   <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category=""></parket-nav>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center px-12 pt-32 pb-20 max-w-screen-2xl mx-auto reveal">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center w-full">
-        <div>
-          <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/40 mb-8 block">Áreas Externas</span>
-          <h1 id="Decks-title"
-            class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-16"
-            style="text-transform: none; font-family: 'Inter', sans-serif;">
-            Decks
-          </h1>
-          <p class="text-white/60 font-body text-xl leading-relaxed max-w-lg mb-12">
-            Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza
-            e o conforto térmico da madeira natural.
-          </p>
-          <div class="flex gap-8">
-            <div class="h-[1px] w-20 bg-white/20 mt-4"></div>
-            <p class="text-white/40 text-sm italic font-light">Vida ao ar livre com alma e design.</p>
+  <main class="scroll-wrapper">
+    <div class="sticky-container">
+      <div id="horizontal-track" class="horizontal-track">
+        
+        <!-- Slide 1: Hero -->
+        <section class="panel flex items-center justify-center px-12 pt-12 text-center">
+          <div class="max-w-3xl mx-auto">
+            <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/40 mb-8 block">Áreas Externas</span>
+            <h1 id="Decks-title" class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-16" style="text-transform: none; font-family: 'Inter', sans-serif;">
+              Decks
+            </h1>
+            <p class="text-white/60 font-body text-xl leading-relaxed mx-auto mb-12 max-w-xl">
+              Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
+            </p>
+            <div class="flex flex-col items-center gap-6">
+              <div class="h-[1px] w-20 bg-white/20"></div>
+              <p class="text-white/40 text-sm italic font-light">Vida ao ar livre com alma e design.</p>
+            </div>
           </div>
-        </div>
-        <div class="relative aspect-[4/5] lg:aspect-square overflow-hidden rounded-2xl liquid-glass group">
-          <img src="decks/image.webp"
-            class="w-full h-full object-cover opacity-80 transition-transform duration-[3s] group-hover:scale-110"
-            alt="Deck Parket">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Detail Section -->
-    <section class="px-12 py-48 bg-surface/20 border-y border-white/5 reveal">
-      <div class="max-w-screen-2xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
-          <div class="lg:col-span-7">
-            <div class="relative aspect-video overflow-hidden rounded-3xl liquid-glass shadow-2xl">
-              <img src="deck_detail_1776366828459.png"
-                class="w-full h-full object-cover transition-transform duration-[2.5s] hover:scale-105"
-                alt="Detalhe Deck">
-              <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
-            </div>
+        <!-- Slide 2: Category Cards (autoload) -->
+        <section class="panel flex items-center px-12">
+          <div class="w-full max-w-screen-2xl mx-auto">
+            <h2 class="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-10">Coleções Especiais</h2>
+            <div id="category-grid" class="grid grid-cols-4 grid-rows-1 gap-4 h-[78vh]"></div>
           </div>
-          <div class="lg:col-span-5 space-y-16">
-            <div>
-              <h3 class="text-4xl font-light mb-8 uppercase tracking-tight">Durabilidade <span
-                  class="italic font-normal">Externa</span></h3>
-              <p class="text-white/50 text-lg leading-relaxed font-light">
-                Utilizamos madeiras de alta densidade como o Ipê e o Cumaru, combinadas com sistemas de fixação
-                invisível que evitam o acúmulo de água e prolongam a vida útil da estrutura.
-              </p>
-            </div>
-            <div class="grid grid-cols-2 gap-12 border-t border-white/10 pt-12">
-              <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] text-white/30 block mb-4">Espécies</span>
-                <p class="text-base font-light">Ipê, Cumaru, Teca Royal</p>
-              </div>
-              <div>
-                <span class="text-[10px] uppercase tracking-[0.3em] text-white/30 block mb-4">Proteção</span>
-                <p class="text-base font-light">UVR Shield, Óleo de Teca Premium</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Call to Action -->
-    <section class="py-72 px-12 text-center max-w-screen-4xl mx-auto reveal group">
-      <div class="relative inline-block mb-16">
-        <h2 class="text-5xl md:text-8xl font-extralight tracking-tighter uppercase relative z-10">
-          Beleza ao ar <span class="italic font-normal">livre</span>.
-        </h2>
-        <div
-          class="absolute -inset-4 bg-white/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-[1s]">
-        </div>
       </div>
-      <p class="text-white/40 text-lg mb-20 max-w-2xl mx-auto font-light">
-        Planeje sua área de lazer com o máximo em sofisticação e durabilidade que só a Parket oferece.
-      </p>
-      <div class="flex flex-col md:flex-row justify-center gap-6">
-        <button
-          class="liquid-glass border border-white/15 px-16 py-7 rounded-full font-label text-[11px] uppercase tracking-[0.4em] font-bold hover:bg-white hover:text-black transition-all duration-500 hover:scale-105 active:scale-95 shadow-xl">
-          Planejar sua Área Externa
-        </button>
-      </div>
-    </section>
+    </div>
   </main>
 
   <!-- Footer -->
   <parket-footer></parket-footer>
 
   <script>
-      // ── Letter Parallax Logic ──
-      (function () {
-        const titleEl = document.getElementById('Decks-title');
-        let letters = [];
-        if (titleEl) {
-          const text = titleEl.textContent.trim();
-          titleEl.innerHTML = text.split('').map((ch, i) =>
-            `<span class="Decks-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
-          ).join('');
-          letters = titleEl.querySelectorAll('.Decks-letter');
+    // ── Autoload Category Cards ──
+    (function () {
+      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+      const CATEGORIES = [
+        { title: 'Brazil',   folder: 'brazil',   size: 'normal' },
+        { title: 'Eurodeck', folder: 'eurodeck', size: 'normal' },
+        { title: 'Kebony',   folder: 'kebony',   size: 'normal' },
+        { title: 'Únicos',   folder: 'unicos',   size: 'normal' },
+      ];
+
+      function probe(src) {
+        return new Promise((res, rej) => {
+          const img = new Image();
+          img.onload = () => res(src);
+          img.onerror = () => rej();
+          img.src = src + '?v=' + Date.now();
+        });
+      }
+
+      async function findImage(cat) {
+        if (cat.cover) return cat.cover;
+        for (const ext of EXTS) {
+          try { return await probe(`decks/${cat.folder}/image.${ext}`); } catch {}
         }
+        return null;
+      }
 
-        const speeds = [0.6, 0.25, 0.45, 0.35, 0.55];
-        const driftsX = [-1, 0.5, 0, -0.3, 0.8];
+      function createCard(cat, src) {
+        const a = document.createElement('a');
+        a.href = `decks-${cat.folder}.html`;
+        a.className = 'category-card'; // We are keeping them all vertical pillars in a 4x1 grid!
+        a.innerHTML = `
+          <img src="${src}${src.includes('?') ? '' : '?v=' + Date.now()}" alt="${cat.title}">
+          <div class="card-label">
+            <h3 class="font-headline text-2xl font-light">${cat.title}</h3>
+          </div>`;
+        return a;
+      }
 
-        window.addEventListener('scroll', () => {
-          const sy = window.scrollY;
-          const vh = window.innerHeight;
-          const progress = Math.min(sy / (vh * 0.7), 1);
+      function createPlaceholder(cat) {
+        const a = document.createElement('a');
+        a.href = `decks-${cat.folder}.html`;
+        a.className = 'category-card';
+        a.innerHTML = `
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="material-symbols-outlined text-white/10 text-5xl">image</span>
+          </div>
+          <div class="card-label">
+            <h3 class="font-headline text-2xl font-light">${cat.title}</h3>
+          </div>`;
+        return a;
+      }
 
-          letters.forEach((letter, i) => {
-            const s = speeds[i] ?? 0.4;
-            const dx = driftsX[i] ?? 0;
-            const dy = -(sy * s);
-            const opacity = Math.max(0, 1 - progress * 1.5);
-            letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
-            letter.style.opacity = opacity;
-          });
-        }, { passive: true });
-      })();
-
-    // Smooth Reveal Animation on Scroll
-    const observerOptions = {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px"
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
+      window.addEventListener('load', async () => {
+        const grid = document.getElementById('category-grid');
+        if (!grid) return;
+        for (const cat of CATEGORIES) {
+          const src = await findImage(cat);
+          grid.appendChild(src ? createCard(cat, src) : createPlaceholder(cat));
         }
       });
-    }, observerOptions);
+    })();
+  </script>
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  <script>
+    // ── Horizontal Scroll Logic ──
+    const track = document.getElementById('horizontal-track');
+    const wrapper = document.querySelector('.scroll-wrapper');
+    const panels = document.querySelectorAll('.panel');
+
+    // ── Letter Parallax Logic ──
+    (function() {
+      const titleEl = document.getElementById('Decks-title');
+      let letters = [];
+      if (titleEl) {
+        const text = titleEl.textContent.trim();
+        titleEl.innerHTML = text.split('').map((ch, i) => 
+          `<span class="Decks-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
+        ).join('');
+        letters = titleEl.querySelectorAll('.Decks-letter');
+      }
+
+      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55];
+      const driftsX = [-1, 0.5, 0, -0.3, 0.8];
+
+      window.addEventListener('scroll', () => {
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+        
+        const totalScrollable = wrapper.offsetHeight - vh;
+        const scrollProgress = Math.max(0, Math.min(sy / totalScrollable, 1));
+        
+        const trackWidth = track.scrollWidth;
+        const translateX = -scrollProgress * (trackWidth - window.innerWidth);
+        track.style.transform = `translateX(${translateX}px)`;
+
+        const progressHero = Math.min(sy / (vh * 0.7), 1);
+        letters.forEach((letter, i) => {
+          const s = speeds[i] ?? 0.4;
+          const dx = driftsX[i] ?? 0;
+          const dy = -(sy * s);
+          const opacity = Math.max(0, 1 - progressHero * 1.5);
+          letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
+          letter.style.opacity = opacity;
+        });
+
+      }, { passive: true });
+    })();
   </script>
 </body>
 
