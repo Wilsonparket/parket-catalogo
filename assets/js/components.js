@@ -58,21 +58,7 @@ class ParketNav extends HTMLElement {
   }
 }
 
-class ParketFooter extends HTMLElement {
-  connectedCallback() {
-    // Check if we are in a subfolder or root to resolve the logo image
-    const depth = this.getAttribute('depth') || '0';
-    const logoSrc = depth === '1' ? '../logo-parket.png' : 'logo-parket.png';
 
-    this.innerHTML = `
-      <footer class="w-full py-24 px-12 bg-black border-t border-white/5 relative z-10">
-        <div class="flex justify-center items-center w-full max-w-screen-2xl mx-auto">
-          <img src="${logoSrc}" alt="Parket" class="h-4 w-auto" />
-        </div>
-      </footer>
-    `;
-  }
-}
 
 class ParketSEO extends HTMLElement {
   connectedCallback() {
@@ -220,6 +206,5 @@ class ParketVideos extends HTMLElement {
 // Register components
 customElements.define('parket-loader', ParketLoader);
 customElements.define('parket-nav', ParketNav);
-customElements.define('parket-footer', ParketFooter);
 customElements.define('parket-seo', ParketSEO);
 customElements.define('parket-videos', ParketVideos);
