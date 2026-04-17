@@ -169,7 +169,7 @@
     <!-- Title -->
     <div class="fade-up mb-12">
       <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Coleção Decks</span>
-      <h1 id="Brazil-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] -ml-[10px]" style="text-transform: none; font-family: 'Inter', sans-serif;">
+      <h1 id="Brazil-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85]" style="text-transform: none; font-family: 'Inter', sans-serif;">
         Brazil
       </h1>
       <p class="text-white/50 font-body text-lg leading-relaxed max-w-2xl mt-10 mb-8">
@@ -241,7 +241,7 @@
           const dx = driftsX[i] ?? 0;
           const dy = -(sy * s);
           const opacity = Math.max(0, 1 - progress * 1.5);
-          letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
+          letter.style.transform = `translate(${0}px, ${dy}px)`;
           letter.style.opacity = opacity;
         });
       }, { passive: true });
