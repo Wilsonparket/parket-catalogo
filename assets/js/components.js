@@ -68,11 +68,6 @@ class ParketFooter extends HTMLElement {
       <footer class="w-full py-24 px-12 bg-black border-t border-white/5 relative z-10">
         <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
           <div><img src="${logoSrc}" alt="Parket" class="h-4 w-auto" /></div>
-          <div class="flex gap-12 opacity-40 hover:opacity-100 transition-opacity duration-500">
-            <a href="#" class="font-label text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Instagram</a>
-            <a href="#" class="font-label text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" class="font-label text-[10px] uppercase tracking-[0.2em] hover:text-white transition-colors">Pinterest</a>
-          </div>
           <div class="text-white/30 font-label text-[10px] uppercase tracking-[0.2em] font-light text-center">
             &copy; ${new Date().getFullYear()} PARKET. ALL RIGHTS RESERVED.
           </div>
@@ -106,6 +101,64 @@ class ParketSEO extends HTMLElement {
     document.head.insertAdjacentHTML('beforeend', metaTags);
   }
 }
+
+// ── Global Lightbox Logic ──
+window.addEventListener('DOMContentLoaded', () => {
+  // Inject zoom-in cursor style for all carousels
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .carousel-slide { cursor: zoom-in !important; }
+  `;
+  document.head.appendChild(style);
+
+  // Inject DOM element safely
+  const lbContainer = document.createElement('div');
+  lbContainer.innerHTML = `
+    <div id="parket-global-lightbox" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-3xl hidden items-center justify-center transition-all duration-500 opacity-0 cursor-zoom-out" style="display: none;">
+      <img id="parket-lightbox-img" class="max-w-[95vw] max-h-[95vh] object-contain transform scale-90 transition-transform duration-700 select-none shadow-2xl" src="" alt="View" />
+    </div>
+  `;
+  document.body.appendChild(lbContainer);
+
+  const lb = document.getElementById('parket-global-lightbox');
+  const img = document.getElementById('parket-lightbox-img');
+  
+  lb.addEventListener('click', () => {
+    lb.style.opacity = '0';
+    img.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      lb.style.display = 'none';
+    }, 500);
+  });
+
+  window.openParketLightbox = (src) => {
+    img.src = src;
+    lb.style.display = 'flex';
+    // Trigger paint reflow for animation
+    void lb.offsetWidth;
+    lb.style.opacity = '1';
+    img.style.transform = 'scale(1)';
+  };
+  
+  // Attach delegated click listener to trigger zoom without modifying separate HTML files
+  document.body.addEventListener('click', (e) => {
+    const slide = e.target.closest('.carousel-slide');
+    // We only want to zoom the ACTIVE slide, so arrows/background don't accidentally trigger it. 
+    // And actually, if you click the arrows, e.target is .material-symbols-outlined which is inside .carousel-arrow.
+    const isArrow = e.target.closest('.carousel-arrow');
+    if (slide && !isArrow) {
+      const imgTarget = slide.querySelector('img');
+      if (imgTarget && imgTarget.src) window.openParketLightbox(imgTarget.src);
+    }
+  });
+
+  // Close with Esc key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lb.style.display === 'flex') {
+      lb.click();
+    }
+  });
+});
 
 // Register components
 customElements.define('parket-loader', ParketLoader);
