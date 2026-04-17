@@ -128,6 +128,51 @@
       transition: opacity 1s ease, transform 1s ease;
     }
     .fade-in.active { opacity: 1; transform: translateY(0); }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    #lightbox.active { display: flex; opacity: 1; }
+    #lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border-radius: 0.5rem;
+      transform: scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #lightbox.active #lightbox-img { transform: scale(1); }
+    .lb-btn {
+      position: absolute;
+      z-index: 110;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .lb-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.1); }
+    .lb-close { top: 40px; right: 40px; }
+    .lb-prev { left: 40px; }
+    .lb-next { right: 40px; }
   </style>
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
@@ -193,6 +238,20 @@
     </div>
   </footer>
 
+  <!-- Lightbox Structure -->
+  <div id="lightbox">
+    <button class="lb-btn lb-close" onclick="closeLightbox()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <button class="lb-btn lb-prev" onclick="lbPrev()">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <img id="lightbox-img" src="" alt="Zoom">
+    <button class="lb-btn lb-next" onclick="lbNext()">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+
   <script>
     (function() {
       const urls = [
@@ -229,12 +288,50 @@
         progress.style.width = `${((current + 1) / urls.length) * 100}%`;
       }
 
+      // ── Lightbox Logic ──
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+
+      window.openLightbox = function(idx) {
+        current = idx;
+        updateLightbox();
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+
+      window.closeLightbox = function() {
+        lb.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        sync(current); // sync main carousel
+      };
+
+      function updateLightbox() {
+        lbImg.src = urls[current];
+      }
+
+      window.lbNext = function() {
+        current = (current + 1) % urls.length;
+        updateLightbox();
+      };
+
+      window.lbPrev = function() {
+        current = (current - 1 + urls.length) % urls.length;
+        updateLightbox();
+      };
+
+      document.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') lbNext();
+        if (e.key === 'ArrowLeft') lbPrev();
+      });
+
       function init() {
         urls.forEach((url, i) => {
           const s = document.createElement('div');
           s.className = 'carousel-slide' + (i === 0 ? ' active' : '');
           s.innerHTML = `<img src="${url}" alt="Slide ${i+1}">`;
-          s.addEventListener('click', () => sync(current + 1));
+          s.addEventListener('click', () => openLightbox(i));
           carousel.insertBefore(s, document.getElementById('btn-prev'));
 
           const t = document.createElement('div');
