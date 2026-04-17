@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parket - Decks Kebony</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface": "#131313",
+            "background": "#000000",
+            "primary": "#ffffff"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body { background-color: #000000; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .liquid-glass {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
+    .text-glow { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    
+    /* ── Floating Letters Style ── */
+    .Paineis-letter {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+    
+    /* ── Smooth Scrolling ── */
+    html { scroll-behavior: smooth; }
+    
+    /* ── Custom Navigation Blur ── */
+    .nav-blur {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+    
+    /* ── Carousel ── */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      margin: 0 auto;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1.04);
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+      border-radius: 1.5rem;
+    }
+
+    /* ── Thumbnails ── */
+    .thumb-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 4px 0;
+    }
+    .thumb-track::-webkit-scrollbar { display: none; }
+
+    .thumb {
+      flex-shrink: 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.4;
+      transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
+    }
+    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.6); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      transition: width 0.3s ease;
+    }
+
+    /* ── Arrow buttons ── */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s ease, background 0.3s ease;
+    }
+    .carousel-viewport:hover .carousel-arrow { opacity: 1; }
+    .carousel-arrow:hover { background: rgba(255,255,255,0.15); }
+    .carousel-arrow.left { left: 20px; }
+    .carousel-arrow.right { right: 20px; }
+    
+    /* ── Entry animation ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+  <script src="assets/js/components.js"></script>
+  <parket-seo title="Parket Decks Kebony"></parket-seo>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+  <parket-loader></parket-loader>
+
+  <!-- Top Navigation -->
+  <parket-nav return-url="decks.html" return-text="Voltar para Decks" category="Kebony"></parket-nav>
+
+  <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
+    <!-- Title -->
+    <div class="fade-up mb-12">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Coleção Decks</span>
+      <h1 id="Kebony-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] -ml-[10px]" style="text-transform: none; font-family: 'Inter', sans-serif;">
+        Kebony
+      </h1>
+      <p class="text-white/50 font-body text-lg leading-relaxed max-w-2xl mt-10 mb-8">
+        Tecnologia norueguesa de modificação que transforma madeiras sustentáveis em joias estéticas e duráveis. O Kebony ganha uma belíssima pátina prateada atemporal.
+      </p>
+      <div class="flex items-center gap-6">
+        <div class="h-[1px] w-12 bg-white/20"></div>
+        <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">Evolução orgânica com DNA nórdico</p>
+      </div>
+    </div>
+
+    <!-- Carousel Section -->
+    <section class="max-w-screen-2xl mx-auto pb-40 mt-16">
+      <div class="fade-up" style="transition-delay: 0.15s">
+        <div class="carousel-viewport" id="carousel">
+          <!-- Slides generated by JS -->
+          <button class="carousel-arrow left" id="arrow-left">
+            <span class="material-symbols-outlined text-white text-xl">chevron_left</span>
+          </button>
+          <button class="carousel-arrow right" id="arrow-right">
+            <span class="material-symbols-outlined text-white text-xl">chevron_right</span>
+          </button>
+        </div>
+
+        <!-- Progress -->
+        <div class="max-w-[900px] mx-auto pt-6">
+          <div class="flex items-center gap-6">
+            <span id="slide-counter" class="font-label text-[11px] tracking-[0.2em] text-white/40 tabular-nums min-w-[60px]">01 / 10</span>
+            <div class="progress-bar flex-1">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Thumbnails -->
+          <div class="thumb-track mt-6 justify-center" id="thumb-track"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <parket-footer></parket-footer>
+
+  <script>
+    // ── Letter Parallax Logic ──
+    (function() {
+      const titleEl = document.getElementById('Kebony-title');
+      let letters = [];
+      if (titleEl) {
+        const text = titleEl.textContent.trim();
+        titleEl.innerHTML = text.split('').map((ch, i) => 
+          `<span class="Paineis-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
+        ).join('');
+        letters = titleEl.querySelectorAll('.Paineis-letter');
+      }
+
+      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55, 0.4, 0.3];
+      const driftsX = [-1, 0.5, 0, -0.3, 0.8, -0.2, 0.1];
+
+      window.addEventListener('scroll', () => {
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+        const progress = Math.min(sy / (vh * 0.7), 1);
+
+        letters.forEach((letter, i) => {
+          const s = speeds[i] ?? 0.4;
+          const dx = driftsX[i] ?? 0;
+          const dy = -(sy * s);
+          const opacity = Math.max(0, 1 - progress * 1.5);
+          letter.style.transform = `translate(${dx * sy * 0.04}px, ${dy}px)`;
+          letter.style.opacity = opacity;
+        });
+      }, { passive: true });
+    })();
+
+    // Smooth Reveal Animation on Scroll
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    // ── Carousel logic ──
+    (function () {
+      const IMMUTABLE_URLS = [
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-01.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-02.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-03.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-04.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-05.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-06.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-07.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-08.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-09.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-10.jpg"
+      ];
+
+      let current = 0;
+      let images = [];
+      let autoplayTimer = null;
+
+      const carousel = document.getElementById('carousel');
+      const thumbTrack = document.getElementById('thumb-track');
+      const counter = document.getElementById('slide-counter');
+      const progressFill = document.getElementById('progress-fill');
+      const arrowLeft = document.getElementById('arrow-left');
+      const arrowRight = document.getElementById('arrow-right');
+
+      function goTo(idx) {
+        if (idx < 0) idx = images.length - 1;
+        if (idx >= images.length) idx = 0;
+        current = idx;
+
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => s.classList.toggle('active', i === current));
+        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+          t.classList.toggle('active', i === current);
+          if (i === current) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+
+        const total = images.length;
+        counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+        progressFill.style.width = `${((current + 1) / total) * 100}%`;
+        resetAutoplay();
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(next, 5000);
+      }
+
+      function buildCarousel(srcs) {
+        images = srcs;
+        srcs.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img src="${src}" alt="Painel ${i + 1}">`;
+          carousel.insertBefore(slide, arrowLeft);
+        });
+
+        srcs.forEach((src, i) => {
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+          thumb.innerHTML = `<img src="${src}" alt="Thumb ${i + 1}">`;
+          thumb.addEventListener('click', () => goTo(i));
+          thumbTrack.appendChild(thumb);
+        });
+
+        progressFill.style.width = `${(1 / srcs.length) * 100}%`;
+        arrowLeft.addEventListener('click', prev);
+        arrowRight.addEventListener('click', next);
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') prev();
+          if (e.key === 'ArrowRight') next();
+        });
+
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        resetAutoplay();
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        carousel.addEventListener('mouseleave', resetAutoplay);
+      }
+
+      window.addEventListener('load', () => {
+        buildCarousel(IMMUTABLE_URLS);
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+      });
+    })();
+  </script>
+</body>
+</html>
