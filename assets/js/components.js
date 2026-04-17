@@ -38,9 +38,9 @@ class ParketNav extends HTMLElement {
     let leftSide = '';
     if (!isMain) {
       leftSide = `
-        <a href="${returnUrl}" class="flex items-center gap-4 group">
-          <span class="material-symbols-outlined text-white/50 group-hover:text-white transition-all duration-300 transform group-hover:-translate-x-1">arrow_back</span>
-          <span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors">${returnText}</span>
+        <a href="${returnUrl}" class="flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all duration-500 group">
+          <span class="material-symbols-outlined text-white/60 group-hover:text-white text-[16px] transition-transform duration-500 group-hover:-translate-x-1">arrow_back</span>
+          <span class="font-label text-[10px] uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition-colors">${returnText}</span>
         </a>
       `;
     } else {
