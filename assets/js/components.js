@@ -191,8 +191,35 @@ window.addEventListener('load', () => {
   });
 });
 
+class ParketVideos extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <section class="max-w-screen-2xl mx-auto px-12 pb-40 fade-up" style="transition-delay: 0.3s">
+        <div class="mb-12">
+          <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Audiovisual</span>
+          <h2 class="text-4xl font-extralight tracking-tight">Vídeos</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="aspect-video bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group cursor-pointer overflow-hidden relative">
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+            <span class="material-symbols-outlined text-4xl text-white/50 group-hover:text-white transition-all scale-90 group-hover:scale-100">play_circle</span>
+            <p class="absolute bottom-6 left-6 font-label text-[10px] uppercase tracking-widest text-white/60">Apresentação da Coleção</p>
+          </div>
+          <div class="aspect-video bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group cursor-pointer overflow-hidden relative">
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+            <span class="material-symbols-outlined text-4xl text-white/50 group-hover:text-white transition-all scale-90 group-hover:scale-100">play_circle</span>
+            <p class="absolute bottom-6 left-6 font-label text-[10px] uppercase tracking-widest text-white/60">Detalhes de Execução</p>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+}
+
 // Register components
 customElements.define('parket-loader', ParketLoader);
 customElements.define('parket-nav', ParketNav);
 customElements.define('parket-footer', ParketFooter);
 customElements.define('parket-seo', ParketSEO);
+customElements.define('parket-videos', ParketVideos);
