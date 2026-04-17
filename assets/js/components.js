@@ -66,11 +66,8 @@ class ParketFooter extends HTMLElement {
 
     this.innerHTML = `
       <footer class="w-full py-24 px-12 bg-black border-t border-white/5 relative z-10">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-12 w-full max-w-screen-2xl mx-auto">
-          <div><img src="${logoSrc}" alt="Parket" class="h-4 w-auto" /></div>
-          <div class="text-white/30 font-label text-[10px] uppercase tracking-[0.2em] font-light text-center">
-            &copy; ${new Date().getFullYear()} PARKET. ALL RIGHTS RESERVED.
-          </div>
+        <div class="flex justify-center items-center w-full max-w-screen-2xl mx-auto">
+          <img src="${logoSrc}" alt="Parket" class="h-4 w-auto" />
         </div>
       </footer>
     `;
