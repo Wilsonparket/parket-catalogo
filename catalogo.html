@@ -670,8 +670,8 @@
             previewName.textContent = info.title;
             previewDesc.textContent = info.desc;
 
-            // Alinha o centro do TÍTULO com o centro do botão (não o bloco inteiro)
-            const rect = a.getBoundingClientRect();
+            // Alinha o centro do TÍTULO com o centro do CARD (imagem de preview)
+            const rect = previewViewport.getBoundingClientRect();
             const titleHeight = previewName.offsetHeight;
             infoBoxEl.style.top = `${rect.top + rect.height / 2 - titleHeight / 2}px`;
             infoBoxEl.style.transform = 'none';
