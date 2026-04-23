@@ -349,7 +349,7 @@
 
       .category-link {
         width: 100% !important;
-        aspect-ratio: 16/10;
+        aspect-ratio: 4/5;
         background: #111;
         border: none;
         border-radius: 0;
@@ -360,8 +360,10 @@
         text-align: left;
         opacity: 0;
         transform: translateY(40px);
-        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         overflow: hidden;
+        position: relative;
       }
 
       .category-link.in-view {
@@ -372,25 +374,36 @@
       .category-link::before {
         content: '';
         position: absolute;
-        inset: 0;
+        top: -15%;
+        left: 0;
+        width: 100%;
+        height: 130%;
         background-image: var(--bg-img);
         background-size: cover;
         background-position: center;
-        opacity: 0.6;
-        transition: transform 2s ease;
+        opacity: 0.7;
+        transform: translate3d(0, var(--parallax, 0px), 0) scale(1.05);
+        will-change: transform;
       }
 
-      .category-link.in-view::before {
-        transform: scale(1.1);
+      .category-link::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%);
+        z-index: 1;
+        pointer-events: none;
       }
 
       .category-link .mobile-title {
         position: relative;
         z-index: 2;
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 300;
         letter-spacing: -0.02em;
         color: #fff;
+        transform: translate3d(0, var(--title-parallax, 0px), 0);
+        will-change: transform;
       }
 
       #categories-bg-video, #categories-bg-image {
@@ -563,26 +576,29 @@
         6: { title: 'Forros', folder: 'forros', desc: 'Perspectiva superior. Detalhes em madeira que elevam o teto a uma obra de arte arquitetônica.' },
       };
 
+      function probe(src) {
+        return fetch(src, { method: 'HEAD' })
+          .then(res => res.ok ? src : null)
+          .catch(() => null);
+      }
+
+      async function firstHit(candidates) {
+        const results = await Promise.all(candidates.map(probe));
+        return results.find(Boolean) || null;
+      }
+
       async function findImage(folder, pattern = 'image') {
-        for (const ext of EXTS) {
-          const src = `${folder}/${pattern}.${ext}`;
-          try {
-            const res = await fetch(src, { method: 'HEAD' });
-            if (res.ok) return src;
-          } catch (e) {}
-        }
-        
+        const direct = EXTS.map(ext => `${folder}/${pattern}.${ext}`);
+        const hit = await firstHit(direct);
+        if (hit) return hit;
+
         if (pattern === 'hero') {
           const subfolders = ['brazil', 'carvalhos', 'unicos'];
+          const subs = [];
           for (const sub of subfolders) {
-            for (const ext of EXTS) {
-              const src = `${folder}/${sub}/02.${ext}`;
-              try {
-                const res = await fetch(src, { method: 'HEAD' });
-                if (res.ok) return src;
-              } catch (e) {}
-            }
+            for (const ext of EXTS) subs.push(`${folder}/${sub}/02.${ext}`);
           }
+          return firstHit(subs);
         }
         return null;
       }
@@ -629,44 +645,47 @@
         previewViewport.style.top = `${top}px`;
       }
 
-      async function createListItem(info) {
+      function createListItem(info) {
         const a = document.createElement('a');
         a.href = `${info.folder}.html`;
         a.className = 'category-link reveal-card';
-        
-        const cardSrc = await findImage(info.folder, 'image');
-        const heroSrc = await findImage(info.folder, 'hero') || cardSrc;
+        a.innerHTML = `<span class="mobile-title">${info.title}</span>`;
+        return a;
+      }
 
-        // Set background image for mobile cards
+      async function hydrateCard(a, info, isDesktop) {
+        const cardSrc = await findImage(info.folder, 'image');
         if (cardSrc) a.style.setProperty('--bg-img', `url('${cardSrc}')`);
 
-        a.innerHTML = `<span class="mobile-title">${info.title}</span>`;
-        
+        if (!isDesktop) return;
+
+        const heroSrc = (await findImage(info.folder, 'hero')) || cardSrc;
+
         a.addEventListener('mouseenter', () => {
           if (window.innerWidth > 1024) {
             setRandomPosition();
             if (cardSrc) previewImage.src = cardSrc;
             if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
-            
             previewName.textContent = info.title;
             previewDesc.textContent = info.desc;
-            
             document.body.classList.add('preview-active');
           }
         });
-        
         a.addEventListener('mouseleave', () => {
           document.body.classList.remove('preview-active');
         });
-        
-        return a;
       }
 
-      async function init() {
+      function init() {
         const listContainer = document.getElementById('category-list');
+        const isDesktop = window.innerWidth > 1024;
+        const cards = [];
+
         for (const key in CARD_INFO) {
           const info = CARD_INFO[key];
-          listContainer.appendChild(await createListItem(info));
+          const el = createListItem(info);
+          listContainer.appendChild(el);
+          cards.push({ el, info });
         }
 
         const observer = new IntersectionObserver((entries) => {
@@ -674,18 +693,45 @@
             if (entry.isIntersecting) entry.target.classList.add('in-view');
           });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
+
+        // Resolve imagens em paralelo — cards já estão renderizados
+        cards.forEach(({ el, info }) => { hydrateCard(el, info, isDesktop); });
       }
 
-      window.addEventListener('scroll', () => {
+      let ticking = false;
+      function updateScroll() {
         const scrollY = window.scrollY;
         const vh = window.innerHeight;
         const progress = Math.min(scrollY / vh, 1);
         document.documentElement.style.setProperty('--scroll-progress', progress);
+
+        // Parallax nos cards mobile (estilo MetaLab)
+        if (window.innerWidth <= 1024) {
+          const cards = document.querySelectorAll('.category-link');
+          cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > vh) return;
+            // -0.5 quando card está abaixo da tela, +0.5 quando acima
+            const centerProgress = (rect.top + rect.height / 2 - vh / 2) / vh;
+            const bgOffset = -centerProgress * 80;
+            const titleOffset = -centerProgress * 25;
+            card.style.setProperty('--parallax', `${bgOffset}px`);
+            card.style.setProperty('--title-parallax', `${titleOffset}px`);
+          });
+        }
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(updateScroll);
+          ticking = true;
+        }
       }, { passive: true });
 
-      window.addEventListener('load', init);
+      window.addEventListener('resize', updateScroll);
+      window.addEventListener('load', () => { init(); updateScroll(); });
     })();
   </script>
 </body>
