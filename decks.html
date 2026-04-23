@@ -1,204 +1,125 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Parket - Decks</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet">
-  <script id="tailwind-config">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
-          "colors": {
-            "surface": "#131313",
-            "background": "#000000",
-            "primary": "#ffffff"
-          },
-          "fontFamily": {
-            "headline": ["Inter"],
-            "body": ["Inter"]
-          }
+          borderRadius: { "DEFAULT": "0", "lg": "0", "xl": "0", "full": "0" },
+          colors: { "surface": "#131313", "background": "#000000", "primary": "#ffffff" },
+          fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] }
         },
       },
     }
   </script>
   <style>
-    body {
-      background-color: #000000;
-      color: #FFFFFF;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-
-    .liquid-glass {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-    }
-
-    .text-glow {
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── Floating Letters Style ── */
-    .Decks-letter {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-
-    /* ── Smooth Scrolling ── */
-    html {
-      scroll-behavior: smooth;
-    }
-
-    /* ── Custom Navigation Blur ── */
+    body { background-color: #000000; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
     .nav-blur {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
-
-    /* ── Horizontal Scroll Utilities ── */
-    .panel {
-      width: 100vw;
-      height: 100vh;
-      flex-shrink: 0;
-    }
-    
-    .horizontal-track {
-      display: flex;
-      width: 200vw;
-      height: 100vh;
-      will-change: transform;
-    }
-
-    /* ── Category Cards ── */
     .category-card {
       position: relative;
-      aspect-ratio: 1 / 1;
       overflow: hidden;
-      border-radius: 1rem;
       cursor: pointer;
-      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease;
+      background: #0a0a0a;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .category-card:hover {
-      transform: scale(1.03);
-      border-color: rgba(255,255,255,0.15);
-    }
-    .category-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
-      pointer-events: none;
-    }
+    .category-card:hover { transform: scale(1.02); }
     .category-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 80%;
-      opacity: 0.6;
-      transition: opacity 0.5s ease, transform 0.7s ease;
+      opacity: 0.55;
+      transition: opacity 0.6s ease, transform 0.8s ease;
     }
-    .category-card:hover img {
-      opacity: 0.85;
-      transform: scale(1.08);
-    }
+    .category-card:hover img { opacity: 0.8; transform: scale(1.05); }
     .category-card .card-label {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       padding: 1.5rem;
+      background: rgba(0,0,0,0.35);
     }
+    .fade-up { opacity: 0; transform: translateY(20px); transition: all 0.9s ease-out; }
 
-    .scroll-wrapper {
-      height: 200vh; /* 2 panels */
+    /* ── Spotlight effect ── */
+    .spotlight-card {
+      --mx: 50%;
+      --my: 50%;
     }
-
-    .sticky-container {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
+    .spotlight-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        400px circle at var(--mx) var(--my),
+        rgba(255,255,255,0.10) 0%,
+        rgba(255,255,255,0.04) 35%,
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .spotlight-card:hover::after {
+      opacity: 1;
     }
   </style>
   <script src="assets/js/components.js"></script>
   <parket-seo title="Parket Decks"></parket-seo>
 </head>
-
 <body class="antialiased selection:bg-white selection:text-black">
   <parket-loader></parket-loader>
+  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category="Decks"></parket-nav>
 
-  <!-- Top Navigation -->
-  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category=""></parket-nav>
-
-  <main class="scroll-wrapper">
-    <div class="sticky-container">
-      <div id="horizontal-track" class="horizontal-track">
-        
-        <!-- Slide 1: Hero -->
-        <section class="panel flex items-center justify-center px-12 pt-12 text-center">
-          <div class="max-w-3xl mx-auto">
-            <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/40 mb-8 block">Áreas Externas</span>
-            <h1 id="Decks-title" class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-16" style="text-transform: none; font-family: 'Inter', sans-serif;">
-              Decks
-            </h1>
-            <p class="text-white/60 font-body text-xl leading-relaxed mx-auto mb-12 max-w-xl">
-              Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
-            </p>
-            <div class="flex flex-col items-center gap-6">
-              <div class="h-[1px] w-20 bg-white/20"></div>
-              <p class="text-white/40 text-sm italic font-light">Vida ao ar livre com alma e design.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 2: Category Cards (autoload) -->
-        <section class="panel flex items-center px-12">
-          <div class="w-full max-w-screen-2xl mx-auto">
-            <h2 class="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-10">Coleções Especiais</h2>
-            <div id="category-grid" class="grid grid-cols-4 gap-8"></div>
-          </div>
-        </section>
-
+  <main>
+    <!-- Hero -->
+    <section class="min-h-[80vh] flex items-center justify-center px-12 pt-40 pb-24 text-center">
+      <div class="max-w-4xl mx-auto fade-up">
+        <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Áreas Externas</span>
+        <h1 class="text-[clamp(3rem,8vw,8rem)] font-thin tracking-[-0.05em] leading-[0.8] mb-16" style="font-family: 'Inter', sans-serif;">
+          Decks
+        </h1>
+        <p class="text-white/40 text-xl font-light leading-relaxed mx-auto max-w-2xl">
+          Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
+        </p>
       </div>
-    </div>
+    </section>
+
+    <!-- Grid 3 colunas sem borda -->
+    <section class="pb-60">
+      <div class="px-12 mb-12 max-w-screen-2xl mx-auto flex items-center gap-8">
+        <h2 class="text-[10px] uppercase tracking-[0.5em] text-white/30 shrink-0">Horizonte Nobre</h2>
+        <div class="h-px flex-1 bg-white/10"></div>
+      </div>
+      <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3"></div>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <!-- Vídeos Section -->
   <parket-videos></parket-videos>
 
   <script>
-    // ── Autoload Category Cards ──
     (function () {
       const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
       const CATEGORIES = [
-        { title: 'Brazil',   folder: 'brazil',   size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg' },
-        { title: 'Eurodeck', folder: 'eurodeck', size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-01.jpg' },
-        { title: 'Kebony',   folder: 'kebony',   size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-01.jpg' },
-        { title: 'Únicos',   folder: 'unicos',   size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-05.jpg' },
+        { title: 'Brazil',   folder: 'brazil',   cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg' },
+        { title: 'Eurodeck', folder: 'eurodeck', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-01.jpg' },
+        { title: 'Kebony',   folder: 'kebony',   cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-01.jpg' },
+        { title: 'Únicos',   folder: 'unicos',   cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-05.jpg' },
       ];
 
       function probe(src) {
@@ -221,11 +142,12 @@
       function createCard(cat, src) {
         const a = document.createElement('a');
         a.href = `decks-${cat.folder}.html`;
-        a.className = 'category-card'; // We are keeping them all vertical pillars in a 4x1 grid!
+        a.className = 'category-card spotlight-card aspect-[4/5]';
         a.innerHTML = `
-          <img src="${src}${src.includes('?') ? '' : '?v=' + Date.now()}" alt="${cat.title}">
-          <div class="card-label">
-            <h3 class="font-headline text-2xl font-light">${cat.title}</h3>
+          <div class="absolute inset-0 bg-black/40 z-[1]"></div>
+          <img class="z-0" src="${src}" alt="${cat.title}">
+          <div class="card-label z-10">
+            <h3 class="font-headline text-2xl font-thin tracking-tighter text-white">${cat.title}</h3>
           </div>`;
         return a;
       }
@@ -233,13 +155,13 @@
       function createPlaceholder(cat) {
         const a = document.createElement('a');
         a.href = `decks-${cat.folder}.html`;
-        a.className = 'category-card';
+        a.className = 'category-card spotlight-card aspect-[4/5]';
         a.innerHTML = `
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span class="material-symbols-outlined text-white/10 text-5xl">image</span>
+          <div class="absolute inset-0 flex items-center justify-center bg-white/5">
+            <span class="material-symbols-outlined text-white/5 text-5xl">image</span>
           </div>
-          <div class="card-label">
-            <h3 class="font-headline text-2xl font-light">${cat.title}</h3>
+          <div class="card-label z-10">
+            <h3 class="font-headline text-2xl font-thin tracking-tighter text-white">${cat.title}</h3>
           </div>`;
         return a;
       }
@@ -251,55 +173,25 @@
           const src = await findImage(cat);
           grid.appendChild(src ? createCard(cat, src) : createPlaceholder(cat));
         }
+        setTimeout(() => {
+          const el = document.querySelector('.fade-up');
+          if (el) { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }
+        }, 100);
       });
     })();
   </script>
 
   <script>
-    // ── Horizontal Scroll Logic ──
-    const track = document.getElementById('horizontal-track');
-    const wrapper = document.querySelector('.scroll-wrapper');
-    const panels = document.querySelectorAll('.panel');
-
-    // ── Letter Parallax Logic ──
-    (function() {
-      const titleEl = document.getElementById('Decks-title');
-      let letters = [];
-      if (titleEl) {
-        const text = titleEl.textContent.trim();
-        titleEl.innerHTML = text.split('').map((ch, i) => 
-          `<span class="Decks-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
-        ).join('');
-        letters = titleEl.querySelectorAll('.Decks-letter');
-      }
-
-      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55];
-      const driftsX = [-1, 0.5, 0, -0.3, 0.8];
-
-      window.addEventListener('scroll', () => {
-        const sy = window.scrollY;
-        const vh = window.innerHeight;
-        
-        const totalScrollable = wrapper.offsetHeight - vh;
-        const scrollProgress = Math.max(0, Math.min(sy / totalScrollable, 1));
-        
-        const trackWidth = track.scrollWidth;
-        const translateX = -scrollProgress * (trackWidth - window.innerWidth);
-        track.style.transform = `translateX(${translateX}px)`;
-
-        const progressHero = Math.min(sy / (vh * 0.7), 1);
-        letters.forEach((letter, i) => {
-          const s = speeds[i] ?? 0.4;
-          const dx = driftsX[i] ?? 0;
-          const dy = -(sy * s);
-          const opacity = Math.max(0, 1 - progressHero * 1.5);
-          letter.style.transform = `translate(${0}px, ${dy}px)`;
-          letter.style.opacity = opacity;
-        });
-
-      }, { passive: true });
-    })();
+    // ── Spotlight mouse tracking ──
+    document.querySelectorAll('.spotlight-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1) + '%';
+        const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1) + '%';
+        card.style.setProperty('--mx', x);
+        card.style.setProperty('--my', y);
+      });
+    });
   </script>
 </body>
-
 </html>

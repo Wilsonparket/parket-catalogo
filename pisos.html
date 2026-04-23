@@ -7,247 +7,204 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  <script id="tailwind-config">
+  <script src="assets/js/components.js"></script>
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
-          "colors": {
-            "surface": "#131313",
-            "background": "#000000",
-            "primary": "#ffffff"
-          },
-          "fontFamily": {
-            "headline": ["Inter"],
-            "body": ["Inter"]
-          }
+          borderRadius: { "DEFAULT": "0", "lg": "0", "xl": "0", "full": "9999px" },
+          colors: { "surface": "#131313", "background": "#000000", "primary": "#ffffff" },
+          fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] }
         },
       },
     }
   </script>
   <style>
+    :root {
+      --scroll-progress: 0;
+    }
     body { background-color: #000000; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    .liquid-glass {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-    }
-    .text-glow { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
     
-    /* ── Custom Navigation Blur ── */
-    .nav-blur {
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    /* ── Immersive Hero ── */
+    #hero-viewport {
+      height: 120vh;
+      position: relative;
     }
-
-    /* ── Horizontal Scroll Utilities ── */
-    .panel {
-      width: 100vw;
+    #hero-sticky {
+      position: sticky;
+      top: 0;
       height: 100vh;
-      flex-shrink: 0;
-    }
-    
-    .horizontal-track {
       display: flex;
-      width: 200vw;
-      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(calc(1 + var(--scroll-progress) * 0.5));
+      filter: brightness(0.3);
       will-change: transform;
     }
+    #hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      opacity: calc(1 - var(--scroll-progress) * 2.5);
+    }
 
-    /* ── Category Cards ── */
+    /* ── Zoom Cards ── */
+    .zoom-card {
+      opacity: 0;
+      transform: scale(0.9) translateY(40px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .zoom-card.in-view {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
     .category-card {
       position: relative;
       overflow: hidden;
-      border-radius: 1rem;
       cursor: pointer;
-      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease;
-    }
-    .category-card:hover {
-      transform: scale(1.03);
-      border-color: rgba(255,255,255,0.15);
-    }
-    .category-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
-      pointer-events: none;
+      background: #0a0a0a;
     }
     .category-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 80%;
-      opacity: 0.6;
-      transition: opacity 0.5s ease, transform 0.7s ease;
+      opacity: 0.5;
+      transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .category-card:hover img {
-      opacity: 0.85;
-      transform: scale(1.08);
-    }
-    .category-card .card-label {
+    .category-card:hover img { opacity: 0.8; transform: scale(1.1); }
+    
+    .card-label {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
-      padding: 1.5rem;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity 0.6s ease;
     }
-
-    .scroll-wrapper {
-      height: 200vh; /* 2 panels */
+    .category-card:hover .card-label { opacity: 1; }
+    
+    .static-label {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 5;
+      transition: opacity 0.4s ease;
     }
-
-    .sticky-container {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
-    }
+    .category-card:hover .static-label { opacity: 0; }
   </style>
-  <script src="assets/js/components.js"></script>
   <parket-seo title="Parket Pisos"></parket-seo>
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
   <parket-loader></parket-loader>
+  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category="Pisos"></parket-nav>
 
-  <!-- Top Navigation (Always Fixed) -->
-  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category=""></parket-nav>
-
-  <main class="scroll-wrapper">
-    <div class="sticky-container">
-      <div id="horizontal-track" class="horizontal-track">
-        
-        <!-- Slide 1: Hero -->
-        <section class="panel flex items-center justify-center px-12 pt-12 text-center">
-          <div class="max-w-3xl mx-auto">
-            <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/40 mb-8 block">Coleção Engineered</span>
-            <h1 id="Pisos-title" class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-16" style="text-transform: none; font-family: 'Inter', sans-serif;">
-              Pisos
-            </h1>
-            <p class="text-white/60 font-body text-xl leading-relaxed mx-auto mb-12 max-w-xl">
-              O alicerce da sofisticação arquitetônica. Nossos pisos em madeira nobre redefinem a excelência através da textura, durabilidade e engenharia de precisão.
-            </p>
-            <div class="flex flex-col items-center gap-6">
-              <div class="h-[1px] w-20 bg-white/20"></div>
-              <p class="text-white/40 text-sm italic font-light">Elegância que se sente sob cada passo.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 2: Category Cards (autoload) -->
-        <section class="panel flex items-center px-12">
-          <div class="w-full max-w-screen-2xl mx-auto">
-            <h2 class="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-10">Coleções</h2>
-            <div id="category-grid" class="grid grid-cols-4 grid-rows-2 gap-4 h-[78vh]"></div>
-          </div>
-        </section>
-
+  <!-- Immersive Sub-Hero -->
+  <section id="hero-viewport">
+    <div id="hero-sticky">
+      <div id="hero-bg" style="background-image: url('https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg');"></div>
+      <div id="hero-content" class="px-12">
+        <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Coleção Engineered</span>
+        <h1 class="text-[clamp(3rem,8vw,8rem)] font-thin tracking-[-0.05em] leading-[0.8] mb-12">Pisos</h1>
+        <p class="max-w-xl mx-auto text-white/40 font-light text-lg tracking-wide uppercase">O alicerce da sofisticação arquitetônica</p>
       </div>
     </div>
+  </section>
+
+  <main class="relative z-20 bg-black">
+    <!-- Grid -->
+    <section class="pb-60">
+      <div class="px-12 py-24 max-w-screen-2xl mx-auto flex items-center gap-8">
+        <h2 class="text-[10px] uppercase tracking-[0.5em] text-white/30 shrink-0">Coleções Atemporais</h2>
+        <div class="h-px flex-1 bg-white/10"></div>
+      </div>
+      <div id="category-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1"></div>
+    </section>
   </main>
 
-  <!-- Footer -->
-
-
-
   <script>
-    // ── Autoload Category Cards ──
-    // Para adicionar/remover uma coleção: edite CATEGORIES abaixo e crie/remova
-    // a pasta correspondente em pisos/ com um image.jpg (ou .png/.webp) dentro.
     (function () {
       const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
       const CATEGORIES = [
-        { title: 'Brazil',           folder: 'brazil',           size: 'normal' },
-        { title: 'Eternos',          folder: 'eternos',          size: 'normal' },
-        { title: 'Únicos',           folder: 'unicos',           size: 'normal' },
-        { title: 'Carvalhos',        folder: 'carvalhos',        size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg' },
-        { title: 'Grandiosos',       folder: 'grandiosos',       size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg' },
-        { title: 'Pinho de Riga',    folder: 'pinho-de-riga',    size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg' },
-        { title: 'Clássicos',        folder: 'classicos',        size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-01.jpg' },
-        { title: 'Wood + Mármore',   folder: 'listone-giordano', size: 'normal', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg' },
+        { title: 'Brazil',         folder: 'brazil' },
+        { title: 'Eternos',        folder: 'eternos' },
+        { title: 'Únicos',         folder: 'unicos' },
+        { title: 'Carvalhos',      folder: 'carvalhos',        cover: 'https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg' },
+        { title: 'Grandiosos',     folder: 'grandiosos',       cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg' },
+        { title: 'Pinho de Riga',  folder: 'pinho-de-riga',    cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg' },
+        { title: 'Clássicos',      folder: 'classicos',        cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-01.jpg' },
+        { title: 'Wood + Mármore', folder: 'listone-giordano', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg' },
       ];
-
-      function probe(src) {
-        return new Promise((res, rej) => {
-          const img = new Image();
-          img.onload = () => res(src);
-          img.onerror = () => rej();
-          img.src = src + '?v=' + Date.now();
-        });
-      }
 
       async function findImage(cat) {
         if (cat.cover) return cat.cover;
         for (const ext of EXTS) {
-          try { return await probe(`pisos/${cat.folder}/image.${ext}`); } catch {}
+          const src = `pisos/${cat.folder}/image.${ext}`;
+          try {
+            const res = await fetch(src, { method: 'HEAD' });
+            if (res.ok) return src;
+          } catch (e) {}
         }
         return null;
       }
 
       function createCard(cat, src) {
-        const a = document.createElement('a');
-        a.href = `pisos-${cat.folder}.html`;
-        a.className = 'category-card' + (cat.size === 'large' ? ' row-span-2' : '');
-        const isLarge = cat.size === 'large';
-        a.innerHTML = `
-          <img src="${src}${src.includes('?') ? '' : '?v=' + Date.now()}" alt="${cat.title}">
-          <div class="card-label">
-            <h3 class="font-headline ${isLarge ? 'text-2xl' : 'text-lg'} font-light">${cat.title}</h3>
-          </div>`;
-        return a;
+        const div = document.createElement('div');
+        div.className = 'zoom-card';
+        div.innerHTML = `
+          <a href="pisos-${cat.folder}.html" class="category-card block aspect-[3/4]">
+            <img src="${src || ''}" alt="${cat.title}">
+            <div class="static-label">
+              <h3 class="text-xl font-light tracking-widest uppercase text-white">${cat.title}</h3>
+            </div>
+            <div class="card-label">
+              <h3 class="text-3xl font-thin tracking-tighter text-white mb-4">${cat.title}</h3>
+              <div class="w-12 h-[1px] bg-white/40"></div>
+              <span class="mt-8 font-label text-[9px] uppercase tracking-[0.4em] opacity-40">Explorar</span>
+            </div>
+          </a>`;
+        return div;
       }
 
-      function createPlaceholder(cat) {
-        const a = document.createElement('a');
-        a.href = `pisos-${cat.folder}.html`;
-        a.className = 'category-card' + (cat.size === 'large' ? ' row-span-2' : '');
-        const isLarge = cat.size === 'large';
-        a.innerHTML = `
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span class="material-symbols-outlined text-white/10 text-5xl">image</span>
-          </div>
-          <div class="card-label">
-            <h3 class="font-headline ${isLarge ? 'text-2xl' : 'text-lg'} font-light">${cat.title}</h3>
-          </div>`;
-        return a;
-      }
-
-      window.addEventListener('load', async () => {
+      async function init() {
         const grid = document.getElementById('category-grid');
-        if (!grid) return;
         for (const cat of CATEGORIES) {
           const src = await findImage(cat);
-          grid.appendChild(src ? createCard(cat, src) : createPlaceholder(cat));
+          grid.appendChild(createCard(cat, src));
         }
-      });
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('in-view');
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.zoom-card').forEach(c => observer.observe(c));
+      }
+
+      window.addEventListener('scroll', () => {
+        const p = Math.min(window.scrollY / window.innerHeight, 1);
+        document.documentElement.style.setProperty('--scroll-progress', p);
+      }, { passive: true });
+
+      window.addEventListener('load', init);
     })();
   </script>
-
-  <script>
-    // ── Horizontal Scroll Logic ──
-    const track = document.getElementById('horizontal-track');
-    const wrapper = document.querySelector('.scroll-wrapper');
-    const panels = document.querySelectorAll('.panel');
-
-    window.addEventListener('scroll', () => {
-      const sy = window.scrollY;
-      const vh = window.innerHeight;
-      
-      // Horizontal translation progress
-      // Total scrollable height = scroll-wrapper height - viewport height
-      const totalScrollable = wrapper.offsetHeight - vh;
-      const scrollProgress = Math.max(0, Math.min(sy / totalScrollable, 1));
-      
-      // Translate track
-      // We move it from 0 to -(totalWidth - viewportWidth)
-      const trackWidth = track.scrollWidth;
-      const translateX = -scrollProgress * (trackWidth - window.innerWidth);
-      track.style.transform = `translateX(${translateX}px)`;
-    }, { passive: true });
+</body>
+</html>
+);
   </script>
 </body>
 </html>

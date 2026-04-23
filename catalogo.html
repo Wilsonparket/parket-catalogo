@@ -66,9 +66,9 @@
             "on-primary-container": "#000000"
           },
           "borderRadius": {
-            "DEFAULT": "1rem",
-            "lg": "2rem",
-            "xl": "3rem",
+            "DEFAULT": "0px",
+            "lg": "0px",
+            "xl": "0px",
             "full": "9999px"
           },
           "fontFamily": {
@@ -81,34 +81,179 @@
     }
   </script>
   <style>
+    :root {
+      --scroll-progress: 0;
+    }
+
     body {
       background-color: #000000;
       color: #FFFFFF;
       font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
     }
 
-    .liquid-glass {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
+    /* ── Global Transitions ── */
+    .transition-expo {
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .text-glow {
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    /* ── Hero Zoom ── */
+    #hero-viewport {
+      height: 100vh;
+      position: relative;
+    }
+    #hero-sticky {
+      position: fixed;
+      inset: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(calc(1 + var(--scroll-progress) * 0.5));
+      filter: brightness(0.4);
+      will-change: transform;
+    }
+    #hero-content {
+      position: relative;
+      z-index: 10;
+      opacity: calc(1 - var(--scroll-progress) * 3);
+      transform: translateY(calc(var(--scroll-progress) * -50px));
     }
 
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    /* ── Categories Section (MetaLab Style) ── */
+    #categories-section {
+      position: relative;
+      z-index: 10;
+      background: #000;
+      min-height: 120vh;
+      display: flex;
+      align-items: center;
     }
 
-    /* ── Cinematic entry overlay ── */
+    .category-list-container {
+      width: 100%;
+      padding-left: 10vw;
+      z-index: 20;
+    }
+
+    .category-link {
+      display: block;
+      font-size: clamp(1rem, 3vw, 3rem); /* Reduced by 50% */
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: rgba(255, 255, 255, 0.3);
+      transition: color 0.4s ease, transform 0.4s ease;
+      text-decoration: none; /* No underline */
+      cursor: pointer;
+      width: max-content;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .category-link:hover {
+      color: #fff;
+      transform: translateX(15px);
+    }
+
+    /* ── Dolly Zoom Preview (MetaLab Wipe Reveal) ── */
+    #preview-viewport {
+      position: fixed;
+      width: 22vw;
+      aspect-ratio: 3/4;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      /* Wipe reveal using clip-path */
+      clip-path: inset(50% 50% 50% 50%);
+      transition: opacity 0.4s ease, 
+                  clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.9);
+      will-change: clip-path, transform, opacity;
+    }
+
+    .dolly-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    }
+
+    .dolly-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.1);
+      transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* MetaLab Reveal State */
+    .preview-active #preview-viewport {
+      opacity: 1;
+      clip-path: inset(0% 0% 0% 0%);
+      transform: scale(1);
+    }
+
+    .preview-active .dolly-image {
+      transform: scale(1.3);
+    }
+
+    /* ── Background Video & Image Layer ── */
+    #categories-bg-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #categories-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+      transition: opacity 1s ease;
+    }
+
+    #category-bg-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.2s ease, transform 2s ease;
+      transform: scale(1.05);
+      filter: grayscale(1) contrast(1.1) brightness(0.4); /* Black and White */
+    }
+
+    .preview-active #category-bg-image {
+      opacity: 1; /* Fully opaque */
+      transform: scale(1);
+    }
+    .preview-active #categories-bg-video {
+      opacity: 0; /* Hide video */
+    }
+
+    /* ── UI Elements ── */
     #page-curtain {
       position: fixed;
       inset: 0;
       background: #000;
       z-index: 9999;
       pointer-events: none;
-      opacity: 1;
       transition: opacity 1s cubic-bezier(0.76, 0, 0.24, 1);
     }
 
@@ -116,195 +261,114 @@
       opacity: 0;
     }
 
-    /* ── Cards: estado inicial (escondido abaixo) ── */
-    .scene-card {
+    .reveal-card {
       opacity: 0;
-      transform: translateY(90px);
-      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .scene-hero {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Estado visível */
-    .scene-card.risen,
-    .scene-hero.risen {
+    .reveal-card.in-view {
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* Micro-animação Amostras (Bolinhas de cor) */
-    @keyframes dropInSwatch {
-      0% { opacity: 0; transform: translateX(-15px) scale(0.8); }
-      100% { opacity: 1; transform: translateX(0) scale(1); }
-    }
-
-    .scene-card .swatch-bubble {
-      opacity: 0;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      cursor: pointer;
-    }
-    
-    .scene-card.risen .swatch-bubble {
-      animation: dropInSwatch 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .scene-card.risen .swatch-bubble:hover {
-      transform: translateY(-8px) scale(1.15) !important;
-      z-index: 20 !important;
-    }
-
-    /* ── Letras "Categorias" ── */
-    .Categorias-letter {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-    /* ── Cards de categorias ── */
   </style>
 </head>
 
 <body class="antialiased selection:bg-white selection:text-black">
   <parket-loader></parket-loader>
-
-  <!-- Cinematic entry curtain -->
   <div id="page-curtain"></div>
 
-  <!-- Top Navigation Shell -->
-  <main class="pt-16">
-    <!-- Hero Section -->
-    <section class="px-12 mb-32 max-w-screen-2xl mx-auto">
-      <div class="scene-hero flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <div class="max-w-4xl">
-          <h1 id="Categorias-title"
-            class="text-[clamp(2rem,5vw,6rem)] font-extralight tracking-[-0.04em] leading-[0.85]"
-            style="text-transform: none; font-family: 'Inter', sans-serif;">Categorias</h1>
-        </div>
+  <!-- Hero with Scroll Zoom -->
+  <section id="hero-viewport">
+    <div id="hero-sticky">
+      <div id="hero-bg" style="background-image: url('autoload/Hero.jpg');"></div>
+      <div id="hero-content" class="text-center">
+        <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50 font-['Inter']">Coleção 2026</span>
       </div>
-    </section>
+      <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
+        <span class="font-label text-[11px] uppercase tracking-[0.4em]">Scroll</span>
+        <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Image Gallery (gerada dinamicamente) -->
-    <section class="px-12 mb-20 max-w-screen-2xl mx-auto">
-      <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-12 gap-8"></div>
-    </section>
+  <!-- Interactive Categories Section -->
+  <section id="categories-section">
+    <div id="categories-bg-container">
+      <video id="categories-bg-video" src="autoload/hero.mp4" autoplay muted loop playsinline></video>
+      <div id="category-bg-image"></div>
+    </div>
+    
+    <div class="category-list-container">
+      <div id="category-list" class="flex flex-col gap-4">
+        <!-- List items injected via JS -->
+      </div>
+    </div>
 
-    <!-- Seção Técnica: Material Vivo -->
-    <section class="px-12 max-w-screen-2xl mx-auto pb-40">
-      <div class="border-t border-white/10 pt-24 fade-up">
-        <!-- Typography Headers -->
-        <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Guia Técnico</span>
-        <h2 class="text-[clamp(2.5rem,4vw,5rem)] font-extralight tracking-[-0.04em] leading-[0.9]  mb-16 max-w-3xl">
+    <!-- Dolly Zoom Preview (Floating) -->
+    <div id="preview-viewport">
+      <div class="dolly-container">
+        <img id="preview-image" src="" class="dolly-image" alt="Preview">
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Section -->
+  <main class="relative z-20 bg-black">
+    <section class="px-12 max-w-screen-2xl mx-auto py-40">
+      <div class="border-t border-white/10 pt-24 reveal-card">
+        <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Guia Técnico</span>
+        <h2 class="text-[clamp(2.5rem,4vw,5rem)] font-extralight tracking-[-0.04em] leading-[0.9] mb-16 max-w-3xl">
           Madeira, um material vivo
         </h2>
 
-        <!-- Bento Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-          
-          <!-- COLUNA ESQUERDA (Col 5) -->
-          <div class="md:col-span-5 flex flex-col gap-8">
-            
-            <!-- CARD: AMOSTRAS -->
-            <div class="liquid-glass rounded-2xl p-8 flex flex-col justify-between scene-card">
-              <div>
-                <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
-                  <span class="w-1 h-1 bg-white/50 rounded-full"></span> Amostras
-                </h3>
-                <div class="text-white/40 text-[13px] font-light leading-relaxed">
-                  <p>A natureza não permite cópias. Cada tábua revela impressões digitais inimitáveis em seus veios. Amostras ilustram o conceito, mas o esplendor final é sempre uma obra irrepetível montada exclusivamente para as proporções do seu ambiente.</p>
-                </div>
-              </div>
-              
-              <!-- Gráfico CSS Swatches -->
-              <div class="mt-8 pt-8 border-t border-white/5">
-                 <div class="inline-block w-max">
-                   <div class="flex items-center justify-between text-[8px] uppercase tracking-[0.2em] text-white/30 mb-4 font-label pl-2 pr-1">
-                     <span>Escuro</span>
-                     <span>Claro</span>
-                   </div>
-                   <div class="flex -space-x-4 z-10 relative">
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[7] swatch-bubble" style="background: #2a1b14; animation-delay: 0.1s;"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[6] swatch-bubble" style="background: #4a2f20; animation-delay: 0.2s;"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[5] swatch-bubble" style="background: #6c4634; animation-delay: 0.3s;"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[4] swatch-bubble" style="background: #a4765b; animation-delay: 0.4s;"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[3] swatch-bubble" style="background: #bf9583; animation-delay: 0.5s;"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[2] swatch-bubble" style="background: #dbbfae; animation-delay: 0.6s;"></div>
-                     <div class="w-12 h-12 rounded-full border border-white/10 shadow-lg relative z-[1] swatch-bubble" style="background: #efdcd3; animation-delay: 0.7s;"></div>
-                   </div>
-                 </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-1">
+          <div class="md:col-span-5 flex flex-col gap-1">
+            <div class="liquid-glass p-12 reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-8 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Amostras
+              </h3>
+              <p class="text-white/40 text-sm font-light leading-relaxed mb-12">
+                A natureza não permite cópias. Cada tábua revela impressões digitais inimitáveis em seus veios. Amostras ilustram o conceito, mas o esplendor final é sempre uma obra irrepetível montada exclusivamente para as proporções do seu ambiente.
+              </p>
+              <div class="flex -space-x-4">
+                <div class="w-12 h-12 rounded-full border border-white/10" style="background: #2a1b14;"></div>
+                <div class="w-12 h-12 rounded-full border border-white/10" style="background: #4a2f20;"></div>
+                <div class="w-12 h-12 rounded-full border border-white/10" style="background: #6c4634;"></div>
+                <div class="w-12 h-12 rounded-full border border-white/10" style="background: #a4765b;"></div>
               </div>
             </div>
 
-            <!-- CARD: CLIMA -->
-            <div class="liquid-glass rounded-2xl p-8 flex flex-col justify-between scene-card">
-              <div>
-                <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
-                  <span class="w-1 h-1 bg-white/50 rounded-full"></span> Condições Climáticas
-                </h3>
-                <div class="text-white/40 text-[13px] font-light leading-relaxed space-y-4">
-                  <p>A madeira respira. Mantenha os ambientes numa média de <span class="text-white/80 font-normal"><span class="animate-count" data-target="15">0</span>ºC a <span class="animate-count" data-target="30">0</span>ºC</span>. Nas residências com piso radiante embutido, a superfície nunca deverá exceder a marca de <span class="text-white/80 font-normal"><span class="animate-count" data-target="27">0</span>ºC</span>.</p>
-                  <p>Subestruturas com autêntico compensado de bétula atestam suportar integridade técnica avançada, blindando seu piso orgânico contra danos e fendas de umidade.</p>
-                </div>
-              </div>
-              
-              <!-- Gráfico CSS Retração -->
-              <div class="mt-8 pt-8 border-t border-white/5">
-                 <div class="flex justify-between items-end h-20 mb-4 relative px-2">
-                   <!-- Icons -->
-                   <div class="absolute inset-0 flex justify-around items-center opacity-30 text-2xl pb-8">
-                     <span class="material-symbols-outlined font-light">brightness_5</span>
-                     <span class="material-symbols-outlined font-light">rainy</span>
-                   </div>
-                   <!-- Shape Trapezoid -->
-                   <div class="w-full h-8 bg-gradient-to-r from-[#996e53]/30 to-[#d6bdae]/50 border-t border-white/10 relative overflow-hidden" style="clip-path: polygon(0 60%, 100% 0, 100% 100%, 0 100%);">
-                   </div>
-                 </div>
-                 <div class="flex justify-between font-label text-[8px] uppercase tracking-[0.2em] text-white/30 text-center">
-                    <span>◀ Clima Seco</span>
-                    <span>▼ Retração/Dilatação ▲</span>
-                    <span>Clima Úmido ▶</span>
-                 </div>
+            <div class="liquid-glass p-12 reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-8 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Condições Climáticas
+              </h3>
+              <div class="text-white/40 text-sm font-light leading-relaxed space-y-4">
+                <p>A madeira respira. Mantenha os ambientes numa média de 15ºC a 30ºC. Nas residências com piso radiante embutido, a superfície nunca deverá exceder a marca de 27ºC.</p>
+                <p>Subestruturas com autêntico compensado de bétula atestam suportar integridade técnica avançada, blindando seu piso orgânico contra danos e fendas de umidade.</p>
               </div>
             </div>
-            
           </div>
 
-          <!-- COLUNA DIREITA (Col 7) -->
-          <div class="md:col-span-7 flex flex-col gap-8">
-            
-            <!-- CARD: COR -->
-            <div class="liquid-glass rounded-2xl p-8 scene-card flex-1 flex flex-col justify-center items-center">
-              <div class="w-full max-w-lg">
-                <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
-                  <span class="w-1 h-1 bg-white/50 rounded-full"></span> Cor da Madeira
-                </h3>
-                
-                <div class="text-white/40 text-[13px] font-light leading-relaxed space-y-4">
-                  <p>O parquete, assim como um vinho refinado, envelhece revelando sua identidade em tom de perfeição. A interação térmica secular do oxigênio e da luz altera as células orgânicas, conduzindo silenciosamente origens vibrantes para acolhedores marrons profundos.</p>
-                  
-                  <div class="pl-6 border-l border-white/10 italic text-white/30">
-                    <p>Espécies exuberantes e puras como o Iroko, fecham suas matizes com intensidade exótica. Peças mais brutas perdem contraste cromático em troca da elegância opaca atemporal, mesmo possuindo fundos de tons primários de verniz acrílico ou tintura UV pigmentada.</p>
-                  </div>
-                  
-                  <p>O feixe solar direto em janelas colossais atua de forma rigorosa em toda matéria estofada ou amadeirada. A presença de tecidos pesados, blackouts, brises e cortinas de filtragem retardam o ciclo botânico, imortalizando suas peças.</p>
-                </div>
+          <div class="md:col-span-7 flex flex-col gap-1">
+            <div class="liquid-glass p-12 reveal-card flex-1">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-8 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Cor da Madeira
+              </h3>
+              <div class="text-white/40 text-sm font-light leading-relaxed space-y-4">
+                <p>O parquete, assim como um vinho refinado, envelhece revelando sua identidade em tom de perfeição. A interação térmica secular do oxigênio e da luz altera as células orgânicas, conduzindo silenciosamente origens vibrantes para acolhedores marrons profundos.</p>
+                <p>Espécies exuberantes e puras como o Iroko, fecham suas matizes com intensidade exótica. Peças mais brutas perdem contraste cromático em troca da elegância opaca atemporal, mesmo possuindo fundos de tons primários de verniz acrílico ou tintura UV pigmentada.</p>
+                <p>O feixe solar direto em janelas colossais atua de forma rigorosa em toda matéria estofada ou amadeirada. A presença de tecidos pesados, blackouts, brises e cortinas de filtragem retardam o ciclo botânico, imortalizando suas peças.</p>
               </div>
             </div>
-
-            <!-- CARD: GRÃO PRATEADO -->
-            <div class="liquid-glass rounded-2xl p-8 scene-card">
-              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+            
+            <div class="liquid-glass p-12 reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-8 flex items-center gap-2">
                 <span class="w-1 h-1 bg-white/50 rounded-full"></span> Grão Prateado
               </h3>
-              <div class="text-white/40 text-[13px] font-light leading-relaxed md:columns-2 gap-12">
-                <p class="mb-4 break-inside-avoid-column">Cortes milimétricos diretos do absoluto coração maciço do tronco projetam cintilamentos lustrosos da mais fina arquitetura genética: o cobiçado "Grão Prateado".</p>
-                <p class="mt-0 break-inside-avoid-column">Mais que um trunfo deslumbrante de atitude. A exclusividade deste núcleo natural aponta um índice brutal de resistência dimensional, garantindo silêncio nas pisadas e longevidade blindada nas tábuas do mundo real.</p>
+              <div class="text-white/40 text-sm font-light leading-relaxed">
+                <p>Cortes milimétricos diretos do absoluto coração maciço do tronco projetam cintilamentos lustrosos da mais fina arquitetura genética: o cobiçado "Grão Prateado". Mais que um trunfo deslumbrante de atitude. A exclusividade deste núcleo natural aponta um índice brutal de resistência dimensional, garantindo silêncio nas pisadas e longevidade blindada nas tábuas do mundo real.</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -312,218 +376,104 @@
   </main>
 
   <script>
-      (function () {
-        const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+    (function () {
+      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+      const CARD_INFO = {
+        1: { title: 'Escadas', folder: 'escadas' },
+        2: { title: 'Decks', folder: 'decks' },
+        3: { title: 'Portas', folder: 'portas' },
+        4: { title: 'Pisos', folder: 'pisos' },
+        5: { title: 'Painéis', folder: 'paineis' },
+        6: { title: 'Forros', folder: 'forros' },
+      };
 
-        // ── Descrições dos cards ─────────────────────────────────────
-        // Edite aqui para adicionar título, subtítulo e pasta de cada card.
-        // Para adicionar um novo card: crie a pasta, coloque image.jpg dentro,
-        // e adicione uma entrada nova aqui (a posição no layout é automática).
-        const CARD_INFO = {
-          1: { title: 'Escadas', folder: 'escadas' },
-          2: { title: 'Decks', folder: 'decks' },
-          3: { title: 'Portas', folder: 'portas' },
-          4: { title: 'Pisos', folder: 'pisos' },
-          5: { title: 'Painéis', folder: 'paineis' },
-          6: { title: 'Forros', folder: 'forros' },
-        };
-        // ────────────────────────────────────────────────────────────
-
-        function probe(src) {
-          return new Promise((res, rej) => {
-            const img = new Image();
-            img.onload = () => res(src);
-            img.onerror = () => rej();
-            img.src = src + '?v=' + Date.now();
-          });
+      async function findImage(folder, pattern = 'image') {
+        for (const ext of EXTS) {
+          const src = `${folder}/${pattern}.${ext}`;
+          try {
+            const res = await fetch(src, { method: 'HEAD' });
+            if (res.ok) return src;
+          } catch (e) {}
         }
-
-        const BUST = '?v=' + Date.now();
-
-        async function findImage(n) {
-          const info = CARD_INFO[n];
-          if (!info || !info.folder) return null;
-          for (const ext of EXTS) {
-            try { return await probe(`${info.folder}/image.${ext}`); } catch { }
-          }
-          return null;
-        }
-
-        function labelHTML(n, position) {
-          const info = CARD_INFO[n];
-          if (!info) return '';
-          const { title, sub } = info;
-          if (position === 'center') {
-            return `<div class="absolute inset-0 flex items-end justify-start p-12">
-        <div>
-          ${sub ? `<p class="font-label text-[11px] tracking-[0.3em] uppercase text-white/50 mb-2">${sub}</p>` : ''}
-          <h2 class="font-headline text-3xl font-light">${title}</h2>
-        </div>
-      </div>`;
-          }
-          return `<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
-      <div>
-        ${sub ? `<p class="font-label text-[10px] tracking-[0.2em] uppercase text-white/50 mb-1">${sub}</p>` : ''}
-        <h3 class="font-headline text-xl font-light">${title}</h3>
-      </div>
-    </div>`;
-        }
-
-        // Cria um card grande (col-8)
-        function makeLarge(src, n) {
-          const info = CARD_INFO[n];
-          const el = document.createElement('a');
-          el.href = info ? `${info.folder}.html` : '#';
-          el.className = 'scene-card block md:col-span-8 group relative overflow-hidden rounded-xl h-[640px] liquid-glass cursor-pointer';
-          el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" src="${src}${BUST}">${labelHTML(n, 'bottom')}`;
-          return el;
-        }
-
-        // Cria um card pequeno (para coluna) — divide altura do col
-        function makeSmall(src, n) {
-          const info = CARD_INFO[n];
-          const el = document.createElement('a');
-          el.href = info ? `${info.folder}.html` : '#';
-          el.className = 'scene-card block group relative overflow-hidden rounded-xl liquid-glass flex-1 cursor-pointer';
-          el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-70" src="${src}${BUST}">${labelHTML(n, 'bottom')}`;
-          return el;
-        }
-
-        // Cria um card panorâmico (col-12)
-        function makeWide(src, n) {
-          const info = CARD_INFO[n];
-          const el = document.createElement('a');
-          el.href = info ? `${info.folder}.html` : '#';
-          el.className = 'scene-card block md:col-span-12 group relative overflow-hidden rounded-xl h-[400px] liquid-glass cursor-pointer';
-          el.innerHTML = `<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" src="${src}${BUST}">${labelHTML(n, 'center')}`;
-          return el;
-        }
-
-        // Monta a galeria bento em grupos de 4: [grande, coluna(pequeno+pequeno), panorâmico]
-        function buildGrid(cards) {
-          const grid = document.getElementById('cards-grid');
-          for (let i = 0; i < cards.length; i += 4) {
-            const g = cards.slice(i, i + 4);
-
-            // Card 4 (panorâmico) vem primeiro
-            if (g[3]) grid.appendChild(makeWide(g[3].src, g[3].n));
-
-            if (g[0]) grid.appendChild(makeLarge(g[0].src, g[0].n));
-
-            if (g[1] || g[2]) {
-              const col = document.createElement('div');
-              col.className = 'md:col-span-4 flex flex-col gap-8 h-[640px]';
-              if (g[1]) col.appendChild(makeSmall(g[1].src, g[1].n));
-              if (g[2]) col.appendChild(makeSmall(g[2].src, g[2].n));
-              grid.appendChild(col);
+        
+        if (pattern === 'hero') {
+          const subfolders = ['brazil', 'carvalhos', 'unicos'];
+          for (const sub of subfolders) {
+            for (const ext of EXTS) {
+              const src = `${folder}/${sub}/02.${ext}`;
+              try {
+                const res = await fetch(src, { method: 'HEAD' });
+                if (res.ok) return src;
+              } catch (e) {}
             }
           }
         }
+        return null;
+      }
 
-        // Anima curtain + cards em cascata
-        function runAnimations() {
-          const curtain = document.getElementById('page-curtain');
-          const hero = document.querySelector('.scene-hero');
-          const cards = document.querySelectorAll('.scene-card');
+      const previewViewport = document.getElementById('preview-viewport');
+      const previewImage = document.getElementById('preview-image');
+      const bgImageLayer = document.getElementById('category-bg-image');
 
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            curtain.classList.add('lifted');
-            setTimeout(() => hero && hero.classList.add('risen'), 150);
-            cards.forEach((card, i) => {
-              setTimeout(() => card.classList.add('risen'), 200 + i * 150);
-            });
-          }));
+      function setRandomPosition() {
+        const x = 40 + Math.random() * 30;
+        const y = 20 + Math.random() * 40;
+        previewViewport.style.left = `${x}vw`;
+        previewViewport.style.top = `${y}vh`;
+      }
+
+      async function createListItem(info) {
+        const a = document.createElement('a');
+        a.href = `${info.folder}.html`;
+        a.className = 'category-link';
+        a.textContent = info.title;
+        
+        const cardSrc = await findImage(info.folder, 'image');
+        const heroSrc = await findImage(info.folder, 'hero') || cardSrc;
+
+        a.addEventListener('mouseenter', () => {
+          setRandomPosition();
+          if (cardSrc) previewImage.src = cardSrc;
+          if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
+          document.body.classList.add('preview-active');
+        });
+        
+        a.addEventListener('mouseleave', () => {
+          document.body.classList.remove('preview-active');
+        });
+        
+        return a;
+      }
+
+      async function init() {
+        const listContainer = document.getElementById('category-list');
+        for (const key in CARD_INFO) {
+          const info = CARD_INFO[key];
+          listContainer.appendChild(await createListItem(info));
         }
 
-        // Carrega imagens de cada entrada do CARD_INFO; pula cards sem imagem.
-        window.addEventListener('load', async () => {
-          const cards = [];
-          const nums = Object.keys(CARD_INFO).map(Number).sort((a, b) => a - b);
-          for (const n of nums) {
-            const src = await findImage(n);
-            if (src) cards.push({ n, src });
-          }
-          buildGrid(cards);
-          runAnimations();
-        });
-      })();
-  </script>
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('in-view');
+          });
+        }, { threshold: 0.1 });
 
-  <script>
-    (function () {
+        document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
 
-      // ── Split letras do título ───────────────────────────────────
-      const titleEl = document.getElementById('Categorias-title');
-      let letters = [];
-      if (titleEl) {
-        const text = titleEl.textContent.trim();
-        titleEl.innerHTML = text.split('').map((ch, i) =>
-          `<span class="Categorias-letter" data-i="${i}">${ch}</span>`
-        ).join('');
-        letters = titleEl.querySelectorAll('.Categorias-letter');
+        setTimeout(() => {
+          document.getElementById('page-curtain').classList.add('lifted');
+        }, 300);
       }
 
-      // Speeds individuais por letra (índice)
-      const speeds = [0.6, 0.25, 0.45, 0.15, 0.55];
-      const driftsX = [-1, 0.5, 0, -0.3, 0.8]; // desvio horizontal sutil
-
-      // ── Scroll handler ───────────────────────────────────────────
-      function onScroll() {
-        const sy = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
         const vh = window.innerHeight;
-        const progress = Math.min(sy / (vh * 0.7), 1);
+        const progress = Math.min(scrollY / vh, 1);
+        document.documentElement.style.setProperty('--scroll-progress', progress);
+      }, { passive: true });
 
-        // Letras: cada uma flutua em velocidade e direção diferentes
-        letters.forEach((letter, i) => {
-          const s = speeds[i] ?? 0.4;
-          const dx = driftsX[i] ?? 0;
-          const dy = -(sy * s);
-          const opacity = Math.max(0, 1 - progress * 1.3);
-          letter.style.transform = `translate(${0}px, ${dy}px)`;
-          letter.style.opacity = opacity;
-        });
-
-
-
-        // Cards: parallax de profundidade individual
-        document.querySelectorAll('.scene-card.risen').forEach((card, i) => {
-          const rect = card.getBoundingClientRect();
-          const center = rect.top + rect.height / 2 - vh / 2;
-          const depth = 0.04 + (i % 3) * 0.015;
-          card.style.transform = `translateY(${center * depth * -1}px)`;
-        });
-      }
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-
-      // ── Animação de contador (Condições Climáticas) ────────────
-      function animateValue(obj, start, end, duration) {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-          if (!startTimestamp) startTimestamp = timestamp;
-          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-          obj.innerHTML = Math.floor(progress * (end - start) + start);
-          if (progress < 1) {
-            window.requestAnimationFrame(step);
-          }
-        };
-        window.requestAnimationFrame(step);
-      }
-
-      const countObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const target = parseInt(entry.target.getAttribute('data-target'));
-            animateValue(entry.target, 0, target, 2000);
-            countObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.5 });
-
-      document.querySelectorAll('.animate-count').forEach(el => countObserver.observe(el));
-
+      window.addEventListener('load', init);
     })();
   </script>
 </body>
-
 </html>
