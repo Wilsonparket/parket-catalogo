@@ -329,7 +329,7 @@
       transform: translateY(0);
     }
 
-    /* Mobile Adjustments */
+    /* Mobile Adjustments (Metalab Style Cards) */
     @media (max-width: 1024px) {
       #preview-viewport, #fixed-info-box {
         display: none !important;
@@ -337,27 +337,64 @@
       
       .category-list-container {
         padding-left: 0;
-        display: flex;
-        justify-content: center;
-        text-align: center;
+        padding-top: 5vh;
       }
 
       #category-list {
         align-items: center;
         width: 100%;
-        padding: 0 20px;
+        padding: 0 10px;
+        gap: 2px;
       }
 
       .category-link {
-        width: 80% !important;
-        max-width: 280px;
-        font-size: 15px;
-        padding: 15px 0;
-        margin-bottom: 12px;
+        width: 100% !important;
+        aspect-ratio: 16/10;
+        background: #111;
+        border: none;
+        border-radius: 0;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: flex-end;
+        padding: 40px !important;
+        text-align: left;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
       }
 
-      #categories-bg-video {
-        opacity: 0.2; /* Darker for better text contrast on mobile */
+      .category-link.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .category-link::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: var(--bg-img);
+        background-size: cover;
+        background-position: center;
+        opacity: 0.6;
+        transition: transform 2s ease;
+      }
+
+      .category-link.in-view::before {
+        transform: scale(1.1);
+      }
+
+      .category-link .mobile-title {
+        position: relative;
+        z-index: 2;
+        font-size: 24px;
+        font-weight: 300;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      #categories-bg-video, #categories-bg-image {
+        display: none;
       }
     }
   </style>
@@ -595,21 +632,27 @@
       async function createListItem(info) {
         const a = document.createElement('a');
         a.href = `${info.folder}.html`;
-        a.className = 'category-link';
-        a.textContent = info.title;
+        a.className = 'category-link reveal-card';
         
         const cardSrc = await findImage(info.folder, 'image');
         const heroSrc = await findImage(info.folder, 'hero') || cardSrc;
 
+        // Set background image for mobile cards
+        if (cardSrc) a.style.setProperty('--bg-img', `url('${cardSrc}')`);
+
+        a.innerHTML = `<span class="mobile-title">${info.title}</span>`;
+        
         a.addEventListener('mouseenter', () => {
-          setRandomPosition();
-          if (cardSrc) previewImage.src = cardSrc;
-          if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
-          
-          previewName.textContent = info.title;
-          previewDesc.textContent = info.desc;
-          
-          document.body.classList.add('preview-active');
+          if (window.innerWidth > 1024) {
+            setRandomPosition();
+            if (cardSrc) previewImage.src = cardSrc;
+            if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
+            
+            previewName.textContent = info.title;
+            previewDesc.textContent = info.desc;
+            
+            document.body.classList.add('preview-active');
+          }
         });
         
         a.addEventListener('mouseleave', () => {
