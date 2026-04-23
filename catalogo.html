@@ -669,6 +669,11 @@
             if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
             previewName.textContent = info.title;
             previewDesc.textContent = info.desc;
+
+            // Alinha o bloco de texto verticalmente com o botão sob o cursor
+            const rect = a.getBoundingClientRect();
+            infoBoxEl.style.top = `${rect.top + rect.height / 2}px`;
+
             document.body.classList.add('preview-active');
           }
         });
