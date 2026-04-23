@@ -319,15 +319,6 @@
       position: fixed;
       inset: 0;
       background: #000;
-      z-index: 9999;
-      pointer-events: none;
-      transition: opacity 1s cubic-bezier(0.76, 0, 0.24, 1);
-    }
-
-    #page-curtain.lifted {
-      opacity: 0;
-    }
-
     .reveal-card {
       opacity: 0;
       transform: translateY(30px);
@@ -610,10 +601,6 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
-
-        setTimeout(() => {
-          document.getElementById('page-curtain').classList.add('lifted');
-        }, 300);
       }
 
       window.addEventListener('scroll', () => {
