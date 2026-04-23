@@ -3,6 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://parket.com.br">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
   <title>Parket - Portas</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -35,22 +39,104 @@
     .text-glow { text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal.active { opacity: 1; transform: translateY(0); }
-    
-    /* ── Floating Letters Style ── */
-    .Portas-letter {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-    
-    /* ── Smooth Scrolling ── */
+
     html { scroll-behavior: smooth; }
-    
-    /* ── Custom Navigation Blur ── */
+
     .nav-blur {
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
+
+    /* ── Carousel ── */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    .carousel-slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+      transform: scale(1.04);
+    }
+    .carousel-slide.active { opacity: 1; transform: scale(1); z-index: 1; }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      background: #000;
+      cursor: zoom-in;
+    }
+
+    .thumb-track {
+      display: flex; gap: 8px;
+      overflow-x: auto; scroll-behavior: smooth;
+      padding: 4px 0;
+    }
+    .thumb-track::-webkit-scrollbar { display: none; }
+    .thumb {
+      flex-shrink: 0;
+      width: 72px; height: 72px;
+      overflow: hidden;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      opacity: 0.4;
+      transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
+    }
+    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.7); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .progress-bar {
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      transition: width 0.3s ease;
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 100;
+      display: none;
+      align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    #lightbox.active { display: flex; opacity: 1; }
+    #lightbox-img {
+      max-width: 90vw; max-height: 85vh;
+      object-fit: contain;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transform: scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    #lightbox.active #lightbox-img { transform: scale(1); }
+    .lb-btn {
+      position: absolute; z-index: 110;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #fff;
+      transition: all 0.3s ease;
+    }
+    .lb-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); }
+    .lb-close { top: 40px; right: 40px; }
+    .lb-prev  { left: 40px; top: 50%; transform: translateY(-50%); }
+    .lb-next  { right: 40px; top: 50%; transform: translateY(-50%); }
   </style>
   <script src="assets/js/components.js"></script>
   <parket-seo title="Parket Portas"></parket-seo>
@@ -59,33 +145,44 @@
   <parket-loader></parket-loader>
 
   <!-- Top Navigation -->
-  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category=""></parket-nav>
+  <parket-nav return-url="catalogo.html#categories-section" return-text="Voltar ao Catálogo" category=""></parket-nav>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center px-12 pt-32 pb-20 max-w-screen-2xl mx-auto reveal">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center w-full">
-        <div>
-          <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/40 mb-8 block">Entradas Majestosas</span>
-          <h1 id="Portas-title" class="text-[clamp(2rem,8vw,7.5rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-16" style="text-transform: none; font-family: 'Inter', sans-serif;">
-            Portas
-          </h1>
-          <p class="text-white/60 font-body text-xl leading-relaxed max-w-lg mb-12">
-            A primeira impressão é a que permanece. Nossas portas pivotantes e de correr em madeira de demolição ou nobres são o ápice do design contemporâneo.
-          </p>
-          <div class="flex gap-8">
-            <div class="h-[1px] w-20 bg-white/20 mt-4"></div>
-            <p class="text-white/40 text-sm italic font-light">O umbral da sofisticação absoluta.</p>
-          </div>
+  <main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
+    <!-- Title -->
+    <div class="reveal mb-12">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Entradas Majestosas</span>
+      <h1 id="Portas-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85]" style="text-transform: none; font-family: 'Inter', sans-serif;">
+        Portas
+      </h1>
+      <p class="text-white/50 font-body text-lg leading-relaxed max-w-2xl mt-10 mb-8">
+        A primeira impressão é a que permanece. Nossas portas pivotantes e de correr em madeira de demolição ou nobres são o ápice do design contemporâneo.
+      </p>
+      <div class="flex items-center gap-6">
+        <div class="h-[1px] w-12 bg-white/20"></div>
+        <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">O umbral da sofisticação absoluta.</p>
+      </div>
+    </div>
+
+    <!-- Carousel Section -->
+    <section class="reveal pb-40 mt-16">
+      <div class="carousel-viewport" id="carousel"></div>
+      <div class="max-w-[900px] mx-auto">
+        <div class="flex items-center gap-6 mt-6">
+          <div class="progress-bar flex-1"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
-        <div class="relative aspect-[4/5] lg:aspect-square overflow-hidden rounded-2xl liquid-glass group">
-          <img src="portas/image.jpg" class="w-full h-full object-cover opacity-80 transition-transform duration-[3s] group-hover:scale-110" alt="Portas Parket">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        </div>
+        <div class="thumb-track mt-6 justify-center" id="thumb-track"></div>
       </div>
     </section>
 
   </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button class="lb-btn lb-close" onclick="closeLightbox()"><span class="material-symbols-outlined">close</span></button>
+    <button class="lb-btn lb-prev" onclick="lbPrev()"><span class="material-symbols-outlined">chevron_left</span></button>
+    <img decoding="async" id="lightbox-img" src="" alt="Zoom">
+    <button class="lb-btn lb-next" onclick="lbNext()"><span class="material-symbols-outlined">chevron_right</span></button>
+  </div>
 
   <!-- Vídeos Section -->
   <parket-videos></parket-videos>
@@ -93,37 +190,6 @@
   <!-- Footer -->
 
   <script>
-    // ── Letter Parallax Logic ──
-    (function() {
-      const titleEl = document.getElementById('Portas-title');
-      let letters = [];
-      if (titleEl) {
-        const text = titleEl.textContent.trim();
-        titleEl.innerHTML = text.split('').map((ch, i) => 
-          `<span class="Portas-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
-        ).join('');
-        letters = titleEl.querySelectorAll('.Portas-letter');
-      }
-
-      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55, 0.4];
-      const driftsX = [-1, 0.5, 0, -0.3, 0.8, -0.2];
-
-      window.addEventListener('scroll', () => {
-        const sy = window.scrollY;
-        const vh = window.innerHeight;
-        const progress = Math.min(sy / (vh * 0.7), 1);
-
-        letters.forEach((letter, i) => {
-          const s = speeds[i] ?? 0.4;
-          const dx = driftsX[i] ?? 0;
-          const dy = -(sy * s);
-          const opacity = Math.max(0, 1 - progress * 1.5);
-          letter.style.transform = `translate(${0}px, ${dy}px)`;
-          letter.style.opacity = opacity;
-        });
-      }, { passive: true });
-    })();
-
     // Smooth Reveal Animation on Scroll
     const observerOptions = {
       threshold: 0.15,
@@ -139,6 +205,111 @@
     }, observerOptions);
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Carousel ──
+    (function () {
+      const images = [
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-01.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-02.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-04.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-05.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-06.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-07.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-09.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-10.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-11.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-13.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-14.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-16.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-03.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-08.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-12.jpg",
+        "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-15.jpg"
+      ];
+
+      const carousel = document.getElementById('carousel');
+      const thumbTrack = document.getElementById('thumb-track');
+      const progressFill = document.getElementById('progress-fill');
+      let current = 0;
+      let timer = null;
+
+      images.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+        slide.innerHTML = `<img decoding="async" src="${src}" alt="Portas ${i + 1}" loading="lazy">`;
+        slide.addEventListener('click', () => openLightbox(i));
+        carousel.appendChild(slide);
+
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+        thumb.innerHTML = `<img decoding="async" src="${src}" alt="Thumb ${i + 1}" loading="lazy">`;
+        thumb.addEventListener('click', () => goTo(i));
+        thumbTrack.appendChild(thumb);
+      });
+
+      function goTo(idx) {
+        if (idx < 0) idx = images.length - 1;
+        if (idx >= images.length) idx = 0;
+        current = idx;
+        carousel.querySelectorAll('.carousel-slide').forEach((s, i) => {
+          s.classList.toggle('active', i === current);
+        });
+        thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+          t.classList.toggle('active', i === current);
+          if (i === current) { const tr = thumbTrack.getBoundingClientRect(), rr = t.getBoundingClientRect(); thumbTrack.scrollTo({ left: thumbTrack.scrollLeft + (rr.left - tr.left) - thumbTrack.clientWidth / 2 + rr.width / 2, behavior: 'smooth' }); }
+        });
+        progressFill.style.width = `${((current + 1) / images.length) * 100}%`;
+        restart();
+      }
+      const next = () => goTo(current + 1);
+      const prev = () => goTo(current - 1);
+
+      function start() { if (timer) return; timer = setInterval(next, 5500); }
+      function stop()  { if (!timer) return; clearInterval(timer); timer = null; }
+      function restart() { stop(); start(); }
+
+      carousel.addEventListener('mouseenter', stop);
+      carousel.addEventListener('mouseleave', start);
+
+      let touchStartX = 0;
+      carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      carousel.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+      }, { passive: true });
+
+      progressFill.style.width = `${(1 / images.length) * 100}%`;
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => e.isIntersecting ? start() : stop());
+      }, { threshold: 0.25 });
+      io.observe(carousel);
+
+      // Lightbox
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      let lbIndex = 0;
+
+      window.openLightbox = (idx) => {
+        lbIndex = idx;
+        lbImg.src = images[lbIndex];
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+      window.closeLightbox = () => {
+        lb.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      };
+      window.lbNext = () => { lbIndex = (lbIndex + 1) % images.length; lbImg.src = images[lbIndex]; };
+      window.lbPrev = () => { lbIndex = (lbIndex - 1 + images.length) % images.length; lbImg.src = images[lbIndex]; };
+
+      document.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') lbNext();
+        if (e.key === 'ArrowLeft') lbPrev();
+      });
+    })();
   </script>
 </body>
 </html>

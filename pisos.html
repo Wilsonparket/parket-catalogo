@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://parket.com.br">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
   <title>Parket - Pisos</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,190 +25,465 @@
     }
   </script>
   <style>
-    :root {
-      --scroll-progress: 0;
-    }
-    body { background-color: #000000; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    
-    /* ── Immersive Hero ── */
-    #hero-viewport {
-      height: 120vh;
+    body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── Collection Section ── */
+    .piso-section { padding: 7rem 3rem; max-width: 90rem; margin: 0 auto; }
+    .piso-header { margin-bottom: 3rem; }
+
+    /* ── Carousel ── */
+    .carousel-viewport {
       position: relative;
-    }
-    #hero-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
+      max-width: 900px;
+      height: 55vh;
+      max-height: 560px;
       overflow: hidden;
+      margin: 0 auto;
     }
-    #hero-bg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      transform: scale(calc(1 + var(--scroll-progress) * 0.5));
-      filter: brightness(0.3);
-      will-change: transform;
+    .carousel-slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+      transform: scale(1.04);
     }
-    #hero-content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      opacity: calc(1 - var(--scroll-progress) * 2.5);
+    .carousel-slide.active { opacity: 1; transform: scale(1); z-index: 1; }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      background: #000;
+      cursor: zoom-in;
     }
 
-    /* ── Zoom Cards ── */
-    .zoom-card {
-      opacity: 0;
-      transform: scale(0.9) translateY(40px);
-      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    /* ── Thumbnails ── */
+    .thumb-track {
+      display: flex; gap: 8px;
+      overflow-x: auto; scroll-behavior: smooth;
+      padding: 4px 0;
     }
-    .zoom-card.in-view {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-    .category-card {
-      position: relative;
+    .thumb-track::-webkit-scrollbar { display: none; }
+    .thumb {
+      flex-shrink: 0;
+      width: 72px; height: 72px;
       overflow: hidden;
       cursor: pointer;
-      background: #0a0a0a;
+      border-bottom: 2px solid transparent;
+      opacity: 0.4;
+      transition: opacity 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
     }
-    .category-card img {
-      width: 100%;
+    .thumb:hover { opacity: 0.7; transform: scale(1.08); }
+    .thumb.active { opacity: 1; border-color: rgba(255,255,255,0.7); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .progress-fill {
       height: 100%;
-      object-fit: cover;
-      opacity: 0.5;
-      transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(255,255,255,0.6);
+      transition: width 0.3s ease;
     }
-    .category-card:hover img { opacity: 0.8; transform: scale(1.1); }
-    
-    .card-label {
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      background: rgba(0,0,0,0.4);
+
+    /* ── Fade-up entry ── */
+    .fade-up {
       opacity: 0;
-      transition: opacity 0.6s ease;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
     }
-    .category-card:hover .card-label { opacity: 1; }
-    
-    .static-label {
-      position: absolute;
-      bottom: 2rem;
-      left: 2rem;
-      z-index: 5;
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Divider between sections ── */
+    .section-divider {
+      max-width: 90rem; margin: 0 auto;
+      padding: 0 3rem;
+    }
+    .section-divider > div {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent);
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 100;
+      display: none;
+      align-items: center; justify-content: center;
+      opacity: 0;
       transition: opacity 0.4s ease;
     }
-    .category-card:hover .static-label { opacity: 0; }
+    #lightbox.active { display: flex; opacity: 1; }
+    #lightbox-img {
+      max-width: 90vw; max-height: 85vh;
+      object-fit: contain;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transform: scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    #lightbox.active #lightbox-img { transform: scale(1); }
+    .lb-btn {
+      position: absolute; z-index: 110;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #fff;
+      transition: all 0.3s ease;
+    }
+    .lb-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); }
+    .lb-close { top: 40px; right: 40px; }
+    .lb-prev  { left: 40px; top: 50%; transform: translateY(-50%); }
+    .lb-next  { right: 40px; top: 50%; transform: translateY(-50%); }
   </style>
   <parket-seo title="Parket Pisos"></parket-seo>
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
   <parket-loader></parket-loader>
-  <parket-nav return-url="catalogo.html" return-text="Voltar ao Catálogo" category="Pisos"></parket-nav>
+  <parket-nav return-url="catalogo.html#categories-section" return-text="Voltar ao Catálogo" category="Pisos"></parket-nav>
 
-  <!-- Immersive Sub-Hero -->
-  <section id="hero-viewport">
-    <div id="hero-sticky">
-      <div id="hero-bg" style="background-image: url('https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg');"></div>
-      <div id="hero-content" class="px-12">
-        <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Coleção Engineered</span>
-        <h1 class="text-[clamp(3rem,8vw,8rem)] font-thin tracking-[-0.05em] leading-[0.8] mb-12">Pisos</h1>
-        <p class="max-w-xl mx-auto text-white/40 font-light text-lg tracking-wide uppercase">O alicerce da sofisticação arquitetônica</p>
-      </div>
-    </div>
-  </section>
-
-  <main class="relative z-20 bg-black">
-    <!-- Grid -->
-    <section class="pb-60">
-      <div class="px-12 py-24 max-w-screen-2xl mx-auto flex items-center gap-8">
-        <h2 class="text-[10px] uppercase tracking-[0.5em] text-white/30 shrink-0">Coleções Atemporais</h2>
-        <div class="h-px flex-1 bg-white/10"></div>
-      </div>
-      <div id="category-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1"></div>
-    </section>
+  <main class="relative z-20 bg-black pt-32">
+    <div id="collections"></div>
   </main>
+
+  <parket-videos></parket-videos>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button class="lb-btn lb-close" onclick="closeLightbox()"><span class="material-symbols-outlined">close</span></button>
+    <button class="lb-btn lb-prev" onclick="lbPrev()"><span class="material-symbols-outlined">chevron_left</span></button>
+    <img decoding="async" id="lightbox-img" src="" alt="Zoom">
+    <button class="lb-btn lb-next" onclick="lbNext()"><span class="material-symbols-outlined">chevron_right</span></button>
+  </div>
 
   <script>
     (function () {
       const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
-      const CATEGORIES = [
-        { title: 'Brazil',         folder: 'brazil' },
-        { title: 'Eternos',        folder: 'eternos' },
-        { title: 'Únicos',         folder: 'unicos' },
-        { title: 'Carvalhos',      folder: 'carvalhos',        cover: 'https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg' },
-        { title: 'Grandiosos',     folder: 'grandiosos',       cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg' },
-        { title: 'Pinho de Riga',  folder: 'pinho-de-riga',    cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg' },
-        { title: 'Clássicos',      folder: 'classicos',        cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-01.jpg' },
-        { title: 'Wood + Mármore', folder: 'listone-giordano', cover: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg' },
+      const MAX_LOCAL_IMAGES = 30;
+
+      const COLLECTIONS = [
+        {
+          key: 'brazil',
+          title: 'Brazil',
+          desc: 'A autenticidade das madeiras brasileiras traduzida em réguas de beleza única. Uma coleção que exalta a alma tropical com cores profundas e fibras marcantes.',
+          localFolder: 'pisos/brazil'
+        },
+        {
+          key: 'eternos',
+          title: 'Eternos',
+          desc: 'Tons e texturas que atravessam o tempo. Uma coleção concebida para durar visualmente e estruturalmente, em qualquer cenário.',
+          localFolder: 'pisos/eternos'
+        },
+        {
+          key: 'unicos',
+          title: 'Únicos',
+          desc: 'Peças raras com desenhos irrepetíveis. Cada régua é assinada pela natureza com veios, nós e matizes singulares.',
+          localFolder: 'pisos/unicos'
+        },
+        {
+          key: 'carvalhos',
+          title: 'Carvalhos',
+          desc: 'A nobreza do Carvalho Europeu em texturas que contam histórias. Tons orgânicos e toques acetinados que trazem o equilíbrio perfeito entre tradição e modernidade.',
+          remote: [
+            "https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/27e09f2b-808a-4ecb-b60d-c2702e023383-1.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/aa120b24-69d4-48d5-b47f-b73099b875ef-2-1.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/european-oak-capuccino-1.jpeg",
+            "https://parket.com.br/wp-content/uploads/2026/03/European-Oak-Giant-1.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/Imagem_7-30-1.webp",
+            "https://parket.com.br/wp-content/uploads/2026/03/IMG_0150-1-scaled.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/IMG_6862-1-scaled.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/IMG_8925-2-1.jpeg",
+            "https://parket.com.br/wp-content/uploads/2026/03/IMG_8932-2-1.jpeg",
+            "https://parket.com.br/wp-content/uploads/2026/03/oak-flooring-dinesen-victoria-miro-gallery-wide-wooden-floorboards-02-1.jpg",
+            "https://parket.com.br/wp-content/uploads/2026/03/sao_paulo_tch1-1.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-01.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-02.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-03.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-04.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-05.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-06.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-07.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-08.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-09.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-10.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-11.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-12.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-13.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-14.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-15.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-16.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-17.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-18.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-19.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-20.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-21.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-22.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-23.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-24.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-25.jpg"
+          ]
+        },
+        {
+          key: 'grandiosos',
+          title: 'Grandiosos',
+          desc: 'Réguas de proporções imponentes que ampliam e valorizam o espaço. Uma coleção que celebra o impacto do formato XL e a continuidade visual da madeira.',
+          remote: [
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-05.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-06.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-07.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-08.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-09.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-11.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-12.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-13.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-03.jpg"
+          ]
+        },
+        {
+          key: 'pinho-de-riga',
+          title: 'Pinho de Riga',
+          desc: 'Resgatado de antigas construções europeias, o Pinho de Riga é sinônimo de história e resiliência. Uma madeira com alma que traz profundidade a qualquer projeto contemporâneo.',
+          remote: [
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-02.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-03.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-04.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-05.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-06.jpg"
+          ]
+        },
+        {
+          key: 'classicos',
+          title: 'Clássicos',
+          desc: 'Padrões atemporais que definem a sofisticação residencial. Uma linha dedicada à elegância contínua que transcende tendências passageiras.',
+          remote: [
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-01.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-02.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-03.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-04.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-05.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-06.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-07.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-08.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-09.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-10.jpg"
+          ]
+        },
+        {
+          key: 'listone-giordano',
+          title: 'Wood + Mármore',
+          titleHtml: 'Wood + <span class="italic font-normal">Mármore</span>',
+          desc: 'A fusão sublime entre a madeira nobre e a imponência mineral. Uma experiência tátil e visual única que redefine a elegância nos detalhes.',
+          remote: [
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-05.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-06.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-07.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-09.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-10.jpg",
+            "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-11.jpg"
+          ]
+        }
       ];
 
-      async function findImage(cat) {
-        if (cat.cover) return cat.cover;
-        for (const ext of EXTS) {
-          const src = `pisos/${cat.folder}/image.${ext}`;
-          try {
-            const res = await fetch(src, { method: 'HEAD' });
-            if (res.ok) return src;
-          } catch (e) {}
-        }
-        return null;
+      function probe(src) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(src);
+          img.onerror = () => reject();
+          img.src = src;
+        });
       }
 
-      function createCard(cat, src) {
-        const div = document.createElement('div');
-        div.className = 'zoom-card';
-        div.innerHTML = `
-          <a href="pisos-${cat.folder}.html" class="category-card block aspect-[3/4]">
-            <img src="${src || ''}" alt="${cat.title}">
-            <div class="static-label">
-              <h3 class="text-xl font-light tracking-widest uppercase text-white">${cat.title}</h3>
+      async function findLocalImages(folder) {
+        const found = [];
+        let consecutiveMisses = 0;
+        for (let i = 1; i <= MAX_LOCAL_IMAGES; i++) {
+          const num = String(i).padStart(2, '0');
+          let hit = false;
+          for (const ext of EXTS) {
+            try {
+              const src = await probe(`${folder}/${num}.${ext}`);
+              found.push(src);
+              hit = true;
+              break;
+            } catch {}
+          }
+          if (!hit) {
+            consecutiveMisses++;
+            if (consecutiveMisses >= 3) break;
+          } else {
+            consecutiveMisses = 0;
+          }
+        }
+        return found;
+      }
+
+      // ── Lightbox (shared across all carousels) ──
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      let lbImages = [];
+      let lbIndex = 0;
+
+      window.openLightbox = (images, idx) => {
+        lbImages = images;
+        lbIndex = idx;
+        lbImg.src = lbImages[lbIndex];
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+      window.closeLightbox = () => {
+        lb.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      };
+      window.lbNext = () => {
+        lbIndex = (lbIndex + 1) % lbImages.length;
+        lbImg.src = lbImages[lbIndex];
+      };
+      window.lbPrev = () => {
+        lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length;
+        lbImg.src = lbImages[lbIndex];
+      };
+      document.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') lbNext();
+        if (e.key === 'ArrowLeft') lbPrev();
+      });
+
+      function buildSection(col, images) {
+        const section = document.createElement('section');
+        section.className = 'piso-section';
+        section.id = col.key;
+        section.innerHTML = `
+          <div class="piso-header fade-up">
+            <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Coleção</span>
+            <h2 class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">${col.titleHtml || col.title}</h2>
+            ${col.desc ? `<p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">${col.desc}</p>` : ''}
+          </div>
+          <div class="fade-up" style="transition-delay: 0.15s">
+            <div class="carousel-viewport"></div>
+            <div class="max-w-[900px] mx-auto">
+              <div class="flex items-center gap-6 mt-6">
+                <div class="progress-bar flex-1"><div class="progress-fill"></div></div>
+              </div>
+              <div class="thumb-track mt-6 justify-center"></div>
             </div>
-            <div class="card-label">
-              <h3 class="text-3xl font-thin tracking-tighter text-white mb-4">${cat.title}</h3>
-              <div class="w-12 h-[1px] bg-white/40"></div>
-              <span class="mt-8 font-label text-[9px] uppercase tracking-[0.4em] opacity-40">Explorar</span>
-            </div>
-          </a>`;
-        return div;
+          </div>
+        `;
+        initCarousel(section, images, col.title);
+        return section;
+      }
+
+      function initCarousel(section, images, title) {
+        const viewport = section.querySelector('.carousel-viewport');
+        const thumbTrack = section.querySelector('.thumb-track');
+        const progressFill = section.querySelector('.progress-fill');
+
+        let current = 0;
+        let timer = null;
+
+        images.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+          slide.innerHTML = `<img decoding="async" src="${src}" alt="${title} ${i + 1}" loading="lazy">`;
+          slide.addEventListener('click', () => openLightbox(images, i));
+          viewport.appendChild(slide);
+
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+          thumb.innerHTML = `<img decoding="async" src="${src}" alt="Thumb ${i + 1}" loading="lazy">`;
+          thumb.addEventListener('click', () => goTo(i));
+          thumbTrack.appendChild(thumb);
+        });
+
+        function goTo(idx) {
+          if (idx < 0) idx = images.length - 1;
+          if (idx >= images.length) idx = 0;
+          current = idx;
+          viewport.querySelectorAll('.carousel-slide').forEach((s, i) => {
+            s.classList.toggle('active', i === current);
+          });
+          thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === current);
+            if (i === current) { const tr = thumbTrack.getBoundingClientRect(), rr = t.getBoundingClientRect(); thumbTrack.scrollTo({ left: thumbTrack.scrollLeft + (rr.left - tr.left) - thumbTrack.clientWidth / 2 + rr.width / 2, behavior: 'smooth' }); }
+          });
+          progressFill.style.width = `${((current + 1) / images.length) * 100}%`;
+          restart();
+        }
+        const next = () => goTo(current + 1);
+        const prev = () => goTo(current - 1);
+
+        function start() {
+          if (timer) return;
+          timer = setInterval(next, 5500);
+        }
+        function stop() {
+          if (!timer) return;
+          clearInterval(timer);
+          timer = null;
+        }
+        function restart() { stop(); start(); }
+
+        viewport.addEventListener('mouseenter', stop);
+        viewport.addEventListener('mouseleave', start);
+
+        let touchStartX = 0;
+        viewport.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        viewport.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        progressFill.style.width = `${(1 / images.length) * 100}%`;
+
+        // Autoplay only when in view
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => e.isIntersecting ? start() : stop());
+        }, { threshold: 0.25 });
+        io.observe(section);
       }
 
       async function init() {
-        const grid = document.getElementById('category-grid');
-        for (const cat of CATEGORIES) {
-          const src = await findImage(cat);
-          grid.appendChild(createCard(cat, src));
+        const container = document.getElementById('collections');
+        for (let i = 0; i < COLLECTIONS.length; i++) {
+          const col = COLLECTIONS[i];
+          let images = [];
+          if (col.remote && col.remote.length) {
+            images = col.remote;
+          } else if (col.localFolder) {
+            images = await findLocalImages(col.localFolder);
+          }
+          if (!images.length) continue;
+
+          container.appendChild(buildSection(col, images));
+
+          if (i < COLLECTIONS.length - 1) {
+            const div = document.createElement('div');
+            div.className = 'section-divider';
+            div.innerHTML = '<div></div>';
+            container.appendChild(div);
+          }
         }
 
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('in-view');
+        // Fade-up observer
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('visible');
           });
         }, { threshold: 0.1 });
-
-        document.querySelectorAll('.zoom-card').forEach(c => observer.observe(c));
+        document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
       }
-
-      window.addEventListener('scroll', () => {
-        const p = Math.min(window.scrollY / window.innerHeight, 1);
-        document.documentElement.style.setProperty('--scroll-progress', p);
-      }, { passive: true });
 
       window.addEventListener('load', init);
     })();
-  </script>
-</body>
-</html>
-);
   </script>
 </body>
 </html>
