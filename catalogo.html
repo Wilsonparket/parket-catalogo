@@ -145,22 +145,30 @@
     }
 
     .category-link {
-      display: block;
-      font-size: clamp(1rem, 3vw, 3rem); /* Reduced by 50% */
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      color: rgba(255, 255, 255, 0.3);
-      transition: color 0.4s ease, transform 0.4s ease;
-      text-decoration: none; /* No underline */
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      padding: 6px 20px;
+      margin-bottom: 6px;
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
       cursor: pointer;
-      width: max-content;
       font-family: 'Inter', sans-serif;
+      white-space: nowrap;
     }
 
     .category-link:hover {
+      background: rgba(255, 255, 255, 0.15);
       color: #fff;
-      transform: translateX(15px);
+      transform: translateX(5px);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     /* ── Dolly Zoom Preview (MetaLab Wipe Reveal) ── */
