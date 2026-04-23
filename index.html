@@ -5,6 +5,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://parket.com.br">
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preload" as="image" href="autoload/video-home-poster.jpg" fetchpriority="high">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
@@ -173,6 +174,8 @@
             muted
             loop
             playsinline
+            preload="auto"
+            poster="autoload/video-home-poster.jpg"
             class="parallax-video absolute inset-0 w-full h-full object-cover opacity-80"
         >
             <source src="autoload/video-home.mp4" type="video/mp4">
