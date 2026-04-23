@@ -328,12 +328,44 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* Mobile Adjustments */
+    @media (max-width: 1024px) {
+      #preview-viewport, #fixed-info-box {
+        display: none !important;
+      }
+      
+      .category-list-container {
+        padding-left: 0;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+      }
+
+      #category-list {
+        align-items: center;
+        width: 100%;
+        padding: 0 20px;
+      }
+
+      .category-link {
+        width: 80% !important;
+        max-width: 280px;
+        font-size: 15px;
+        padding: 15px 0;
+        margin-bottom: 12px;
+      }
+
+      #categories-bg-video {
+        opacity: 0.2; /* Darker for better text contrast on mobile */
+      }
+    }
   </style>
 </head>
 
 <body class="antialiased selection:bg-white selection:text-black">
-  <parket-loader></parket-loader>
-  <div id="page-curtain"></div>
+
+
 
   <!-- Hero with Scroll Zoom -->
   <section id="hero-viewport">
