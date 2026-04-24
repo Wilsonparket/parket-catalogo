@@ -128,8 +128,6 @@
     #hero-content {
       position: relative;
       z-index: 10;
-      opacity: calc(1 - var(--scroll-progress) * 3);
-      transform: translateY(calc(var(--scroll-progress) * -50px));
     }
 
     /* ── Categories Section (MetaLab Style) ── */
@@ -331,53 +329,69 @@
       transform: translateY(0);
     }
 
-    /* Mobile: list buttons with iOS-style scroll-snap picker */
+    /* Mobile: sticky section + page-scroll-driven picker */
     @media (max-width: 1024px) {
+      html {
+        scroll-snap-type: y proximity;
+      }
+
+      #hero-viewport,
+      #categories-section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
       #preview-viewport, #fixed-info-box {
         display: none !important;
       }
 
       #categories-section {
         display: block;
+        height: 280vh;
+        min-height: 280vh;
+        position: relative;
+      }
+
+      #categories-bg-container {
+        position: sticky;
+        top: 0;
         height: 100vh;
-        min-height: 100vh;
+        width: 100%;
+        margin-bottom: -100vh;
       }
 
       .category-list-container {
-        padding: 0;
+        position: sticky;
+        top: 0;
         width: 100%;
         height: 100vh;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 1100px;
+        perspective-origin: 50% 50%;
       }
 
       #category-list {
-        width: 100%;
-        height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scroll-snap-type: y mandatory;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: auto;
-        perspective: 1100px;
-        perspective-origin: 50% 50%;
-        padding: 45vh 0;
-        gap: 12px;
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        scrollbar-width: none;
-      }
-
-      #category-list::-webkit-scrollbar {
-        display: none;
+        gap: 12px;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        transform: translateY(var(--list-y, 0px));
+        will-change: transform;
       }
 
       .category-link {
-        scroll-snap-align: center;
-        scroll-snap-stop: always;
         flex: 0 0 auto;
         width: auto !important;
-        min-width: 160px;
-        max-width: 220px;
+        min-width: 120px;
+        max-width: 170px;
         font-size: 15px;
-        padding: 8px 24px !important;
+        padding: 6px 16px !important;
         margin-bottom: 0;
         color: rgba(255, 255, 255, 0.7);
         background: rgba(255, 255, 255, 0.08);
@@ -388,11 +402,9 @@
         transform-origin: 50% 50%;
         transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
         opacity: var(--pick-opacity, 1);
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                    opacity 0.35s ease-out,
-                    color 0.35s ease-out,
-                    background 0.35s ease-out,
-                    border-color 0.35s ease-out;
+        transition: color 0.25s ease-out,
+                    background 0.25s ease-out,
+                    border-color 0.25s ease-out;
         will-change: transform, opacity;
       }
 
@@ -724,23 +736,41 @@
       function updatePicker() {
         pickerTicking = false;
         if (window.innerWidth > 1024) return;
+
+        const section = document.getElementById('categories-section');
         const list = document.getElementById('category-list');
-        if (!list) return;
-        const listRect = list.getBoundingClientRect();
-        const centerY = listRect.top + listRect.height / 2;
+        if (!section || !list) return;
+
         const cards = list.querySelectorAll('.category-link');
+        if (!cards.length) return;
+
+        const vh = window.innerHeight;
+        const sectionRect = section.getBoundingClientRect();
+        const sectionTop = window.scrollY + sectionRect.top;
+        const scrollDistance = section.offsetHeight - vh;
+        if (scrollDistance <= 0) return;
+
+        const scrollWithin = Math.max(0, Math.min(scrollDistance, window.scrollY - sectionTop));
+        const progress = scrollWithin / scrollDistance;
+        const focalIndex = progress * (cards.length - 1);
+
+        const cardHeight = cards[0].offsetHeight;
+        const gap = parseFloat(getComputedStyle(list).rowGap || '12') || 12;
+        const stride = cardHeight + gap;
+        const naturalCenter = (cards.length - 1) / 2;
+        const listOffset = (naturalCenter - focalIndex) * stride;
+        list.style.setProperty('--list-y', `${listOffset.toFixed(1)}px`);
+
         let activeCard = null;
         let minAbsDist = Infinity;
 
-        cards.forEach(card => {
-          const rect = card.getBoundingClientRect();
-          const itemCenter = rect.top + rect.height / 2;
-          const normalized = Math.max(-1.5, Math.min(1.5, (itemCenter - centerY) / listRect.height));
-          const absDist = Math.abs(normalized);
+        cards.forEach((card, i) => {
+          const distance = i - focalIndex;
+          const absDist = Math.abs(distance);
 
-          const scale = Math.max(0.72, 1 - absDist * 0.32);
-          const opacity = Math.max(0.18, 1 - absDist * 1.1);
-          const translateZ = -absDist * 220;
+          const scale = Math.max(0.62, 1 - absDist * 0.18);
+          const opacity = Math.max(0.18, 1 - absDist * 0.5);
+          const translateZ = -absDist * 200;
 
           card.style.setProperty('--pick-scale', scale.toFixed(3));
           card.style.setProperty('--pick-opacity', opacity.toFixed(3));
@@ -760,17 +790,11 @@
           requestAnimationFrame(updateHeroScroll);
           heroTicking = true;
         }
+        if (!pickerTicking) {
+          requestAnimationFrame(updatePicker);
+          pickerTicking = true;
+        }
       }, { passive: true });
-
-      const listEl = document.getElementById('category-list');
-      if (listEl) {
-        listEl.addEventListener('scroll', () => {
-          if (!pickerTicking) {
-            requestAnimationFrame(updatePicker);
-            pickerTicking = true;
-          }
-        }, { passive: true });
-      }
 
       window.addEventListener('resize', () => { updateHeroScroll(); updatePicker(); });
       window.addEventListener('load', () => { init(); updateHeroScroll(); updatePicker(); });
