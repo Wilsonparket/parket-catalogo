@@ -347,8 +347,8 @@
 
       #categories-section {
         display: block;
-        height: 280vh;
-        min-height: 280vh;
+        height: 320vh;
+        min-height: 320vh;
         position: relative;
       }
 
@@ -494,7 +494,7 @@
   <!-- Technical Section -->
   <main class="relative z-20 bg-black">
     <section class="px-12 max-w-screen-2xl mx-auto py-40">
-      <div class="border-t border-white/10 pt-24 reveal-card">
+      <div class="border-t border-white/10 pt-24">
         <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Guia Técnico</span>
         <h2 class="text-[clamp(2.5rem,4vw,5rem)] font-extralight tracking-[-0.04em] leading-[0.9] mb-20 max-w-3xl">
           Madeira, um material vivo
@@ -604,6 +604,7 @@
         4: { title: 'Pisos', folder: 'pisos', desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.' },
         5: { title: 'Painéis', folder: 'paineis', desc: 'Geometria viva. Revestimentos que trazem ritmo e profundidade às paredes através da marcenaria fina.' },
         6: { title: 'Forros', folder: 'forros', desc: 'Perspectiva superior. Detalhes em madeira que elevam o teto a uma obra de arte arquitetônica.' },
+        7: { title: 'Texturas', folder: 'texturas', image: 'texturas/autoload/chevron-naturalle.webp', hero: 'texturas/autoload/espinha-de-peixe-mont-blanc.webp', desc: 'Padrões e desenhos autorais. Cortes, chevrons e espinhas de peixe que transformam a superfície em expressão.' },
       };
 
       async function findImage(folder, pattern = 'image') {
@@ -683,8 +684,8 @@
       async function hydrateCard(a, info, isDesktop) {
         if (!isDesktop) return;
 
-        const cardSrc = await findImage(info.folder, 'image');
-        const heroSrc = (await findImage(info.folder, 'hero')) || cardSrc;
+        const cardSrc = info.image || await findImage(info.folder, 'image');
+        const heroSrc = info.hero || (await findImage(info.folder, 'hero')) || cardSrc;
 
         a.addEventListener('mouseenter', () => {
           if (window.innerWidth > 1024) {
