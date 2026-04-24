@@ -319,6 +319,8 @@
       position: fixed;
       inset: 0;
       background: #000;
+    }
+
     .reveal-card {
       opacity: 0;
       transform: translateY(30px);
@@ -329,35 +331,101 @@
       transform: translateY(0);
     }
 
-    /* Mobile Adjustments */
+    /* Mobile: list buttons with iOS-style scroll-snap picker */
     @media (max-width: 1024px) {
       #preview-viewport, #fixed-info-box {
         display: none !important;
       }
-      
+
+      #categories-section {
+        display: block;
+        height: 100vh;
+        min-height: 100vh;
+      }
+
       .category-list-container {
-        padding-left: 0;
-        display: flex;
-        justify-content: center;
-        text-align: center;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
       }
 
       #category-list {
-        align-items: center;
         width: 100%;
-        padding: 0 20px;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-snap-type: y mandatory;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: auto;
+        perspective: 1100px;
+        perspective-origin: 50% 50%;
+        padding: 45vh 0;
+        gap: 12px;
+        align-items: center;
+        scrollbar-width: none;
+      }
+
+      #category-list::-webkit-scrollbar {
+        display: none;
       }
 
       .category-link {
-        width: 80% !important;
-        max-width: 280px;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        flex: 0 0 auto;
+        width: auto !important;
+        min-width: 160px;
+        max-width: 220px;
         font-size: 15px;
-        padding: 15px 0;
-        margin-bottom: 12px;
+        padding: 8px 24px !important;
+        margin-bottom: 0;
+        color: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0;
+        text-align: center;
+        text-decoration: none;
+        transform-origin: 50% 50%;
+        transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
+        opacity: var(--pick-opacity, 1);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.35s ease-out,
+                    color 0.35s ease-out,
+                    background 0.35s ease-out,
+                    border-color 0.35s ease-out;
+        will-change: transform, opacity;
+      }
+
+      .category-link:hover {
+        transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
+      }
+
+      .category-link.is-active {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .category-link::before,
+      .category-link::after {
+        display: none;
+      }
+
+      .category-link .mobile-title {
+        display: inline-block;
+        font-size: inherit;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: inherit;
+        text-shadow: none;
       }
 
       #categories-bg-video {
-        opacity: 0.2; /* Darker for better text contrast on mobile */
+        opacity: 0.2;
+      }
+
+      #category-bg-image {
+        display: none;
       }
     }
   </style>
@@ -385,8 +453,8 @@
   <!-- Interactive Categories Section -->
   <section id="categories-section">
     <div id="categories-bg-container">
-      <video id="categories-bg-video" src="autoload/hero.mp4" autoplay muted loop playsinline></video>
-      <div id="category-bg-image"></div>
+      <video id="categories-bg-video" src="autoload/hero.mp4" autoplay muted loop playsinline poster="autoload/Hero.jpg"></video>
+      <div id="category-bg-image" style="background-image: url('autoload/Hero.jpg');"></div>
     </div>
     
     <div class="category-list-container">
@@ -592,38 +660,45 @@
         previewViewport.style.top = `${top}px`;
       }
 
-      async function createListItem(info) {
+      function createListItem(info, withReveal) {
         const a = document.createElement('a');
         a.href = `${info.folder}.html`;
-        a.className = 'category-link';
-        a.textContent = info.title;
-        
-        const cardSrc = await findImage(info.folder, 'image');
-        const heroSrc = await findImage(info.folder, 'hero') || cardSrc;
-
-        a.addEventListener('mouseenter', () => {
-          setRandomPosition();
-          if (cardSrc) previewImage.src = cardSrc;
-          if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
-          
-          previewName.textContent = info.title;
-          previewDesc.textContent = info.desc;
-          
-          document.body.classList.add('preview-active');
-        });
-        
-        a.addEventListener('mouseleave', () => {
-          document.body.classList.remove('preview-active');
-        });
-        
+        a.className = withReveal ? 'category-link reveal-card' : 'category-link';
+        a.innerHTML = `<span class="mobile-title">${info.title}</span>`;
         return a;
       }
 
-      async function init() {
+      async function hydrateCard(a, info, isDesktop) {
+        if (!isDesktop) return;
+
+        const cardSrc = await findImage(info.folder, 'image');
+        const heroSrc = (await findImage(info.folder, 'hero')) || cardSrc;
+
+        a.addEventListener('mouseenter', () => {
+          if (window.innerWidth > 1024) {
+            setRandomPosition();
+            if (cardSrc) previewImage.src = cardSrc;
+            if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
+            previewName.textContent = info.title;
+            previewDesc.textContent = info.desc;
+            document.body.classList.add('preview-active');
+          }
+        });
+        a.addEventListener('mouseleave', () => {
+          document.body.classList.remove('preview-active');
+        });
+      }
+
+      function init() {
         const listContainer = document.getElementById('category-list');
+        const isDesktop = window.innerWidth > 1024;
+        const cards = [];
+
         for (const key in CARD_INFO) {
           const info = CARD_INFO[key];
-          listContainer.appendChild(await createListItem(info));
+          const el = createListItem(info, isDesktop);
+          listContainer.appendChild(el);
+          cards.push({ el, info });
         }
 
         const observer = new IntersectionObserver((entries) => {
@@ -631,18 +706,74 @@
             if (entry.isIntersecting) entry.target.classList.add('in-view');
           });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
+
+        cards.forEach(({ el, info }) => { hydrateCard(el, info, isDesktop); });
       }
 
-      window.addEventListener('scroll', () => {
+      let heroTicking = false;
+      function updateHeroScroll() {
         const scrollY = window.scrollY;
         const vh = window.innerHeight;
         const progress = Math.min(scrollY / vh, 1);
         document.documentElement.style.setProperty('--scroll-progress', progress);
+        heroTicking = false;
+      }
+
+      let pickerTicking = false;
+      function updatePicker() {
+        pickerTicking = false;
+        if (window.innerWidth > 1024) return;
+        const list = document.getElementById('category-list');
+        if (!list) return;
+        const listRect = list.getBoundingClientRect();
+        const centerY = listRect.top + listRect.height / 2;
+        const cards = list.querySelectorAll('.category-link');
+        let activeCard = null;
+        let minAbsDist = Infinity;
+
+        cards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const itemCenter = rect.top + rect.height / 2;
+          const normalized = Math.max(-1.5, Math.min(1.5, (itemCenter - centerY) / listRect.height));
+          const absDist = Math.abs(normalized);
+
+          const scale = Math.max(0.72, 1 - absDist * 0.32);
+          const opacity = Math.max(0.18, 1 - absDist * 1.1);
+          const translateZ = -absDist * 220;
+
+          card.style.setProperty('--pick-scale', scale.toFixed(3));
+          card.style.setProperty('--pick-opacity', opacity.toFixed(3));
+          card.style.setProperty('--pick-z', `${translateZ.toFixed(0)}px`);
+
+          if (absDist < minAbsDist) {
+            minAbsDist = absDist;
+            activeCard = card;
+          }
+        });
+
+        cards.forEach(c => c.classList.toggle('is-active', c === activeCard));
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!heroTicking) {
+          requestAnimationFrame(updateHeroScroll);
+          heroTicking = true;
+        }
       }, { passive: true });
 
-      window.addEventListener('load', init);
+      const listEl = document.getElementById('category-list');
+      if (listEl) {
+        listEl.addEventListener('scroll', () => {
+          if (!pickerTicking) {
+            requestAnimationFrame(updatePicker);
+            pickerTicking = true;
+          }
+        }, { passive: true });
+      }
+
+      window.addEventListener('resize', () => { updateHeroScroll(); updatePicker(); });
+      window.addEventListener('load', () => { init(); updateHeroScroll(); updatePicker(); });
     })();
   </script>
 </body>
