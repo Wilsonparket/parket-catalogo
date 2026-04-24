@@ -319,6 +319,7 @@
       position: fixed;
       inset: 0;
       background: #000;
+    }
     .reveal-card {
       opacity: 0;
       transform: translateY(30px);
@@ -572,7 +573,7 @@
         1: { title: 'Escadas', folder: 'escadas', desc: 'A ascensão da forma. Design esculpido em madeira para conectar níveis com elegância absoluta.' },
         2: { title: 'Decks', folder: 'decks', desc: 'O exterior elevado. Resistência e beleza natural para transformar terraços em refúgios atemporais.' },
         3: { title: 'Portas', folder: 'portas', desc: 'O limiar da sofisticação. Portas que narram a identidade do ambiente desde o primeiro toque.' },
-        4: { title: 'Pisos', folder: 'pisos', desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.' },
+        4: { title: 'Pisos', folder: 'pisos', desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.', pos: '85% 60%' },
         5: { title: 'Painéis', folder: 'paineis', desc: 'Geometria viva. Revestimentos que trazem ritmo e profundidade às paredes através da marcenaria fina.' },
         6: { title: 'Forros', folder: 'forros', desc: 'Perspectiva superior. Detalhes em madeira que elevam o teto a uma obra de arte arquitetônica.' },
       };
@@ -666,6 +667,7 @@
           if (window.innerWidth > 1024) {
             setRandomPosition();
             if (cardSrc) previewImage.src = cardSrc;
+            previewImage.style.objectPosition = info.pos || 'center';
             if (heroSrc) bgImageLayer.style.backgroundImage = `url('${heroSrc}')`;
             previewName.textContent = info.title;
             previewDesc.textContent = info.desc;
