@@ -330,61 +330,78 @@
       transform: translateY(0);
     }
 
-    /* Mobile Adjustments (Metalab Style Cards) */
+    /* Mobile Adjustments (Metalab Horizontal Snap Carousel) */
     @media (max-width: 1024px) {
       #preview-viewport, #fixed-info-box {
         display: none !important;
       }
-      
+
+      #categories-section {
+        min-height: auto;
+        padding: 4vh 0;
+      }
+
       .category-list-container {
         padding-left: 0;
-        padding-top: 5vh;
+        padding-top: 0;
+        padding-bottom: 0;
       }
 
       #category-list {
-        align-items: center;
+        flex-direction: row !important;
+        align-items: stretch;
         width: 100%;
-        padding: 0 10px;
-        gap: 2px;
+        padding: 0 7.5vw;
+        gap: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
       }
+      #category-list::-webkit-scrollbar { display: none; }
 
       .category-link {
-        width: 100% !important;
-        aspect-ratio: 4/5;
+        flex: 0 0 85vw;
+        width: 85vw !important;
+        height: 75vh;
+        scroll-snap-align: center;
         background: #111;
         border: none;
         border-radius: 0;
-        margin-bottom: 2px;
+        margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 40px !important;
         text-align: center;
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(40px) scale(var(--card-scale, 1));
         transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+                    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         overflow: hidden;
         position: relative;
       }
 
       .category-link.in-view {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(var(--card-scale, 1));
       }
 
       .category-link::before {
         content: '';
         position: absolute;
-        top: -15%;
-        left: 0;
-        width: 100%;
-        height: 130%;
+        top: 0;
+        left: -15%;
+        width: 130%;
+        height: 100%;
         background-image: var(--bg-img);
         background-size: cover;
         background-position: center;
-        opacity: 0.7;
-        transform: translate3d(0, var(--parallax, 0px), 0) scale(1.05);
+        opacity: 0.75;
+        transform: translate3d(var(--parallax-x, 0px), 0, 0) scale(1.05);
         will-change: transform;
       }
 
@@ -400,12 +417,10 @@
       .category-link .mobile-title {
         position: relative;
         z-index: 2;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 300;
         letter-spacing: -0.02em;
         color: #fff;
-        transform: translate3d(0, var(--title-parallax, 0px), 0);
-        will-change: transform;
       }
 
       #categories-bg-video, #categories-bg-image {
@@ -705,6 +720,20 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
 
+        // Mobile: revela todos os cards juntos quando o carousel entra em view
+        // (IntersectionObserver não considera o scroll horizontal interno)
+        if (!isDesktop) {
+          const carouselObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                cards.forEach(({ el }) => el.classList.add('in-view'));
+                carouselObserver.disconnect();
+              }
+            });
+          }, { threshold: 0.1 });
+          carouselObserver.observe(listContainer);
+        }
+
         // Resolve imagens em paralelo — cards já estão renderizados
         cards.forEach(({ el, info }) => { hydrateCard(el, info, isDesktop); });
       }
@@ -715,21 +744,6 @@
         const vh = window.innerHeight;
         const progress = Math.min(scrollY / vh, 1);
         document.documentElement.style.setProperty('--scroll-progress', progress);
-
-        // Parallax nos cards mobile (estilo MetaLab)
-        if (window.innerWidth <= 1024) {
-          const cards = document.querySelectorAll('.category-link');
-          cards.forEach(card => {
-            const rect = card.getBoundingClientRect();
-            if (rect.bottom < 0 || rect.top > vh) return;
-            // -0.5 quando card está abaixo da tela, +0.5 quando acima
-            const centerProgress = (rect.top + rect.height / 2 - vh / 2) / vh;
-            const bgOffset = -centerProgress * 80;
-            const titleOffset = -centerProgress * 25;
-            card.style.setProperty('--parallax', `${bgOffset}px`);
-            card.style.setProperty('--title-parallax', `${titleOffset}px`);
-          });
-        }
         ticking = false;
       }
 
@@ -740,8 +754,52 @@
         }
       }, { passive: true });
 
-      window.addEventListener('resize', updateScroll);
-      window.addEventListener('load', () => { init(); updateScroll(); });
+      // Parallax horizontal no carousel mobile
+      let carouselTicking = false;
+      function updateCarouselParallax() {
+        const list = document.getElementById('category-list');
+        if (!list || window.innerWidth > 1024) {
+          carouselTicking = false;
+          return;
+        }
+        const containerWidth = list.offsetWidth;
+        const containerCenter = list.scrollLeft + containerWidth / 2;
+        const cards = list.querySelectorAll('.category-link');
+        cards.forEach(card => {
+          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+          const distance = cardCenter - containerCenter;
+          const progress = Math.max(-1.2, Math.min(1.2, distance / containerWidth));
+          // Imagem translada no sentido oposto ao swipe (efeito janela)
+          const bgOffset = -progress * 50;
+          // Cards vizinhos ficam levemente menores
+          const scale = 1 - Math.min(Math.abs(progress), 0.6) * 0.1;
+          card.style.setProperty('--parallax-x', `${bgOffset}px`);
+          card.style.setProperty('--card-scale', scale.toFixed(3));
+        });
+        carouselTicking = false;
+      }
+
+      function attachCarouselListeners() {
+        const list = document.getElementById('category-list');
+        if (!list) return;
+        list.addEventListener('scroll', () => {
+          if (!carouselTicking) {
+            requestAnimationFrame(updateCarouselParallax);
+            carouselTicking = true;
+          }
+        }, { passive: true });
+      }
+
+      window.addEventListener('resize', () => {
+        updateScroll();
+        updateCarouselParallax();
+      });
+      window.addEventListener('load', () => {
+        init();
+        updateScroll();
+        attachCarouselListeners();
+        updateCarouselParallax();
+      });
     })();
   </script>
 </body>
