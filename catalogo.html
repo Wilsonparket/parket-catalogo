@@ -146,6 +146,13 @@
       width: 100%;
       padding-left: 10vw;
       z-index: 20;
+      perspective: 1200px;
+      perspective-origin: 30% 50%;
+      transform-style: preserve-3d;
+    }
+
+    #category-list {
+      transform-style: preserve-3d;
     }
 
     .category-link {
@@ -163,19 +170,36 @@
       -webkit-backdrop-filter: blur(25px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 0;
-      transition: all 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+                  transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       text-decoration: none;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       white-space: nowrap;
       text-transform: none;
+      --depth: 0;
+      --hover-z: 0;
+      transform: translate3d(
+        calc(var(--mx, 0) * var(--depth) * 6px),
+        calc(var(--my, 0) * var(--depth) * 6px),
+        calc(var(--depth) * 14px + var(--hover-z) * 1px)
+      );
+      will-change: transform;
     }
+
+    /* Staggered depth — camadas alternadas de profundidade */
+    #category-list > .category-link:nth-child(1) { --depth:  2.5; }
+    #category-list > .category-link:nth-child(2) { --depth: -1.5; }
+    #category-list > .category-link:nth-child(3) { --depth:  3.0; }
+    #category-list > .category-link:nth-child(4) { --depth: -2.5; }
+    #category-list > .category-link:nth-child(5) { --depth:  1.5; }
+    #category-list > .category-link:nth-child(6) { --depth: -3.0; }
 
     .category-link:hover {
       background: rgba(255, 255, 255, 0.12);
       color: #fff;
-      transform: translateX(4px);
       border-color: rgba(255, 255, 255, 0.2);
+      --hover-z: 60;
     }
 
     /* ── Dolly Zoom Preview (MetaLab Wipe Reveal) ── */
@@ -330,78 +354,61 @@
       transform: translateY(0);
     }
 
-    /* Mobile Adjustments (Metalab Horizontal Snap Carousel) */
+    /* Mobile Adjustments (Metalab Style Cards) */
     @media (max-width: 1024px) {
       #preview-viewport, #fixed-info-box {
         display: none !important;
       }
-
-      #categories-section {
-        min-height: auto;
-        padding: 4vh 0;
-      }
-
+      
       .category-list-container {
         padding-left: 0;
-        padding-top: 0;
-        padding-bottom: 0;
+        padding-top: 5vh;
       }
 
       #category-list {
-        flex-direction: row !important;
-        align-items: stretch;
+        align-items: center;
         width: 100%;
-        padding: 0 7.5vw;
-        gap: 10px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-        scrollbar-width: none;
+        padding: 0 10px;
+        gap: 2px;
       }
-      #category-list::-webkit-scrollbar { display: none; }
 
       .category-link {
-        flex: 0 0 85vw;
-        width: 85vw !important;
-        height: 75vh;
-        scroll-snap-align: center;
+        width: 100% !important;
+        aspect-ratio: 4/5;
         background: #111;
         border: none;
         border-radius: 0;
-        margin: 0;
+        margin-bottom: 2px;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 40px !important;
         text-align: center;
         opacity: 0;
-        transform: translateY(40px) scale(var(--card-scale, 1));
+        transform: translateY(40px);
         transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         overflow: hidden;
         position: relative;
       }
 
       .category-link.in-view {
         opacity: 1;
-        transform: translateY(0) scale(var(--card-scale, 1));
+        transform: translateY(0);
       }
 
       .category-link::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: -15%;
-        width: 130%;
-        height: 100%;
+        top: -15%;
+        left: 0;
+        width: 100%;
+        height: 130%;
         background-image: var(--bg-img);
         background-size: cover;
         background-position: center;
-        opacity: 0.75;
-        transform: translate3d(var(--parallax-x, 0px), 0, 0) scale(1.05);
+        opacity: 0.7;
+        transform: translate3d(0, var(--parallax, 0px), 0) scale(1.05);
         will-change: transform;
       }
 
@@ -417,10 +424,12 @@
       .category-link .mobile-title {
         position: relative;
         z-index: 2;
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 300;
         letter-spacing: -0.02em;
         color: #fff;
+        transform: translate3d(0, var(--title-parallax, 0px), 0);
+        will-change: transform;
       }
 
       #categories-bg-video, #categories-bg-image {
@@ -720,20 +729,6 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
 
-        // Mobile: revela todos os cards juntos quando o carousel entra em view
-        // (IntersectionObserver não considera o scroll horizontal interno)
-        if (!isDesktop) {
-          const carouselObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                cards.forEach(({ el }) => el.classList.add('in-view'));
-                carouselObserver.disconnect();
-              }
-            });
-          }, { threshold: 0.1 });
-          carouselObserver.observe(listContainer);
-        }
-
         // Resolve imagens em paralelo — cards já estão renderizados
         cards.forEach(({ el, info }) => { hydrateCard(el, info, isDesktop); });
       }
@@ -744,6 +739,21 @@
         const vh = window.innerHeight;
         const progress = Math.min(scrollY / vh, 1);
         document.documentElement.style.setProperty('--scroll-progress', progress);
+
+        // Parallax nos cards mobile (estilo MetaLab)
+        if (window.innerWidth <= 1024) {
+          const cards = document.querySelectorAll('.category-link');
+          cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > vh) return;
+            // -0.5 quando card está abaixo da tela, +0.5 quando acima
+            const centerProgress = (rect.top + rect.height / 2 - vh / 2) / vh;
+            const bgOffset = -centerProgress * 80;
+            const titleOffset = -centerProgress * 25;
+            card.style.setProperty('--parallax', `${bgOffset}px`);
+            card.style.setProperty('--title-parallax', `${titleOffset}px`);
+          });
+        }
         ticking = false;
       }
 
@@ -754,52 +764,52 @@
         }
       }, { passive: true });
 
-      // Parallax horizontal no carousel mobile
-      let carouselTicking = false;
-      function updateCarouselParallax() {
-        const list = document.getElementById('category-list');
-        if (!list || window.innerWidth > 1024) {
-          carouselTicking = false;
-          return;
-        }
-        const containerWidth = list.offsetWidth;
-        const containerCenter = list.scrollLeft + containerWidth / 2;
-        const cards = list.querySelectorAll('.category-link');
-        cards.forEach(card => {
-          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-          const distance = cardCenter - containerCenter;
-          const progress = Math.max(-1.2, Math.min(1.2, distance / containerWidth));
-          // Imagem translada no sentido oposto ao swipe (efeito janela)
-          const bgOffset = -progress * 50;
-          // Cards vizinhos ficam levemente menores
-          const scale = 1 - Math.min(Math.abs(progress), 0.6) * 0.1;
-          card.style.setProperty('--parallax-x', `${bgOffset}px`);
-          card.style.setProperty('--card-scale', scale.toFixed(3));
-        });
-        carouselTicking = false;
-      }
+      window.addEventListener('resize', updateScroll);
 
-      function attachCarouselListeners() {
-        const list = document.getElementById('category-list');
-        if (!list) return;
-        list.addEventListener('scroll', () => {
-          if (!carouselTicking) {
-            requestAnimationFrame(updateCarouselParallax);
-            carouselTicking = true;
+      // Depth parallax do menu (desktop) — cursor controla camadas 3D
+      function attachDepthParallax() {
+        const container = document.querySelector('.category-list-container');
+        if (!container) return;
+
+        let targetMX = 0, targetMY = 0;
+        let curMX = 0, curMY = 0;
+        let rafId = null;
+
+        function lerp(a, b, t) { return a + (b - a) * t; }
+
+        function tick() {
+          curMX = lerp(curMX, targetMX, 0.08);
+          curMY = lerp(curMY, targetMY, 0.08);
+          container.style.setProperty('--mx', curMX.toFixed(4));
+          container.style.setProperty('--my', curMY.toFixed(4));
+          if (Math.abs(curMX - targetMX) > 0.0005 || Math.abs(curMY - targetMY) > 0.0005) {
+            rafId = requestAnimationFrame(tick);
+          } else {
+            rafId = null;
           }
+        }
+
+        function kick() {
+          if (!rafId) rafId = requestAnimationFrame(tick);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+          if (window.innerWidth <= 1024) return;
+          const rect = container.getBoundingClientRect();
+          // -0.5 a 0.5 em cada eixo
+          targetMX = (e.clientX - rect.left - rect.width / 2) / rect.width;
+          targetMY = (e.clientY - rect.top - rect.height / 2) / rect.height;
+          kick();
         }, { passive: true });
+
+        document.addEventListener('mouseleave', () => {
+          targetMX = 0;
+          targetMY = 0;
+          kick();
+        });
       }
 
-      window.addEventListener('resize', () => {
-        updateScroll();
-        updateCarouselParallax();
-      });
-      window.addEventListener('load', () => {
-        init();
-        updateScroll();
-        attachCarouselListeners();
-        updateCarouselParallax();
-      });
+      window.addEventListener('load', () => { init(); updateScroll(); attachDepthParallax(); });
     })();
   </script>
 </body>
