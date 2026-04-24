@@ -3,7 +3,8 @@
 Este repositório contém o catálogo digital da Parket, com todas as coleções de pisos, forros e escadas.
 
 ## Como acessar
-O site está disponível através do GitHub Pages.
+O site está disponível através do GitHub Pages:
+[https://wilsonparket.github.io/parket-catalogo/](https://wilsonparket.github.io/parket-catalogo/)
 
 ## Estrutura do Projeto
 - `index.html`: Página de entrada (Hero com vídeo)
