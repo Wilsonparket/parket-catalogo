@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://parket.com.br">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <title>Parket - Reta</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <script src="assets/js/components.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          borderRadius: { "DEFAULT": "0", "lg": "0", "xl": "0", "full": "9999px" },
+          colors: { "surface": "#131313", "background": "#000000", "primary": "#ffffff" },
+          fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      aspect-ratio: 16 / 10;
+      background: #111;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .carousel-viewport {
+        aspect-ratio: 4 / 5;
+      }
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease, background 0.25s ease;
+    }
+
+    .carousel-viewport:hover .carousel-arrow {
+      opacity: 1;
+    }
+
+    @media (hover: none) {
+      .carousel-arrow {
+        opacity: 1;
+      }
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .carousel-arrow.prev {
+      left: 16px;
+    }
+
+    .carousel-arrow.next {
+      right: 16px;
+    }
+
+    .carousel-arrow .material-symbols-outlined {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .slide-download-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 5;
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.95);
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease, color 0.25s ease;
+    }
+    .slide-download-btn:hover {
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .slide-download-btn .material-symbols-outlined { font-size: 20px; line-height: 1; }
+
+    .color-name-overlay {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      z-index: 4;
+      padding: 28px 24px 18px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0) 100%);
+      pointer-events: none;
+    }
+    .color-name {
+      font-size: clamp(14px, 1.6vw, 18px);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+
+    .download-cta:disabled { opacity: 0.7; cursor: progress; transform: none; }
+
+    .progress-bar {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .thumb-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .thumb-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .thumb {
+      flex: 0 0 64px;
+      aspect-ratio: 1;
+      background: #111;
+      cursor: pointer;
+      overflow: hidden;
+      opacity: 0.5;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb.active {
+      opacity: 1;
+      border-color: rgba(255, 255, 255, 0.85);
+    }
+
+    .thumb:hover {
+      opacity: 0.85;
+    }
+
+    .download-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 32px;
+      background: #fff;
+      color: #000;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    }
+
+    .download-cta:hover {
+      background: #d9ab87;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .download-cta .material-symbols-outlined {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+  <parket-seo title="Parket Reta"></parket-seo>
+</head>
+
+<body class="antialiased selection:bg-white selection:text-black">
+  <parket-loader></parket-loader>
+  <parket-nav return-url="texturas-pisos.html" return-text="Voltar a Pisos" category=""></parket-nav>
+
+  <main class="relative z-20 bg-black pt-32 pb-32">
+    <div class="px-6 md:px-12 pt-8 pb-12 max-w-screen-2xl mx-auto fade-up">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Texturas / Pisos /
+        Carvalhos</span>
+      <h1 class="text-[clamp(2.5rem,7vw,7rem)] font-thin tracking-[-0.05em] leading-[0.9]">Reta</h1>
+    </div>
+
+    <div class="px-6 md:px-12 max-w-screen-2xl mx-auto fade-up" style="transition-delay: 0.15s">
+      <div class="carousel-viewport" id="viewport">
+        <button class="carousel-arrow prev" id="prev-btn" aria-label="Anterior"><span
+            class="material-symbols-outlined">chevron_left</span></button>
+        <button class="carousel-arrow next" id="next-btn" aria-label="Próximo"><span
+            class="material-symbols-outlined">chevron_right</span></button>
+        <div class="color-name-overlay">
+          <div class="color-name" id="color-name">—</div>
+        </div>
+      </div>
+
+      <div class="max-w-[600px] mx-auto mt-6">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="thumb-track mt-4" id="thumb-track"></div>
+      </div>
+    </div>
+
+    <div class="px-6 md:px-12 mt-12 max-w-screen-2xl mx-auto flex flex-col items-center fade-up"
+      style="transition-delay: 0.25s">
+      <button id="download-btn" class="download-cta">
+        <span class="material-symbols-outlined" id="dl-icon">download</span>
+        <span id="dl-label">Baixar Coleção Inteira</span>
+      </button>
+    </div>
+  </main>
+
+  <script>
+      (function () {
+        const FOLDER = 'texturas/autoload/reta';
+
+        async function loadManifest() {
+          try {
+            const res = await fetch(`${FOLDER}/manifest.json`, { cache: 'no-store' });
+            if (!res.ok) return [];
+            const list = await res.json();
+            return list
+              .map(filename => {
+                const m = filename.match(/^(\d+)\s+(.+)\.([^.]+)$/);
+                if (!m) return null;
+                return {
+                  number: parseInt(m[1], 10),
+                  name: m[2].trim(),
+                  ext: m[3],
+                  filename,
+                  src: `${FOLDER}/${encodeURIComponent(filename)}`
+                };
+              })
+              .filter(Boolean)
+              .sort((a, b) => a.number - b.number);
+          } catch (e) {
+            return [];
+          }
+        }
+
+        const viewport = document.getElementById('viewport');
+        const thumbTrack = document.getElementById('thumb-track');
+        const progressFill = document.getElementById('progress-fill');
+        const colorName = document.getElementById('color-name');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const dlBtn = document.getElementById('download-btn');
+        const dlLabel = document.getElementById('dl-label');
+        const dlIcon = document.getElementById('dl-icon');
+
+        function downloadItem(item) {
+          const a = document.createElement('a');
+          a.href = item.src;
+          a.download = `${item.name.replace(/\s+/g, '-')}.${item.ext}`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+
+        let items = [];
+        let current = 0;
+
+        function update() {
+          viewport.querySelectorAll('.carousel-slide').forEach((s, i) => {
+            s.classList.toggle('active', i === current);
+          });
+          thumbTrack.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === current);
+            if (i === current) {
+              const tr = thumbTrack.getBoundingClientRect();
+              const rr = t.getBoundingClientRect();
+              thumbTrack.scrollTo({
+                left: thumbTrack.scrollLeft + (rr.left - tr.left) - thumbTrack.clientWidth / 2 + rr.width / 2,
+                behavior: 'smooth'
+              });
+            }
+          });
+          progressFill.style.width = `${((current + 1) / items.length) * 100}%`;
+          colorName.textContent = items[current].name;
+        }
+
+        function goTo(idx) {
+          if (idx < 0) idx = items.length - 1;
+          if (idx >= items.length) idx = 0;
+          current = idx;
+          update();
+        }
+        const next = () => goTo(current + 1);
+        const prev = () => goTo(current - 1);
+
+        prevBtn.addEventListener('click', prev);
+        nextBtn.addEventListener('click', next);
+
+        let touchStartX = 0;
+        viewport.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        viewport.addEventListener('touchend', (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        dlBtn.addEventListener('click', async () => {
+          if (!items.length || dlBtn.disabled) return;
+          dlBtn.disabled = true;
+          dlIcon.textContent = 'hourglass_top';
+          const originalLabel = dlLabel.textContent;
+          dlLabel.textContent = 'Preparando…';
+          try {
+            const zip = new JSZip();
+            const folder = zip.folder('Reta');
+            for (let i = 0; i < items.length; i++) {
+              const it = items[i];
+              dlLabel.textContent = `Compactando ${i + 1}/${items.length}…`;
+              const res = await fetch(it.src);
+              const blob = await res.blob();
+              folder.file(`${String(it.number).padStart(2, '0')} ${it.name}.${it.ext}`, blob);
+            }
+            dlLabel.textContent = 'Gerando ZIP…';
+            const content = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Reta-Colecao.zip';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          } catch (err) {
+            console.error(err);
+            dlLabel.textContent = 'Erro — tentar de novo';
+            setTimeout(() => { dlLabel.textContent = originalLabel; dlIcon.textContent = 'download'; dlBtn.disabled = false; }, 2500);
+            return;
+          }
+          dlLabel.textContent = originalLabel;
+          dlIcon.textContent = 'download';
+          dlBtn.disabled = false;
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') next();
+          if (e.key === 'ArrowLeft') prev();
+        });
+
+        (async () => {
+          items = await loadManifest();
+          if (!items.length) {
+            colorName.textContent = '';
+            return;
+          }
+
+          items.forEach((item, i) => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+            slide.innerHTML = `
+              <img src="${item.src}" alt="${item.name}" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async" fetchpriority="${i < 1 ? 'high' : 'auto'}">
+              <button class="slide-download-btn" title="Baixar ${item.name}" aria-label="Baixar ${item.name}">
+                <span class="material-symbols-outlined">download</span>
+              </button>
+            `;
+            slide.querySelector('.slide-download-btn').addEventListener('click', (e) => {
+              e.stopPropagation();
+              downloadItem(item);
+            });
+            viewport.appendChild(slide);
+
+            const thumb = document.createElement('div');
+            thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+            thumb.title = item.name;
+            thumb.innerHTML = `<img src="${item.src}" alt="${item.name}" loading="lazy" decoding="async">`;
+            thumb.addEventListener('click', () => goTo(i));
+            thumbTrack.appendChild(thumb);
+          });
+
+          update();
+        })();
+
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+      })();
+  </script>
+</body>
+
+</html>
