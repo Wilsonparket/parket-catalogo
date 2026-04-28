@@ -4,7 +4,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="image" href="autoload/video-home-poster.webp" fetchpriority="high">
-  <link rel="preload" as="video" href="autoload/video-home.mp4" type="video/mp4">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&amp;display=swap" rel="stylesheet">
 <style>
         *, *::before, *::after { box-sizing: border-box; }
@@ -31,21 +30,33 @@
             align-items: center;
             justify-content: center;
         }
-        .parallax-video {
+        .hero-poster, .parallax-video {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 1;
         }
+        .hero-poster {
+            opacity: 1;
+            transition: opacity 0.8s ease;
+            z-index: 1;
+        }
+        .parallax-video {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            z-index: 2;
+        }
+        .parallax-video.is-ready { opacity: 1; }
+        .hero-section.video-ready .hero-poster { opacity: 0; }
         @media (min-width: 768px) {
-            .parallax-video { opacity: 0.8; }
+            .parallax-video.is-ready { opacity: 0.8; }
         }
         .video-overlay {
             position: absolute;
             inset: 0;
             background: rgba(0, 0, 0, 0.3);
+            z-index: 3;
         }
         #btn-wrap {
             position: relative;
@@ -149,19 +160,18 @@
 <div id="exit-curtain"></div>
 <main>
 <div class="scroll-stage">
-    <section class="hero-section">
+    <section class="hero-section" id="hero-section">
+        <img src="autoload/video-home-poster.webp" alt="" class="hero-poster" decoding="async" fetchpriority="high">
         <video
-            autoplay
             muted
             loop
             playsinline
-            preload="metadata"
+            preload="none"
             poster="autoload/video-home-poster.webp"
             class="parallax-video"
-        >
-            <source src="autoload/video-home.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+            id="hero-video"
+            data-src="autoload/video-home.mp4"
+        ></video>
         <div class="video-overlay"></div>
         <div id="btn-wrap">
             <button id="catalog-btn" onclick="goToCatalog()" class="catalog-btn">
@@ -174,11 +184,37 @@
 
 <script>
 (function () {
-  const video   = document.querySelector('.parallax-video');
+  const video   = document.getElementById('hero-video');
   const btn     = document.getElementById('catalog-btn');
   let   current = 1;
   let   target  = 1;
   let   rafId   = null;
+
+  // Lazy-load do vídeo: só começa a baixar após o page paint inicial,
+  // pra não bloquear o render da home no mobile.
+  function loadVideo() {
+    if (video.dataset.loaded) return;
+    video.dataset.loaded = '1';
+    const src = video.dataset.src;
+    if (!src) return;
+    const source = document.createElement('source');
+    source.src  = src;
+    source.type = 'video/mp4';
+    video.appendChild(source);
+    video.load();
+    video.addEventListener('canplay', () => {
+      video.classList.add('is-ready');
+      document.getElementById('hero-section').classList.add('video-ready');
+      const play = video.play();
+      if (play && play.catch) play.catch(() => {});
+    }, { once: true });
+  }
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadVideo, { timeout: 1500 });
+  } else {
+    window.addEventListener('load', () => setTimeout(loadVideo, 200), { once: true });
+  }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
@@ -205,21 +241,16 @@
 function goToCatalog() {
   const curtain = document.getElementById('exit-curtain');
   const btn     = document.querySelector('.catalog-btn');
-  const video   = document.querySelector('.parallax-video');
+  const hero    = document.querySelector('.hero-section');
 
-  // 1. Botão dissolve
   btn.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
   btn.style.opacity    = '0';
   btn.style.transform  = 'scale(0.94)';
 
-  // 2. Vídeo zoom lento — sensação de "entrar" na cena
-  video.style.transition = 'transform 1s cubic-bezier(0.76, 0, 0.24, 1)';
-  video.style.transform  = 'scale(1.1)';
+  hero.style.transition = 'transform 1s cubic-bezier(0.76, 0, 0.24, 1)';
+  hero.style.transform  = 'scale(1.1)';
 
-  // 3. Cortina fecha
   setTimeout(() => curtain.classList.add('closing'), 120);
-
-  // 4. Navega
   setTimeout(() => { window.location.href = 'catalogo.html'; }, 1050);
 }
 </script>
