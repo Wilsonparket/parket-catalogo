@@ -31,7 +31,10 @@ if [ -z "${VIDEO:-}" ]; then
 fi
 
 VERSION=$(stat -f %m "$VIDEO")
-export NEW_SRC="$VIDEO?v=$VERSION"
+
+# URL-encode o caminho (espaços viram %20, etc.) — preserva / . - _ ~
+ENCODED_VIDEO=$(printf '%s' "$VIDEO" | perl -pe 's/([^A-Za-z0-9\-._~\/])/sprintf("%%%02X", ord($1))/ge')
+export NEW_SRC="$ENCODED_VIDEO?v=$VERSION"
 
 # Substitui o data-src do <video> em index.html (perl + env var = quoting seguro)
 perl -i -pe 's{data-src="[^"]*"}{data-src="$ENV{NEW_SRC}"}g' "$HTML"
