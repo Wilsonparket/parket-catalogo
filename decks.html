@@ -29,7 +29,7 @@
     body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
     /* ── Collection Section ── */
-    .deck-section { padding: 7rem 3rem; max-width: 90rem; margin: 0 auto; }
+    .deck-section { padding: 5rem 0; }
     .deck-header { margin-bottom: 3rem; }
 
     /* ── Carousel ── */
@@ -148,19 +148,16 @@
   <parket-loader></parket-loader>
   <parket-nav return-url="catalogo.html#categories-section" return-text="Voltar ao Catálogo" category=""></parket-nav>
 
-  <main>
-    <!-- Hero -->
-    <section class="min-h-[80vh] flex items-center justify-center px-12 pt-40 pb-24 text-center">
-      <div class="max-w-4xl mx-auto fade-up">
-        <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Áreas Externas</span>
-        <h1 class="text-[clamp(3rem,8vw,8rem)] font-thin tracking-[-0.05em] leading-[0.8] mb-16" style="font-family: 'Inter', sans-serif;">
-          Decks
-        </h1>
-        <p class="text-white/40 text-xl font-light leading-relaxed mx-auto max-w-2xl">
-          Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
-        </p>
-      </div>
-    </section>
+<main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
+
+    <!-- Title -->
+    <div class="fade-up mb-16">
+      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Áreas Externas</span>
+      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">Decks</h1>
+      <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
+        Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
+      </p>
+    </div>
 
     <div id="collections" class="relative z-20 bg-black"></div>
   </main>
