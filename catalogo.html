@@ -435,8 +435,9 @@
         opacity: 0.2;
       }
 
+      /* Mobile: deixa o filtro do bg um pouco mais leve (sem ser um hover, é o estado padrão durante o picker) */
       #category-bg-image {
-        display: none;
+        filter: grayscale(0.3) saturate(1) contrast(1) brightness(0.55);
       }
     }
   </style>
@@ -682,10 +683,18 @@
       }
 
       async function hydrateCard(a, info, isDesktop) {
-        if (!isDesktop) return;
-
         const cardSrc = info.image || await findImage(info.folder, 'image');
         const heroSrc = info.hero || (await findImage(info.folder, 'hero')) || cardSrc;
+
+        // Guarda no próprio elemento pra mobile e desktop usarem
+        a.__heroSrc = heroSrc;
+        a.__cardSrc = cardSrc;
+        a.__info = info;
+
+        // Pré-carrega a imagem de hero (mobile vai mostrar imediatamente quando o picker focar)
+        if (heroSrc) { const img = new Image(); img.src = heroSrc; }
+
+        if (!isDesktop) return;
 
         a.addEventListener('mouseenter', () => {
           if (window.innerWidth > 1024) {
@@ -784,6 +793,17 @@
         });
 
         cards.forEach(c => c.classList.toggle('is-active', c === activeCard));
+
+        // Mobile: faz o fundo seguir o botão ativo do picker
+        if (activeCard && activeCard.__heroSrc && progress > 0.02) {
+          if (bgImageLayer.dataset.src !== activeCard.__heroSrc) {
+            bgImageLayer.style.backgroundImage = `url('${activeCard.__heroSrc}')`;
+            bgImageLayer.dataset.src = activeCard.__heroSrc;
+          }
+          document.body.classList.add('preview-active');
+        } else {
+          document.body.classList.remove('preview-active');
+        }
       }
 
       window.addEventListener('scroll', () => {
