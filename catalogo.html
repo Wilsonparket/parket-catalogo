@@ -431,12 +431,14 @@
         text-shadow: none;
       }
 
+      /* Mobile: vídeo de fundo é removido, fundo é a imagem da categoria ativa */
       #categories-bg-video {
-        opacity: 0.2;
+        display: none;
       }
 
-      /* Mobile: deixa o filtro do bg um pouco mais leve (sem ser um hover, é o estado padrão durante o picker) */
       #category-bg-image {
+        opacity: 1;
+        transform: none;
         filter: grayscale(0.3) saturate(1) contrast(1) brightness(0.55);
       }
     }
@@ -601,6 +603,17 @@
 
   <script>
     (function () {
+      // Mobile: impede o vídeo de fundo de carregar (não vai aparecer mesmo)
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        const v = document.getElementById('categories-bg-video');
+        if (v) {
+          v.removeAttribute('autoplay');
+          v.removeAttribute('src');
+          v.pause && v.pause();
+          v.load && v.load();
+        }
+      }
+
       const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
       const CARD_INFO = {
         1: { title: 'Escadas', folder: 'escadas', desc: 'A ascensão da forma. Design esculpido em madeira para conectar níveis com elegância absoluta.' },
@@ -794,15 +807,12 @@
 
         cards.forEach(c => c.classList.toggle('is-active', c === activeCard));
 
-        // Mobile: faz o fundo seguir o botão ativo do picker
-        if (activeCard && activeCard.__heroSrc && progress > 0.02) {
+        // Mobile: o fundo é a imagem da categoria ativa (sempre visível durante o picker)
+        if (activeCard && activeCard.__heroSrc) {
           if (bgImageLayer.dataset.src !== activeCard.__heroSrc) {
             bgImageLayer.style.backgroundImage = `url('${activeCard.__heroSrc}')`;
             bgImageLayer.dataset.src = activeCard.__heroSrc;
           }
-          document.body.classList.add('preview-active');
-        } else {
-          document.body.classList.remove('preview-active');
         }
       }
 
