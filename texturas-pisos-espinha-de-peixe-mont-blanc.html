@@ -332,9 +332,13 @@
         const dlIcon = document.getElementById('dl-icon');
 
         function downloadItem(item) {
+          // Webp é só preview — baixa o PNG original
+          const isWebp = /\.webp$/i.test(item.filename);
+          const downloadSrc = isWebp ? item.src.replace(/\.webp$/i, '.png') : item.src;
+          const downloadExt = isWebp ? 'png' : item.ext;
           const a = document.createElement('a');
-          a.href = item.src;
-          a.download = `${item.name.replace(/\s+/g, '-')}.${item.ext}`;
+          a.href = downloadSrc;
+          a.download = `${item.name.replace(/\s+/g, '-')}.${downloadExt}`;
           document.body.appendChild(a);
           a.click();
           a.remove();
@@ -393,9 +397,12 @@
             for (let i = 0; i < items.length; i++) {
               const it = items[i];
               dlLabel.textContent = `Compactando ${i + 1}/${items.length}…`;
-              const res = await fetch(it.src);
+              const isWebp = /\.webp$/i.test(it.filename);
+              const downloadSrc = isWebp ? it.src.replace(/\.webp$/i, '.png') : it.src;
+              const downloadExt = isWebp ? 'png' : it.ext;
+              const res = await fetch(downloadSrc);
               const blob = await res.blob();
-              folder.file(`${String(it.number).padStart(2, '0')} ${it.name}.${it.ext}`, blob);
+              folder.file(`${String(it.number).padStart(2, '0')} ${it.name}.${downloadExt}`, blob);
             }
             dlLabel.textContent = 'Gerando ZIP…';
             const content = await zip.generateAsync({ type: 'blob' });
