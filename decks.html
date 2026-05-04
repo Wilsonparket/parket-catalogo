@@ -29,7 +29,7 @@
     body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
     /* ── Collection Section ── */
-    .deck-section { padding: 5rem 0; }
+    .deck-section { padding: 7rem 3rem; max-width: 90rem; margin: 0 auto; }
     .deck-header { margin-bottom: 3rem; }
 
     /* ── Carousel ── */
@@ -54,6 +54,30 @@
       object-fit: contain;
       background: #000;
       cursor: zoom-in;
+    }
+
+    .slide-caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 28px 32px 22px;
+      color: rgba(255,255,255,0.92);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-align: center;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+      pointer-events: none;
+      z-index: 2;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    @media (max-width: 640px) {
+      .slide-caption {
+        padding: 20px 18px 16px;
+        font-size: 11px;
+        letter-spacing: 0.24em;
+      }
     }
 
     /* ── Thumbnails ── */
@@ -148,16 +172,19 @@
   <parket-loader></parket-loader>
   <parket-nav return-url="catalogo.html#categories-section" return-text="Voltar ao Catálogo" category=""></parket-nav>
 
-<main class="pt-32 pb-40 px-12 max-w-screen-2xl mx-auto">
-
-    <!-- Title -->
-    <div class="fade-up mb-16">
-      <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Áreas Externas</span>
-      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">Decks</h1>
-      <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
-        Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
-      </p>
-    </div>
+  <main>
+    <!-- Hero -->
+    <section class="min-h-[80vh] flex items-center justify-center px-12 pt-40 pb-24 text-center">
+      <div class="max-w-4xl mx-auto fade-up">
+        <span class="font-label uppercase tracking-[0.6em] text-[10px] text-white/30 mb-8 block">Áreas Externas</span>
+        <h1 class="text-[clamp(3rem,8vw,8rem)] font-thin tracking-[-0.05em] leading-[0.8] mb-16" style="font-family: 'Inter', sans-serif;">
+          Decks
+        </h1>
+        <p class="text-white/40 text-xl font-light leading-relaxed mx-auto max-w-2xl">
+          Resistência e beleza sob o céu. Nossos decks são projetados para suportar as intempéries mantendo a nobreza e o conforto térmico da madeira natural.
+        </p>
+      </div>
+    </section>
 
     <div id="collections" class="relative z-20 bg-black"></div>
   </main>
@@ -180,16 +207,16 @@
           title: 'Brazil',
           desc: 'Nossa homenagem às raízes tropicais. A Coleção Brazil traz o calor e a beleza duradoura da madeira nativa brasileira para áreas externas.',
           images: [
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-10.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-09.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-06.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-05.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-04.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-03.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-01.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-08.jpg",
-            "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-07.jpg"
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg", name: "Itaúba" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-10.jpg", name: "Cumaru Oxidado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-09.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-06.jpg", name: "Ipê Oxidado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-05.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-04.jpg", name: "Ipê Oxidado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-03.jpg", name: "Ipê" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-01.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-08.jpg", name: "Cumaru Oxidado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-07.jpg" }
           ]
         },
         {
@@ -234,6 +261,9 @@
         }
       ];
 
+      // Helper: aceita string ou {src, name}
+      const getImg = (item) => typeof item === 'string' ? { src: item } : item;
+
       // ── Lightbox (shared) ──
       const lb = document.getElementById('lightbox');
       const lbImg = document.getElementById('lightbox-img');
@@ -242,7 +272,7 @@
 
       window.openLightbox = (images, idx) => {
         lbImages = images; lbIndex = idx;
-        lbImg.src = lbImages[lbIndex];
+        lbImg.src = getImg(lbImages[lbIndex]).src;
         lb.classList.add('active');
         document.body.style.overflow = 'hidden';
       };
@@ -252,11 +282,11 @@
       };
       window.lbNext = () => {
         lbIndex = (lbIndex + 1) % lbImages.length;
-        lbImg.src = lbImages[lbIndex];
+        lbImg.src = getImg(lbImages[lbIndex]).src;
       };
       window.lbPrev = () => {
         lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length;
-        lbImg.src = lbImages[lbIndex];
+        lbImg.src = getImg(lbImages[lbIndex]).src;
       };
       document.addEventListener('keydown', (e) => {
         if (!lb.classList.contains('active')) return;
@@ -297,16 +327,22 @@
         let current = 0;
         let timer = null;
 
-        images.forEach((src, i) => {
+        images.forEach((item, i) => {
+          const img = getImg(item);
+          const altLabel = img.name || `${title} ${i + 1}`;
           const slide = document.createElement('div');
           slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
-          slide.innerHTML = `<img decoding="async" src="${src}" alt="${title} ${i + 1}" loading="lazy">`;
+          slide.innerHTML = `
+            <img decoding="async" src="${img.src}" alt="${altLabel}" loading="lazy">
+            ${img.name ? `<div class="slide-caption">${img.name}</div>` : ''}
+          `;
           slide.addEventListener('click', () => openLightbox(images, i));
           viewport.appendChild(slide);
 
           const thumb = document.createElement('div');
           thumb.className = 'thumb' + (i === 0 ? ' active' : '');
-          thumb.innerHTML = `<img decoding="async" src="${src}" alt="Thumb ${i + 1}" loading="lazy">`;
+          thumb.title = altLabel;
+          thumb.innerHTML = `<img decoding="async" src="${img.src}" alt="Thumb ${i + 1}" loading="lazy">`;
           thumb.addEventListener('click', () => goTo(i));
           thumbTrack.appendChild(thumb);
         });
