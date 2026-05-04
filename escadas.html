@@ -65,6 +65,32 @@
       border-radius: 0;
     }
 
+    .slide-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 28px 32px 22px;
+      color: rgba(255,255,255,0.92);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-align: center;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+      pointer-events: none;
+      z-index: 2;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    @media (max-width: 640px) {
+      .slide-caption {
+        padding: 20px 18px 16px;
+        font-size: 11px;
+        letter-spacing: 0.24em;
+      }
+    }
+
     /* ── Thumbnails ── */
     .thumb-track {
       display: flex;
@@ -218,15 +244,15 @@
   <script>
     (function () {
       const images = [
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-03.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-05.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-07.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-09.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-10.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-11.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-13.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-14.jpg",
-        "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-16.jpg"
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-03.jpg", name: "Peroba do Campo" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-05.jpg", name: "Peroba Demolição" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-07.jpg", name: "Peroba Demolição Escadas" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-09.jpg", name: "Carvalho Europeu Naturalle" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-10.jpg", name: "Carvalho Europeu Customizado" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-11.jpg" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-13.jpg" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-14.jpg" },
+        { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-16.jpg" }
       ];
 
       let current = 0;
@@ -276,7 +302,7 @@
       };
 
       function updateLightbox() {
-        lbImg.src = images[current];
+        lbImg.src = images[current].src;
       }
 
       window.lbNext = function() {
@@ -297,16 +323,21 @@
       });
 
       function buildCarousel() {
-        images.forEach((src, i) => {
+        images.forEach((img, i) => {
+          const altLabel = img.name || `Escadas ${i + 1}`;
           const slide = document.createElement('div');
           slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
-          slide.innerHTML = `<img loading="lazy" decoding="async" src="${src}" alt="Escadas ${i + 1}">`;
+          slide.innerHTML = `
+            <img loading="lazy" decoding="async" src="${img.src}" alt="${altLabel}">
+            ${img.name ? `<div class="slide-caption">${img.name}</div>` : ''}
+          `;
           slide.addEventListener('click', () => openLightbox(i));
           carousel.appendChild(slide);
 
           const thumb = document.createElement('div');
           thumb.className = 'thumb' + (i === 0 ? ' active' : '');
-          thumb.innerHTML = `<img loading="lazy" decoding="async" src="${src}" alt="Thumb ${i + 1}">`;
+          thumb.title = altLabel;
+          thumb.innerHTML = `<img loading="lazy" decoding="async" src="${img.src}" alt="Thumb ${i + 1}">`;
           thumb.addEventListener('click', () => goTo(i));
           thumbTrack.appendChild(thumb);
         });
