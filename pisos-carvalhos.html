@@ -170,7 +170,7 @@
     <!-- Title -->
     <div class="fade-up mb-16">
       <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Pisos</span>
-      <h1 id="page-title" class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">Carvalhos</h1>
+      <h1 id="page-title" class="text-[29.28px] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">Carvalhos</h1>
       <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
         A nobreza do Carvalho Europeu em texturas que contam histórias. Tons orgânicos e toques acetinados que trazem o equilíbrio perfeito entre tradição e modernidade.
       </p>
@@ -319,9 +319,9 @@
 
       document.addEventListener('keydown', (e) => {
         if (!lb.classList.contains('active')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') lbNext();
-        if (e.key === 'ArrowLeft') lbPrev();
+        if (e.key === 'Escape') { closeLightbox(); e.stopImmediatePropagation(); }
+        if (e.key === 'ArrowRight') { lbNext(); e.stopImmediatePropagation(); }
+        if (e.key === 'ArrowLeft') { lbPrev(); e.stopImmediatePropagation(); }
       });
 
       function buildCarousel() {
@@ -341,6 +341,7 @@
 
         progressFill.style.width = `${(1 / images.length) * 100}%`;
         document.addEventListener('keydown', (e) => {
+            if (lb.classList.contains('active')) return;
           if (e.key === 'ArrowLeft') prev();
           if (e.key === 'ArrowRight') next();
         });

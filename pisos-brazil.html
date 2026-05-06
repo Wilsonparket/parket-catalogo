@@ -55,6 +55,10 @@
       position: absolute;
       inset: 0;
       opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
       transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
       transform: scale(1.04);
     }
@@ -65,12 +69,47 @@
       z-index: 1;
     }
 
-    .carousel-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
+    .slide-inner {
+      position: relative;
+      max-width: 100%;
+      max-height: 100%;
+      line-height: 0;
+    }
+
+    .slide-inner img {
+      display: block;
+      max-width: 100%;
+      max-height: 55vh;
+      width: auto;
+      height: auto;
       border-radius: 0;
+    }
+    @media (min-width: 640px) {
+      .slide-inner img { max-height: 560px; }
+    }
+
+    .slide-caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 32px 56px 28px;
+      color: rgba(255,255,255,0.92);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-align: left;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+      pointer-events: none;
+      z-index: 2;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    @media (max-width: 640px) {
+      .slide-caption {
+        padding: 24px 28px 20px;
+        font-size: 11px;
+        letter-spacing: 0.24em;
+      }
     }
 
     /* ── Thumbnails ── */
@@ -230,7 +269,7 @@
     <div class="fade-up mb-16">
       <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block -ml-0">Pisos</span>
       <h1 id="page-title"
-        class="text-[clamp(2.5rem,6vw,7rem)] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">
+        class="text-[29.28px] font-extralight tracking-[-0.04em] leading-[0.85] mb-8">
         Brazil</h1>
       <p class="text-white/40 text-lg font-light leading-relaxed max-w-2xl">
         A autenticidade das madeiras brasileiras traduzida em réguas de beleza única. Uma coleção que exalta a alma
@@ -284,6 +323,13 @@
         const FOLDER = 'pisos/brazil';
         const EXTS = ['webp', 'jpg', 'jpeg', 'png'];
         const MAX_IMAGES = 30;
+
+        // Nomes por índice da foto (1-based)
+        const NAMES = {
+          3: 'Peroba Mica',
+          4: 'Peroba Mica',
+          5: 'Cumaru'
+        };
 
         function probe(src) {
           return new Promise((res, rej) => {
@@ -384,9 +430,9 @@
 
         document.addEventListener('keydown', (e) => {
           if (!lb.classList.contains('active')) return;
-          if (e.key === 'Escape') closeLightbox();
-          if (e.key === 'ArrowRight') lbNext();
-          if (e.key === 'ArrowLeft') lbPrev();
+          if (e.key === 'Escape') { closeLightbox(); e.stopImmediatePropagation(); }
+          if (e.key === 'ArrowRight') { lbNext(); e.stopImmediatePropagation(); }
+          if (e.key === 'ArrowLeft') { lbPrev(); e.stopImmediatePropagation(); }
         });
 
         function buildCarousel(srcs) {
@@ -394,9 +440,16 @@
 
           // Create slides
           srcs.forEach((src, i) => {
+            const name = NAMES[i + 1];
+            const altLabel = name || `Brazil ${i + 1}`;
             const slide = document.createElement('div');
             slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
-            slide.innerHTML = `<img loading="lazy" decoding="async" src="${src}" alt="Brazil ${i + 1}">`;
+            slide.innerHTML = `
+              <div class="slide-inner">
+                <img loading="lazy" decoding="async" src="${src}" alt="${altLabel}">
+                ${name ? `<div class="slide-caption">${name}</div>` : ''}
+              </div>
+            `;
             slide.addEventListener('click', () => openLightbox(i));
             carousel.appendChild(slide);
           });
@@ -416,6 +469,7 @@
           // Arrows
           // Keyboard
           document.addEventListener('keydown', (e) => {
+            if (lb.classList.contains('active')) return;
             if (e.key === 'ArrowLeft') prev();
             if (e.key === 'ArrowRight') next();
           });
