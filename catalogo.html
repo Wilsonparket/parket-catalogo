@@ -130,6 +130,71 @@
       z-index: 10;
     }
 
+    /* Hide parket-nav bar; reuse only the search overlay */
+    parket-nav > nav { display: none !important; }
+
+    /* Floating search button — minimal icon that expands on hover */
+    #categories-search-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 60;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      height: 32px;
+      width: 32px;
+      padding: 0;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: transparent;
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  gap 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  padding 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.5s ease,
+                  transform 0.5s ease,
+                  visibility 0.5s ease,
+                  color 0.4s ease,
+                  border-color 0.4s ease;
+    }
+    #categories-search-btn.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    #categories-search-btn:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.30);
+      width: 130px;
+      gap: 8px;
+      padding: 0 14px;
+    }
+    #categories-search-btn .material-symbols-outlined {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    #categories-search-btn .label {
+      opacity: 0;
+      max-width: 0;
+      white-space: nowrap;
+      transition: opacity 0.5s ease 0.15s, max-width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #categories-search-btn:hover .label {
+      opacity: 1;
+      max-width: 100px;
+    }
+
     /* ── Categories Section (MetaLab Style) ── */
     #categories-section {
       position: relative;
@@ -461,6 +526,9 @@
 
 
 
+  <!-- Search overlay only (nav bar stays hidden) -->
+  <parket-nav return-url="index.html" return-text=""></parket-nav>
+
   <!-- Hero with Scroll Zoom -->
   <section id="hero-viewport">
     <div id="hero-sticky">
@@ -475,6 +543,12 @@
       </div>
     </div>
   </section>
+
+  <!-- Floating search button (top-right) — appears when categories section is fully in view -->
+  <button id="categories-search-btn" type="button" aria-label="Buscar">
+    <span class="material-symbols-outlined">search</span>
+    <span class="label">Buscar...</span>
+  </button>
 
   <!-- Interactive Categories Section -->
   <section id="categories-section">
@@ -770,6 +844,7 @@
           cards.push({ el, info });
         }
 
+
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('in-view');
@@ -859,7 +934,23 @@
       }, { passive: true });
 
       window.addEventListener('resize', () => { updateHeroScroll(); updatePicker(); });
-      window.addEventListener('load', () => { init(); updateHeroScroll(); updatePicker(); });
+      function initSearchButton() {
+        const btn = document.getElementById('categories-search-btn');
+        const section = document.getElementById('categories-section');
+        if (!btn || !section) return;
+        btn.addEventListener('click', () => {
+          const trigger = document.querySelector('parket-nav [data-action="open-search"]');
+          if (trigger) trigger.click();
+        });
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            btn.classList.toggle('is-visible', e.isIntersecting);
+          });
+        }, { threshold: 0.6 });
+        io.observe(section);
+      }
+
+      window.addEventListener('load', () => { init(); updateHeroScroll(); updatePicker(); initSearchButton(); });
     })();
   </script>
 </body>

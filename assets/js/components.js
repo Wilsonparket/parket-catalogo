@@ -28,11 +28,80 @@ class ParketLoader extends HTMLElement {
 
 const PARKET_PAGES = [
   { cat: 'Catálogo', name: 'Catálogo', url: 'catalogo.html' },
-  { cat: 'Decks', name: 'Decks', url: 'decks.html' },
-  { cat: 'Decks', name: 'Brazil', url: 'decks-brazil.html' },
-  { cat: 'Decks', name: 'EuroDeck', url: 'decks-eurodeck.html' },
-  { cat: 'Decks', name: 'Kebony', url: 'decks-kebony.html' },
-  { cat: 'Decks', name: 'Únicos', url: 'decks-unicos.html' },
+  { cat: 'Decks', name: 'Decks', url: 'decks.html', tags: 'deck' },
+  { cat: 'Decks', name: 'Brazil', url: 'decks-brazil.html', tags: 'deck cumaru ipe ipê garapa massaranduba itauba peroba tauari jatobá' },
+  { cat: 'Decks', name: 'EuroDeck', url: 'decks-eurodeck.html', tags: 'deck eurodeck carvalho europeu pinho' },
+  { cat: 'Decks', name: 'Kebony', url: 'decks-kebony.html', tags: 'deck kebony clear character noruega' },
+  { cat: 'Decks', name: 'Únicos', url: 'decks-unicos.html', tags: 'deck unicos únicos exóticas raras' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Naturalle', url: 'pisos-carvalhos.html', tags: 'carvalho europeu naturalle' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Mont Blanc', url: 'pisos-carvalhos.html', tags: 'carvalho europeu mont blanc' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Smoke', url: 'pisos-carvalhos.html', tags: 'carvalho europeu smoke' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Armani', url: 'pisos-carvalhos.html', tags: 'carvalho europeu armani' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Wild Grey', url: 'pisos-carvalhos.html', tags: 'carvalho europeu wild grey' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Nevado', url: 'pisos-carvalhos.html', tags: 'carvalho europeu nevado' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Batman', url: 'pisos-carvalhos.html', tags: 'carvalho europeu batman' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Cappuccino', url: 'pisos-carvalhos.html', tags: 'carvalho europeu cappuccino capuccino' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Light Brown', url: 'pisos-carvalhos.html', tags: 'carvalho europeu light brown' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Marrone', url: 'pisos-carvalhos.html', tags: 'carvalho europeu marrone' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Milano', url: 'pisos-carvalhos.html', tags: 'carvalho europeu milano' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu All Black', url: 'pisos-carvalhos.html', tags: 'carvalho europeu all black' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Grigio Negro', url: 'pisos-carvalhos.html', tags: 'carvalho europeu grigio negro' },
+  { cat: 'Pisos › Carvalhos', name: 'Carvalho Europeu Giz', url: 'pisos-carvalhos.html', tags: 'carvalho europeu giz' },
+  { cat: 'Pisos › Grandiosos', name: 'Carvalho Europeu', url: 'pisos-grandiosos.html', tags: 'carvalho europeu grandioso' },
+  { cat: 'Pisos › Wood + Mármore', name: 'Carvalho Europeu + Mármore', url: 'pisos-listone-giordano.html', tags: 'carvalho europeu travertino navona carrara nero marquina quartizitos' },
+  { cat: 'Pisos › Clássicos', name: 'Chevron em Carvalho Europeu', url: 'pisos-classicos.html', tags: 'carvalho europeu chevron mont blanc batman naturalle' },
+  { cat: 'Pisos › Clássicos', name: 'Espinha de Peixe em Carvalho Europeu', url: 'pisos-classicos.html', tags: 'carvalho europeu espinha de peixe baby brey' },
+  { cat: 'Pisos › Clássicos', name: 'Versalles em Carvalho Europeu', url: 'pisos-classicos.html', tags: 'carvalho europeu versalles versailles' },
+
+  // ─── Pisos › Brazil ───
+  { cat: 'Pisos › Brazil', name: 'Cumaru', url: 'pisos.html#brazil', tags: 'piso cumaru brazil' },
+  { cat: 'Pisos › Brazil', name: 'Peroba Mica', url: 'pisos.html#brazil', tags: 'piso peroba mica brazil' },
+  { cat: 'Pisos › Brazil', name: 'Tauari', url: 'pisos.html#brazil', tags: 'piso tauari brazil' },
+
+  // ─── Pisos › Eternos ───
+  { cat: 'Pisos › Eternos', name: 'Bambu Demolição', url: 'pisos.html#eternos', tags: 'piso bambu demolição eternos' },
+  { cat: 'Pisos › Eternos', name: 'Canela Demolição', url: 'pisos.html#eternos', tags: 'piso canela demolição eternos' },
+  { cat: 'Pisos › Eternos', name: 'Peroba Demolição', url: 'pisos.html#eternos', tags: 'piso peroba demolição eternos' },
+
+  // ─── Pisos › Únicos ───
+  { cat: 'Pisos › Únicos', name: 'Pau Ferro', url: 'pisos.html#unicos', tags: 'piso pau ferro únicos unicos' },
+  { cat: 'Pisos › Únicos', name: 'Lapacho', url: 'pisos.html#unicos', tags: 'piso lapacho únicos unicos' },
+  { cat: 'Pisos › Únicos', name: 'Nogueira', url: 'pisos.html#unicos', tags: 'piso nogueira únicos unicos' },
+
+  // ─── Pisos › Pinho de Riga ───
+  { cat: 'Pisos › Pinho de Riga', name: 'Pinho de Riga', url: 'pisos-pinho-de-riga.html', tags: 'piso pinho de riga' },
+  { cat: 'Pisos › Grandiosos', name: 'Pinho de Riga Mont Blanc', url: 'pisos.html#grandiosos', tags: 'piso pinho de riga mont blanc grandiosos' },
+
+  // ─── Forros (fotos) ───
+  { cat: 'Forros', name: 'Carvalho Europeu', url: 'forros.html', tags: 'forro carvalho europeu' },
+  { cat: 'Forros', name: 'Carvalho Europeu Customizado', url: 'forros.html', tags: 'forro carvalho europeu customizado' },
+  { cat: 'Forros', name: 'Freijó', url: 'forros.html', tags: 'forro freijó freijo' },
+  { cat: 'Forros', name: 'Cumaru', url: 'forros.html', tags: 'forro cumaru' },
+  { cat: 'Forros', name: 'Tauari', url: 'forros.html', tags: 'forro tauari' },
+  { cat: 'Forros', name: 'Cabreúva Dourada', url: 'forros.html', tags: 'forro cabreúva dourada cabreuva' },
+  { cat: 'Forros', name: 'Toblerone de Cabreúva Branca', url: 'forros.html', tags: 'forro toblerone cabreúva branca cabreuva' },
+
+  // ─── Painéis (fotos) ───
+  { cat: 'Painéis', name: 'Carvalho Europeu', url: 'paineis.html', tags: 'painel paineis carvalho europeu' },
+  { cat: 'Painéis', name: 'Carvalho Europeu Customizado', url: 'paineis.html', tags: 'painel paineis carvalho europeu customizado' },
+  { cat: 'Painéis', name: 'Freijó', url: 'paineis.html', tags: 'painel paineis freijó freijo' },
+  { cat: 'Painéis', name: 'Freijó Customizado', url: 'paineis.html', tags: 'painel paineis freijó freijo customizado' },
+  { cat: 'Painéis', name: 'Peroba do Campo', url: 'paineis.html', tags: 'painel paineis peroba do campo' },
+  { cat: 'Painéis', name: 'Cumaru', url: 'paineis.html', tags: 'painel paineis cumaru' },
+  { cat: 'Painéis', name: 'Shou Sugi Ban', url: 'paineis.html', tags: 'painel paineis shou sugi ban' },
+  { cat: 'Painéis', name: 'Shou Sugi Ban + Freijó', url: 'paineis.html', tags: 'painel paineis shou sugi ban freijó freijo' },
+
+  // ─── Escadas (fotos) ───
+  { cat: 'Escadas', name: 'Peroba do Campo', url: 'escadas.html', tags: 'escada peroba do campo' },
+  { cat: 'Escadas', name: 'Peroba Demolição', url: 'escadas.html', tags: 'escada peroba demolição' },
+  { cat: 'Escadas', name: 'Carvalho Europeu Naturalle', url: 'escadas.html', tags: 'escada carvalho europeu naturalle' },
+  { cat: 'Escadas', name: 'Carvalho Europeu Customizado', url: 'escadas.html', tags: 'escada carvalho europeu customizado' },
+
+  // ─── Portas (fotos) ───
+  { cat: 'Portas', name: 'Laca Branca', url: 'portas.html', tags: 'porta laca branca' },
+  { cat: 'Portas', name: 'Muxarabie em Freijó', url: 'portas.html', tags: 'porta muxarabie freijó freijo' },
+  { cat: 'Portas', name: 'Freijó', url: 'portas.html', tags: 'porta freijó freijo' },
+  { cat: 'Portas', name: 'Shou Sugi Ban', url: 'portas.html', tags: 'porta shou sugi ban' },
   { cat: 'Escadas', name: 'Escadas', url: 'escadas.html' },
   { cat: 'Fachadas', name: 'Fachadas', url: 'fachadas.html' },
   { cat: 'Forros', name: 'Forros', url: 'forros.html' },
@@ -59,6 +128,241 @@ function parketNormalize(s) {
   return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
+// Distância de Levenshtein (edição mínima entre duas strings)
+function parketLevenshtein(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const prev = new Array(b.length + 1);
+  const curr = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prev[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a.charCodeAt(i - 1) === b.charCodeAt(j - 1) ? 0 : 1;
+      curr[j] = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+    }
+    for (let j = 0; j <= b.length; j++) prev[j] = curr[j];
+  }
+  return prev[b.length];
+}
+
+// Match com tolerância a erros de digitação (fuzzy).
+// Para cada token: substring exata OU palavra do texto a até N edições de distância.
+function parketFuzzyMatch(query, text) {
+  const q = parketNormalize((query || '').trim());
+  if (!q) return false;
+  const t = parketNormalize(text || '');
+  const tokens = q.split(/\s+/).filter(Boolean);
+  return tokens.every(token => {
+    if (t.includes(token)) return true;
+    if (token.length < 3) return false;
+    const maxDist = token.length <= 5 ? 1 : 2;
+    const words = t.split(/[\s+\-›()/]+/).filter(Boolean);
+    return words.some(w => {
+      if (Math.abs(w.length - token.length) > maxDist) return false;
+      return parketLevenshtein(token, w) <= maxDist;
+    });
+  });
+}
+
+// ── Photo Index (used by busca.html carousel) ──
+const PARKET_PHOTOS = (() => {
+  const photos = [];
+  const expand = (cat, page, srcBuilder, names) => {
+    Object.entries(names).forEach(([i, name]) => {
+      photos.push({ cat, name, page, src: srcBuilder(i) });
+    });
+  };
+
+  // Pisos › Brazil (local 01-11)
+  expand('Pisos › Brazil', 'pisos.html#brazil',
+    i => `pisos/brazil/${String(i).padStart(2,'0')}.webp`,
+    { 1:'Cumaru',2:'Cumaru',3:'Peroba Mica',4:'Peroba Mica',5:'Cumaru',6:'Cumaru',7:'Cumaru',8:'Tauari',9:'Tauari',10:'Tauari',11:'Tauari' });
+
+  // Pisos › Eternos (local 01-05)
+  expand('Pisos › Eternos', 'pisos.html#eternos',
+    i => `pisos/eternos/${String(i).padStart(2,'0')}.webp`,
+    { 1:'Bambu Demolição',2:'Canela Demolição',3:'Canela Demolição',4:'Canela Demolição',5:'Canela Demolição' });
+
+  // Pisos › Únicos (local 01-04)
+  expand('Pisos › Únicos', 'pisos.html#unicos',
+    i => `pisos/unicos/${String(i).padStart(2,'0')}.webp`,
+    { 1:'Pau Ferro',2:'Lapacho',3:'Lapacho',4:'Nogueira' });
+
+  // Pisos › Carvalhos (remote 30)
+  const carvalhosUrls = [
+    'https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/27e09f2b-808a-4ecb-b60d-c2702e023383-1.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/aa120b24-69d4-48d5-b47f-b73099b875ef-2-1.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/european-oak-capuccino-1.jpeg',
+    'https://parket.com.br/wp-content/uploads/2026/03/European-Oak-Giant-1.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/Imagem_7-30-1.webp',
+    'https://parket.com.br/wp-content/uploads/2026/03/IMG_0150-1-scaled.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/IMG_6862-1-scaled.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/IMG_8925-2-1.jpeg',
+    'https://parket.com.br/wp-content/uploads/2026/03/IMG_8932-2-1.jpeg',
+    'https://parket.com.br/wp-content/uploads/2026/03/oak-flooring-dinesen-victoria-miro-gallery-wide-wooden-floorboards-02-1.jpg',
+    'https://parket.com.br/wp-content/uploads/2026/03/sao_paulo_tch1-1.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-01.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-03.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-05.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-06.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-07.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-08.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-09.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-11.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-12.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-13.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-15.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-16.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-18.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-20.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-21.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-22.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-24.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-25.jpg',
+  ];
+  const carvalhosNames = { 1:'Carvalho Europeu Naturalle',2:'Carvalho Europeu Mont Blanc',3:'Carvalho Europeu Mont Blanc',4:'Carvalho Europeu Cappuccino',5:'Carvalho Europeu Naturalle',6:'Carvalho Europeu Naturalle',7:'Carvalho Europeu Naturalle',8:'Carvalho Europeu Light Brown',9:'Carvalho Europeu Light Brown',10:'Carvalho Europeu Smoke',11:'Carvalho Europeu Naturalle',12:'Carvalho Europeu Marrone',13:'Carvalho Europeu Naturalle',14:'Carvalho Europeu Mont Blanc',15:'Carvalho Europeu Nevado',16:'Carvalho Europeu Batman',17:'Carvalho Europeu Armani',18:'Carvalho Europeu Armani',19:'Carvalho Europeu Smoke',20:'Carvalho Europeu Giz',21:'Carvalho Europeu Wild Grey',22:'Carvalho Europeu Armani',23:'Carvalho Europeu Naturalle',24:'Carvalho Europeu Smoke',25:'Carvalho Europeu Naturalle',26:'Carvalho Europeu Milano',27:'Carvalho Europeu Naturalle',28:'Carvalho Europeu All Black',29:'Carvalho Europeu Nevado',30:'Carvalho Europeu Batman' };
+  carvalhosUrls.forEach((src, idx) => {
+    photos.push({ cat: 'Pisos › Carvalhos', name: carvalhosNames[idx+1], page: 'pisos.html#carvalhos', src });
+  });
+
+  // Pisos › Grandiosos (remote 10)
+  const grandUrls = [
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-05.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-06.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-07.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-08.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-09.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-11.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-12.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-13.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-03.jpg',
+  ];
+  const grandNames = { 1:'Carvalho Europeu Smoke',2:'Carvalho Europeu Naturalle',3:'Carvalho Europeu Naturalle',4:'Pinho de Riga Mont Blanc',5:'Pinho de Riga Mont Blanc',6:'Pinho de Riga',7:'Pinho de Riga Mont Blanc',8:'Carvalho Europeu Naturalle',9:'Carvalho Europeu Mont Blanc',10:'Pinho de Riga Mont Blanc' };
+  grandUrls.forEach((src, idx) => {
+    photos.push({ cat: 'Pisos › Grandiosos', name: grandNames[idx+1], page: 'pisos.html#grandiosos', src });
+  });
+
+  // Pisos › Pinho de Riga (remote 6)
+  const prUrls = [
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-02.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-03.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-04.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-05.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-06.jpg',
+  ];
+  prUrls.forEach(src => photos.push({ cat: 'Pisos › Pinho de Riga', name: 'Pinho de Riga', page: 'pisos.html#pinho-de-riga', src }));
+
+  // Pisos › Clássicos (remote 10, ordered)
+  const clUrls = [
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-02.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-03.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-05.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-06.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-04.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-07.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-01.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-08.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-09.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-10.jpg',
+  ];
+  const clNames = { 1:'Espinha de Peixe Baby Brey',2:'Chevron em Carvalho Europeu Batman',3:'Mosaico em Nogueira',4:'Chevron Curve em Nogueira',5:'Chevron em Carvalho Europeu Naturalle',6:'Espinha de Peixe em Carvalho Europeu',7:'Chevron em Carvalho Europeu Mont Blanc',8:'Chevron em Carvalho Europeu Mont Blanc',9:'Versalles em Carvalho Europeu Naturalle',10:'Versalles em Carvalho Europeu Naturalle' };
+  clUrls.forEach((src, idx) => {
+    photos.push({ cat: 'Pisos › Clássicos', name: clNames[idx+1], page: 'pisos-classicos.html', src });
+  });
+
+  // Pisos › Wood + Mármore (remote 7)
+  const maUrls = [
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-05.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-06.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-07.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-09.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-10.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-11.jpg',
+  ];
+  const maNames = { 1:'Carvalho Europeu Smoke + Travertino Navona',2:'Carvalho Europeu All Black + Carrara',3:'Nogueira + Nero Marquina + Latão',4:'Carvalho Europeu Naturalle + Travertino Navona',5:'Nogueira + Latão',6:'Carvalho Europeu Naturalle + Quartizitos Coloridos',7:'Nogueira + Nero Marquina + Latão' };
+  maUrls.forEach((src, idx) => {
+    photos.push({ cat: 'Pisos › Wood + Mármore', name: maNames[idx+1], page: 'pisos-listone-giordano.html', src });
+  });
+
+  // Forros (remote PRO_FO with NAMES)
+  const forrosUrls = [
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-01.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-02.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-03.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-04.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-05.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-06.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-07.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-08.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-09.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-10.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-12.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-13.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-14.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-15.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-16.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-17.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-19.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-20.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-21.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-22.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-23.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-25.jpg',
+  ];
+  const forrosNames = { 1:'Carvalho Europeu',2:'Freijó',3:'Cumaru',4:'Cumaru',5:'Cumaru',6:'Cumaru',7:'Cumaru',8:'Cumaru',9:'Carvalho Europeu',10:'Carvalho Europeu',11:'Tauari',12:'Cabreúva Dourada',13:'Cabreúva Dourada',14:'Cabreúva Dourada',15:'Cabreúva Dourada',16:'Cabreúva Dourada',17:'Cumaru',18:'Cumaru',19:'Carvalho Europeu Customizado',20:'Toblerone de Cabreúva Branca',21:'Freijó',22:'Cumaru' };
+  forrosUrls.forEach((src, idx) => {
+    photos.push({ cat: 'Forros', name: forrosNames[idx+1], page: 'forros.html', src });
+  });
+
+  // Painéis (remote PRO_PA with NAMES)
+  const paineisUrls = [
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-01.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-02.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-03.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-06.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-08.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-09.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-10.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-11.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-12.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-13.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-14.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-15.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-16.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-17.jpg',
+    'https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-18.jpg',
+  ];
+  const paineisNames = { 1:'Carvalho Europeu Customizado',2:'Freijó',3:'Peroba do Campo',4:'Freijó Customizado',5:'Cumaru',6:'Carvalho Europeu',7:'Freijó',8:'Shou Sugi Ban',9:'Carvalho Europeu Customizado',10:'Freijó',11:'Freijó',12:'Cumaru',13:'Shou Sugi Ban',14:'Shou Sugi Ban + Freijó',15:'Carvalho Europeu Customizado' };
+  paineisUrls.forEach((src, idx) => {
+    photos.push({ cat: 'Painéis', name: paineisNames[idx+1], page: 'paineis.html', src });
+  });
+
+  // Escadas
+  photos.push(
+    { cat: 'Escadas', name: 'Peroba do Campo', page: 'escadas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-03.jpg' },
+    { cat: 'Escadas', name: 'Peroba Demolição', page: 'escadas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-05.jpg' },
+    { cat: 'Escadas', name: 'Peroba Demolição', page: 'escadas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-07.jpg' },
+    { cat: 'Escadas', name: 'Carvalho Europeu Naturalle', page: 'escadas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-09.jpg' },
+    { cat: 'Escadas', name: 'Carvalho Europeu Customizado', page: 'escadas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-10.jpg' },
+  );
+
+  // Portas
+  photos.push(
+    { cat: 'Portas', name: 'Laca Branca', page: 'portas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-05.jpg' },
+    { cat: 'Portas', name: 'Muxarabie em Freijó', page: 'portas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-06.jpg' },
+    { cat: 'Portas', name: 'Freijó', page: 'portas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-09.jpg' },
+    { cat: 'Portas', name: 'Shou Sugi Ban', page: 'portas.html', src: 'https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-10.jpg' },
+  );
+
+  return photos;
+})();
+
 class ParketNav extends HTMLElement {
   connectedCallback() {
     const returnUrl = this.getAttribute('return-url') || 'catalogo.html';
@@ -74,9 +378,10 @@ class ParketNav extends HTMLElement {
           </a>
           <div class="flex items-center gap-3 md:gap-5 min-w-0">
             ${category ? `<span class="font-label text-[10px] uppercase tracking-[0.3em] text-white/30 truncate max-w-[160px] md:max-w-[240px] text-right hidden sm:inline">${category}</span>` : ''}
-            <button type="button" class="parket-search-btn" aria-label="Buscar" data-action="open-search">
+            <label class="parket-nav-search" data-action="open-search">
               <span class="material-symbols-outlined">search</span>
-            </button>
+              <input type="text" class="parket-nav-search-input" placeholder="Buscar..." aria-label="Buscar" readonly>
+            </label>
           </div>
         </div>
       </nav>
@@ -113,6 +418,41 @@ class ParketNav extends HTMLElement {
         }
         .parket-search-btn:hover { background: rgba(255,255,255,0.10); color: #fff; border-color: rgba(255,255,255,0.25); }
         .parket-search-btn .material-symbols-outlined { font-size: 18px; }
+
+        .parket-nav-search {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          height: 36px;
+          padding: 0 14px;
+          border-radius: 9999px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.04);
+          color: rgba(255,255,255,0.7);
+          cursor: pointer;
+          transition: all 0.25s ease;
+          width: 220px;
+          max-width: 30vw;
+        }
+        .parket-nav-search:hover { background: rgba(255,255,255,0.10); color: #fff; border-color: rgba(255,255,255,0.25); }
+        .parket-nav-search .material-symbols-outlined { font-size: 18px; pointer-events: none; }
+        .parket-nav-search-input {
+          flex: 1;
+          min-width: 0;
+          background: transparent;
+          border: 0;
+          outline: 0;
+          color: inherit;
+          font-family: 'Inter', sans-serif;
+          font-size: 12px;
+          letter-spacing: 0.05em;
+          cursor: pointer;
+        }
+        .parket-nav-search-input::placeholder { color: rgba(255,255,255,0.45); }
+        @media (max-width: 640px) {
+          .parket-nav-search { width: auto; padding: 0 10px; }
+          .parket-nav-search-input { width: 100px; font-size: 11px; }
+        }
 
         .parket-search-overlay {
           position: fixed;
@@ -180,9 +520,12 @@ class ParketNav extends HTMLElement {
 
         .parket-search-results {
           margin-top: 18px;
-          display: flex;
+          display: none;
           flex-direction: column;
         }
+        .parket-search-results.has-results { display: flex; }
+        .parket-search-input::selection { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.6); }
+        .parket-search-input::-moz-selection { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.6); }
         .parket-search-result {
           display: flex;
           align-items: center;
@@ -230,12 +573,24 @@ class ParketNav extends HTMLElement {
     this._overlay.addEventListener('click', (e) => {
       if (e.target === this._overlay) this._closeSearch();
     });
-    this._input.addEventListener('input', (e) => this._renderResults(e.target.value));
+    this._input.addEventListener('input', (e) => {
+      const isDelete = !!(e.inputType && e.inputType.startsWith('delete'));
+      this._handleType(e.target.value, isDelete);
+    });
     this._input.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') this._closeSearch();
       if (e.key === 'Enter') {
-        const first = this._results.querySelector('.parket-search-result');
-        if (first) window.location.href = first.getAttribute('href');
+        const q = (this._userTyped || this._input.value || '').trim();
+        if (q) window.location.href = `busca.html?q=${encodeURIComponent(q)}`;
+      }
+      // Seta esquerda aceita o autocompletar
+      if (e.key === 'ArrowLeft') {
+        const inp = this._input;
+        if (inp.selectionStart !== inp.selectionEnd) {
+          e.preventDefault();
+          this._userTyped = inp.value;
+          inp.setSelectionRange(inp.value.length, inp.value.length);
+        }
       }
     });
     document.addEventListener('keydown', (e) => {
@@ -245,10 +600,44 @@ class ParketNav extends HTMLElement {
       }
     });
 
-    this._renderResults('');
+    this._userTyped = '';
   }
 
   _isOpen() { return this._overlay.classList.contains('is-open'); }
+
+  _findMatch(query) {
+    const q = parketNormalize((query || '').trim());
+    if (!q) return null;
+    const fullText = (p) => parketNormalize(`${p.cat} ${p.name} ${p.tags || ''}`);
+    return PARKET_PAGES.find(p => parketNormalize(p.name).startsWith(q))
+        || PARKET_PAGES.find(p => parketNormalize(p.name).includes(q))
+        || PARKET_PAGES.find(p => {
+          const text = fullText(p);
+          return q.split(/\s+/).every(token => text.includes(token));
+        });
+  }
+
+  _handleType(value, isDelete) {
+    this._userTyped = value;
+    this._renderResults(value);
+    if (isDelete || !value) return;
+    const match = this._findMatch(value);
+    if (!match) return;
+    const userN = parketNormalize(value);
+    const nameN = parketNormalize(match.name);
+    if (nameN.startsWith(userN) && nameN !== userN) {
+      const completed = value + match.name.slice(value.length);
+      this._input.value = completed;
+      this._input.setSelectionRange(value.length, completed.length);
+    }
+  }
+
+  _findAllMatches(query) {
+    if (!query || !query.trim()) return [];
+    return PARKET_PAGES.filter(p =>
+      parketFuzzyMatch(query, `${p.cat} ${p.name} ${p.tags || ''}`)
+    );
+  }
 
   _openSearch() {
     this._overlay.classList.add('is-open');
@@ -262,20 +651,23 @@ class ParketNav extends HTMLElement {
     this._overlay.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('parket-search-locked');
     this._input.value = '';
-    this._renderResults('');
+    this._userTyped = '';
+    this._results.innerHTML = '';
+    this._results.classList.remove('has-results');
   }
 
   _renderResults(query) {
-    const q = parketNormalize(query.trim());
-    const list = q
-      ? PARKET_PAGES.filter(p => parketNormalize(p.name + ' ' + p.cat).includes(q))
-      : PARKET_PAGES;
-
+    if (!query || !query.trim()) {
+      this._results.innerHTML = '';
+      this._results.classList.remove('has-results');
+      return;
+    }
+    const list = this._findAllMatches(query);
+    this._results.classList.add('has-results');
     if (!list.length) {
       this._results.innerHTML = `<div class="parket-search-empty">Nenhum resultado para "${query}".</div>`;
       return;
     }
-
     this._results.innerHTML = list.map(p => `
       <a class="parket-search-result" href="${p.url}">
         <span class="parket-search-result-name">${p.name}</span>

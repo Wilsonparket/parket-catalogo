@@ -155,10 +155,6 @@
       <p class="text-white/50 font-body text-lg leading-relaxed max-w-2xl mt-10 mb-8">
         Engenharia de precisão com peças longas e uniformes. Uma seleção premium que alia simetria impecável e refinamento absoluto para o seu deck.
       </p>
-      <div class="flex items-center gap-6">
-        <div class="h-[1px] w-12 bg-white/20"></div>
-        <p class="text-white/30 text-[10px] uppercase tracking-[0.2em] font-light">Alinhamento milimétrico, visual impecável</p>
-      </div>
     </div>
 
     <!-- Carousel Section -->
@@ -189,36 +185,6 @@
   <parket-videos></parket-videos>
 
   <script>
-    // ── Letter Parallax Logic ──
-    (function() {
-      const titleEl = document.getElementById('Eurodeck-title');
-      let letters = [];
-      if (titleEl) {
-        const text = titleEl.textContent.trim();
-        titleEl.innerHTML = text.split('').map((ch, i) => 
-          `<span class="Paineis-letter" data-i="${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`
-        ).join('');
-        letters = titleEl.querySelectorAll('.Paineis-letter');
-      }
-
-      const speeds = [0.6, 0.25, 0.45, 0.35, 0.55, 0.4, 0.3];
-      const driftsX = [-1, 0.5, 0, -0.3, 0.8, -0.2, 0.1];
-
-      window.addEventListener('scroll', () => {
-        const sy = window.scrollY;
-        const vh = window.innerHeight;
-        const progress = Math.min(sy / (vh * 0.7), 1);
-
-        letters.forEach((letter, i) => {
-          const s = speeds[i] ?? 0.4;
-          const dx = driftsX[i] ?? 0;
-          const dy = -(sy * s);
-          const opacity = Math.max(0, 1 - progress * 1.5);
-          letter.style.transform = `translate(${0}px, ${dy}px)`;
-          letter.style.opacity = opacity;
-        });
-      }, { passive: true });
-    })();
 
     // Smooth Reveal Animation on Scroll
     const observerOptions = {
