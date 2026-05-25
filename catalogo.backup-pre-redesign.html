@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://parket.com.br">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <script src="assets/js/components.js"></script>
+  <parket-seo is-main></parket-seo>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline": "#919191",
+            "surface-container-highest": "#353535",
+            "inverse-surface": "#e2e2e2",
+            "primary-fixed": "#5d5f5f",
+            "on-primary-fixed-variant": "#e2e2e2",
+            "surface-dim": "#131313",
+            "tertiary-fixed": "#5d5f5f",
+            "surface-bright": "#393939",
+            "inverse-primary": "#5d5f5f",
+            "tertiary-fixed-dim": "#454747",
+            "on-secondary-container": "#e2e2e2",
+            "error-container": "#93000a",
+            "surface-variant": "#353535",
+            "primary-fixed-dim": "#454747",
+            "secondary-container": "#454747",
+            "on-surface-variant": "#c6c6c6",
+            "on-surface": "#e2e2e2",
+            "error": "#ffb4ab",
+            "surface": "#131313",
+            "on-tertiary-fixed-variant": "#e2e2e2",
+            "tertiary": "#e2e2e2",
+            "secondary": "#c6c6c7",
+            "background": "#131313",
+            "on-primary": "#1a1c1c",
+            "secondary-fixed": "#c6c6c7",
+            "on-secondary": "#1a1c1c",
+            "secondary-fixed-dim": "#aaabab",
+            "primary": "#ffffff",
+            "on-error": "#690005",
+            "on-secondary-fixed": "#1a1c1c",
+            "primary-container": "#d4d4d4",
+            "outline-variant": "#474747",
+            "on-primary-fixed": "#ffffff",
+            "tertiary-container": "#909191",
+            "inverse-on-surface": "#303030",
+            "on-tertiary-container": "#000000",
+            "on-tertiary-fixed": "#ffffff",
+            "on-background": "#e2e2e2",
+            "on-secondary-fixed-variant": "#3a3c3c",
+            "on-tertiary": "#1a1c1c",
+            "surface-container-high": "#2a2a2a",
+            "surface-container-low": "#1b1b1b",
+            "surface-container": "#1f1f1f",
+            "surface-tint": "#c6c6c7",
+            "on-error-container": "#ffdad6",
+            "surface-container-lowest": "#0e0e0e",
+            "on-primary-container": "#000000"
+          },
+          "borderRadius": {
+            "DEFAULT": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    :root {
+      --scroll-progress: 0;
+    }
+
+    body {
+      background-color: #000000;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Global Transitions ── */
+    .transition-expo {
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── Hero Zoom ── */
+    #hero-viewport {
+      height: 100vh;
+      position: relative;
+    }
+    #hero-sticky {
+      position: fixed;
+      inset: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(calc(1 + var(--scroll-progress) * 0.5));
+      filter: brightness(0.4);
+      will-change: transform;
+    }
+    #hero-content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hide parket-nav bar; reuse only the search overlay */
+    parket-nav > nav { display: none !important; }
+
+    /* Floating search button — minimal icon that expands on hover */
+    #categories-search-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 60;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      height: 32px;
+      width: 32px;
+      padding: 0;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: transparent;
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  gap 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  padding 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.5s ease,
+                  transform 0.5s ease,
+                  visibility 0.5s ease,
+                  color 0.4s ease,
+                  border-color 0.4s ease;
+    }
+    #categories-search-btn.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    #categories-search-btn:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.30);
+      width: 130px;
+      gap: 8px;
+      padding: 0 14px;
+    }
+    #categories-search-btn .material-symbols-outlined {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    #categories-search-btn .label {
+      opacity: 0;
+      max-width: 0;
+      white-space: nowrap;
+      transition: opacity 0.5s ease 0.15s, max-width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #categories-search-btn:hover .label {
+      opacity: 1;
+      max-width: 100px;
+    }
+
+    /* ── Categories Section (MetaLab Style) ── */
+    #categories-section {
+      position: relative;
+      z-index: 10;
+      background: #000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .category-list-container {
+      width: 100%;
+      padding-left: 10vw;
+      z-index: 20;
+    }
+
+    .category-link {
+      display: inline-block;
+      width: 160px; /* Fixed width for alignment */
+      text-align: center;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 7.5px 0; /* Padding only vertical since width is fixed */
+      margin-bottom: 7.5px;
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      text-transform: none;
+    }
+
+    .category-link:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── Dolly Zoom Preview (MetaLab Wipe Reveal) ── */
+    #preview-viewport {
+      position: fixed;
+      width: 22vw;
+      aspect-ratio: 3/4;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      will-change: transform, opacity;
+    }
+
+    #preview-reveal-wrapper {
+      width: 100%;
+      height: 100%;
+      clip-path: inset(50% 50% 50% 50%);
+      transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.9);
+      will-change: clip-path, transform;
+    }
+
+    .dolly-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    }
+
+    .preview-active #preview-viewport {
+      opacity: 1;
+    }
+    .preview-active #preview-reveal-wrapper {
+      clip-path: inset(0% 0% 0% 0%);
+      transform: scale(1);
+    }
+
+    /* Fixed Info Box on the Right */
+    #fixed-info-box {
+      position: fixed;
+      right: 5vw;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(560px, 38vw);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: left;
+    }
+
+    .preview-active #fixed-info-box {
+      opacity: 1;
+      transition-delay: 0.4s;
+    }
+
+    #preview-category-name {
+      display: block;
+      font-size: clamp(2.5rem, 6vw, 7rem);
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      line-height: 0.85;
+      color: #fff;
+      margin-bottom: 28px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+
+    #preview-description {
+      display: block;
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.75);
+      text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+
+    .dolly-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.1);
+      transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* MetaLab Reveal State */
+    .preview-active #preview-viewport {
+      opacity: 1;
+      clip-path: inset(0% 0% 0% 0%);
+      transform: scale(1);
+    }
+
+    .preview-active .dolly-image {
+      transform: scale(1.3);
+    }
+
+    /* ── Background Video & Image Layer ── */
+    #categories-bg-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #categories-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+      transition: opacity 1s ease;
+    }
+
+    #category-bg-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.2s ease, transform 2s ease;
+      transform: scale(1.05);
+    }
+    .cbg-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: grayscale(0.55) saturate(0.9) contrast(1.05) brightness(0.45);
+      will-change: opacity;
+    }
+    .cbg-layer.is-active { opacity: 1; }
+
+    .preview-active #category-bg-image {
+      opacity: 1; /* Fully opaque */
+      transform: scale(1);
+    }
+    .preview-active #categories-bg-video {
+      opacity: 0; /* Hide video */
+    }
+
+    /* ── UI Elements ── */
+    #page-curtain {
+      position: fixed;
+      inset: 0;
+      background: #000;
+    }
+
+    .reveal-card {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-card.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile: sticky section + page-scroll-driven picker */
+    @media (max-width: 1024px) {
+      html {
+        scroll-snap-type: y proximity;
+      }
+
+      #hero-viewport,
+      #categories-section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      #preview-viewport, #fixed-info-box {
+        display: none !important;
+      }
+
+      #categories-section {
+        display: block;
+        height: 320vh;
+        min-height: 320vh;
+        position: relative;
+      }
+
+      #categories-bg-container {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        margin-bottom: -100vh;
+      }
+
+      .category-list-container {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 1100px;
+        perspective-origin: 50% 50%;
+      }
+
+      #category-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        transform: translateY(var(--list-y, 0px));
+        will-change: transform;
+      }
+
+      .category-link {
+        flex: 0 0 auto;
+        width: auto !important;
+        min-width: 144px;
+        max-width: 204px;
+        font-size: 18px;
+        padding: 7px 19px !important;
+        margin-bottom: 0;
+        color: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 0;
+        text-align: center;
+        text-decoration: none;
+        transform-origin: 50% 50%;
+        transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
+        opacity: var(--pick-opacity, 1);
+        transition: color 0.25s ease-out,
+                    background 0.25s ease-out,
+                    border-color 0.25s ease-out;
+        will-change: transform, opacity;
+      }
+
+      .category-link:hover {
+        transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
+      }
+
+      .category-link.is-active {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .category-link::before,
+      .category-link::after {
+        display: none;
+      }
+
+      .category-link .mobile-title {
+        display: inline-block;
+        font-size: inherit;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: inherit;
+        text-shadow: none;
+      }
+
+      /* Mobile: vídeo de fundo é removido, fundo é a imagem da categoria ativa */
+      #categories-bg-video {
+        display: none;
+      }
+
+      #category-bg-image {
+        opacity: 1;
+        transform: none;
+      }
+      .cbg-layer {
+        filter: grayscale(0.3) saturate(1) contrast(1) brightness(0.55);
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-white selection:text-black">
+
+
+
+  <!-- Search overlay only (nav bar stays hidden) -->
+  <parket-nav return-url="index.html" return-text=""></parket-nav>
+
+  <!-- Hero with Scroll Zoom -->
+  <section id="hero-viewport">
+    <div id="hero-sticky">
+      <div id="hero-bg" style="background-image: url('autoload/Hero.webp');"></div>
+      <div id="hero-content" class="text-center">
+        <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50 font-['Inter']">Coleção 2026</span>
+      </div>
+      <img decoding="async" src="logo-parket.webp" alt="Parket" class="absolute top-6 left-1/2 -translate-x-1/2 h-4 md:h-5 w-auto opacity-80 z-10">
+      <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
+        <span class="font-label text-[11px] uppercase tracking-[0.4em]">Scroll</span>
+        <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating search button (top-right) — appears when categories section is fully in view -->
+  <button id="categories-search-btn" type="button" aria-label="Buscar">
+    <span class="material-symbols-outlined">search</span>
+    <span class="label">Buscar...</span>
+  </button>
+
+  <!-- Interactive Categories Section -->
+  <section id="categories-section">
+    <div id="categories-bg-container">
+      <video id="categories-bg-video" src="autoload/hero.mp4?v=20260429" autoplay muted loop playsinline poster="autoload/Hero.webp"></video>
+      <div id="category-bg-image">
+        <div class="cbg-layer is-active" data-layer="a" style="background-image: url('autoload/Hero.webp');"></div>
+        <div class="cbg-layer" data-layer="b"></div>
+      </div>
+    </div>
+
+    <div class="category-list-container">
+      <div id="category-list" class="flex flex-col items-start gap-1">
+        <!-- List items injected via JS -->
+      </div>
+    </div>
+
+    <!-- Dolly Zoom Preview (Floating) -->
+    <div id="preview-viewport">
+      <div id="preview-reveal-wrapper">
+        <div class="dolly-container">
+          <img decoding="async" id="preview-image" src="" class="dolly-image" alt="Preview">
+        </div>
+      </div>
+    </div>
+
+    <!-- Stable Info Box -->
+    <div id="fixed-info-box">
+      <span id="preview-category-name">Categoria</span>
+      <p id="preview-description">Descrição da categoria.</p>
+    </div>
+  </section>
+
+  <!-- Technical Section -->
+  <main class="relative z-20 bg-black">
+    <section class="px-12 max-w-screen-2xl mx-auto pt-16 pb-32">
+      <div class="border-t border-white/10 pt-16">
+        <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Guia Técnico</span>
+        <h2 class="text-[clamp(2.5rem,4vw,5rem)] font-extralight tracking-[-0.04em] leading-[0.9] mb-20 max-w-3xl">
+          Madeira, um material vivo
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-20">
+
+          <!-- LEFT COLUMN -->
+          <div class="flex flex-col gap-20">
+            <!-- Tone palette -->
+            <div class="reveal-card">
+              <div class="w-fit">
+                <div class="flex items-center gap-2 mb-6">
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#3a2414;"></div>
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#5c3a22;"></div>
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#7d5536;"></div>
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#9a7758;"></div>
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#b69c82;"></div>
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#d0bba5;"></div>
+                  <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#ead8c3;"></div>
+                </div>
+                <div class="flex items-center justify-between text-[8.5px] md:text-[10px] uppercase tracking-[0.3em] text-white/40">
+                  <span>Escuro</span>
+                  <span>Claro</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cor -->
+            <div class="reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Cor
+              </h3>
+              <div class="text-white/50 text-sm font-light leading-relaxed space-y-4 max-w-xl">
+                <p>A cor da madeira vem dos extrativos que ela contém. A exposição ao ar e à luz modifica esses extrativos, transformando a cor original do parquete ao longo do tempo. Espécies tropicais, por conterem mais extrativos, evoluem para marrons mais escuros.</p>
+                <p>Iroko e Parket apresentam as mudanças mais intensas — tábuas originalmente semelhantes podem assumir tonalidades distintas. O Teak varia bastante no início mas se uniformiza com o tempo; o Wengé mantém boa estabilidade de cor.</p>
+                <p>Com a luz, a madeira tende ao amarelo, mesmo em acabamentos pigmentados. Exposição solar direta e intensa pode causar descoloração — recomenda-se o uso de cortinas ou filmes UV nos vidros.</p>
+              </div>
+            </div>
+
+            <!-- Grão Prateado -->
+            <div class="reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Grão Prateado
+              </h3>
+              <div class="text-white/50 text-sm font-light leading-relaxed space-y-4 max-w-xl">
+                <p>Tábuas cortadas em seção radial do tronco apresentam grão reto e reflexos iridescentes — o chamado grão prateado, historicamente valorizado como indicador de qualidade e prestígio.</p>
+                <p>A madeira é um material vivo, influenciado por luz, temperatura, umidade e uso. Além da estética, o grão prateado indica melhor desempenho técnico: estabilidade dimensional e impermeabilidade.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="flex flex-col gap-20">
+            <!-- Amostras -->
+            <div class="reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Amostras
+              </h3>
+              <div class="text-white/50 text-sm font-light leading-relaxed space-y-4 max-w-xl">
+                <p>A madeira é um material natural e variegado: cada peça é única. Amostras compostas por poucas tábuas fornecem apenas uma ideia geral do parquete, sem representar fielmente todas as nuances e veios.</p>
+                <p>A cor muda com o tempo por exposição à luz e ao ar — um piso recém-instalado pode ter aparência diferente de uma amostra já exposta.</p>
+              </div>
+            </div>
+
+            <!-- Climate diagram -->
+            <div class="reveal-card liquid-glass p-10 flex flex-col items-center">
+              <div class="flex items-center gap-12 mb-4 text-2xl">
+                <span>☀️</span>
+                <span>🌧️</span>
+              </div>
+              <div class="flex items-center gap-4 w-full">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-white/50 whitespace-nowrap">Clima<br>Seco</span>
+                <svg class="w-2.5 h-2.5 text-white/40 flex-shrink-0" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="8,1 8,9 2,5"/></svg>
+                <div class="flex-1 h-12" style="background: linear-gradient(to right, #b98862 0%, #d9ab87 50%, #b98862 100%); clip-path: polygon(0 30%, 100% 10%, 100% 90%, 0 70%);"></div>
+                <svg class="w-2.5 h-2.5 text-white/40 flex-shrink-0" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="2,1 2,9 8,5"/></svg>
+                <span class="text-[10px] uppercase tracking-[0.3em] text-white/50 whitespace-nowrap">Clima<br>Úmido</span>
+              </div>
+              <div class="mt-4 text-[10px] uppercase tracking-[0.3em] text-white/50 flex items-center gap-2">
+                <svg class="w-2 h-2" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,2 9,2 5,8"/></svg>
+                Retração / Dilatação
+                <svg class="w-2 h-2" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="5,2 9,8 1,8"/></svg>
+              </div>
+            </div>
+
+            <!-- Condições Climáticas -->
+            <div class="reveal-card">
+              <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
+                <span class="w-1 h-1 bg-white/50 rounded-full"></span> Condições Climáticas
+              </h3>
+              <div class="text-white/50 text-sm font-light leading-relaxed space-y-4 max-w-xl">
+                <p>A madeira dilata e retrai conforme umidade e temperatura. O ideal é manter o ar entre 15°C e 30°C e a umidade relativa entre 45% e 65% — faixa também ideal para as pessoas — durante e após a instalação.</p>
+                <p>No inverno pode ser necessário umidificar o ar. Em pisos com aquecimento, a superfície nunca deve ultrapassar 27°C; evite cobri-la com tapetes grossos que retenham calor.</p>
+                <p>Produtos Parket com suporte de compensado de bétula (ver Especificações Técnicas) toleram condições mais severas — umidade a partir de 30% e superfície até 29°C — mantendo a integridade.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    (function () {
+      // Mobile: impede o vídeo de fundo de carregar (não vai aparecer mesmo)
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        const v = document.getElementById('categories-bg-video');
+        if (v) {
+          v.removeAttribute('autoplay');
+          v.removeAttribute('src');
+          v.pause && v.pause();
+          v.load && v.load();
+        }
+      }
+
+      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+      const CARD_INFO = {
+        1: { title: 'Escadas', folder: 'escadas', desc: 'A ascensão da forma. Design esculpido em madeira para conectar níveis com elegância absoluta.' },
+        2: { title: 'Decks', folder: 'decks', desc: 'O exterior elevado. Resistência e beleza natural para transformar terraços em refúgios atemporais.' },
+        3: { title: 'Portas', folder: 'portas', desc: 'O limiar da sofisticação. Portas que narram a identidade do ambiente desde o primeiro toque.' },
+        4: { title: 'Pisos', folder: 'pisos', desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.' },
+        5: { title: 'Painéis', folder: 'paineis', desc: 'Geometria viva. Revestimentos que trazem ritmo e profundidade às paredes através da marcenaria fina.' },
+        6: { title: 'Forros', folder: 'forros', desc: 'Perspectiva superior. Detalhes em madeira que elevam o teto a uma obra de arte arquitetônica.' },
+        7: { title: 'Download Texturas', folder: 'texturas', image: 'texturas/autoload/chevron-naturalle.webp', hero: 'texturas/autoload/espinha-de-peixe-mont-blanc.webp', desc: 'Padrões e desenhos autorais. Cortes, chevrons e espinhas de peixe que transformam a superfície em expressão.' },
+      };
+
+      async function findImage(folder, pattern = 'image') {
+        for (const ext of EXTS) {
+          const src = `${folder}/${pattern}.${ext}`;
+          try {
+            const res = await fetch(src, { method: 'HEAD' });
+            if (res.ok) return src;
+          } catch (e) {}
+        }
+
+        if (pattern === 'hero') {
+          const subfolders = ['brazil', 'carvalhos', 'unicos'];
+          for (const sub of subfolders) {
+            for (const ext of EXTS) {
+              const src = `${folder}/${sub}/02.${ext}`;
+              try {
+                const res = await fetch(src, { method: 'HEAD' });
+                if (res.ok) return src;
+              } catch (e) {}
+            }
+          }
+        }
+        return null;
+      }
+
+      const previewViewport = document.getElementById('preview-viewport');
+      const previewImage = document.getElementById('preview-image');
+      const previewName = document.getElementById('preview-category-name');
+      const previewDesc = document.getElementById('preview-description');
+      const bgImageLayer = document.getElementById('category-bg-image');
+      const bgLayers = bgImageLayer ? bgImageLayer.querySelectorAll('.cbg-layer') : [];
+      let activeBgKey = 'a';
+
+      // Cross-fade entre as duas layers para troca suave de imagem
+      function setBgImage(src) {
+        if (!src || !bgImageLayer || bgImageLayer.dataset.src === src) return;
+        const nextKey = activeBgKey === 'a' ? 'b' : 'a';
+        const nextLayer = bgImageLayer.querySelector(`.cbg-layer[data-layer="${nextKey}"]`);
+        const currentLayer = bgImageLayer.querySelector(`.cbg-layer[data-layer="${activeBgKey}"]`);
+        if (!nextLayer || !currentLayer) return;
+        nextLayer.style.backgroundImage = `url('${src}')`;
+        // Garante que o background carregou antes de iniciar o fade
+        requestAnimationFrame(() => {
+          nextLayer.classList.add('is-active');
+          currentLayer.classList.remove('is-active');
+        });
+        activeBgKey = nextKey;
+        bgImageLayer.dataset.src = src;
+      }
+
+      const infoBoxEl = document.getElementById('fixed-info-box');
+
+      function setRandomPosition() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        // Photo dimensions (matches CSS: width 22vw, aspect-ratio 3/4)
+        const photoWidth = vw * 0.22;
+        const photoHeight = photoWidth * (4 / 3);
+
+        // Right-side info box: right:5vw, width from CSS, plus -30px shift when active
+        const infoBoxWidth = infoBoxEl ? infoBoxEl.offsetWidth : Math.min(400, vw * 0.30);
+        const infoBoxLeftEdge = vw - (vw * 0.05) - infoBoxWidth - 30;
+        // Left-side buttons: padding-left:10vw, width:160px (+ small hover translate)
+        const buttonsRightEdge = (vw * 0.10) + 160 + 8;
+
+        const safeMargin = 40;
+        const minLeft = buttonsRightEdge + safeMargin;
+        const maxLeft = infoBoxLeftEdge - photoWidth - safeMargin;
+
+        // Fallback when viewport is too narrow: center the photo between the two zones
+        const left = maxLeft > minLeft
+          ? minLeft + Math.random() * (maxLeft - minLeft)
+          : Math.max(0, (vw - photoWidth) / 2);
+
+        // Vertical: center the photo vertically so it aligns with the info-box
+        const top = Math.max(0, (vh - photoHeight) / 2);
+
+        previewViewport.style.left = `${left}px`;
+        previewViewport.style.top = `${top}px`;
+      }
+
+      function createListItem(info, withReveal) {
+        const a = document.createElement('a');
+        a.href = `${info.folder}.html`;
+        a.className = withReveal ? 'category-link reveal-card' : 'category-link';
+        a.innerHTML = `<span class="mobile-title">${info.title}</span>`;
+        return a;
+      }
+
+      async function hydrateCard(a, info, isDesktop) {
+        const cardSrc = info.image || await findImage(info.folder, 'image');
+        const heroSrc = info.hero || (await findImage(info.folder, 'hero')) || cardSrc;
+
+        // Guarda no próprio elemento pra mobile e desktop usarem
+        a.__heroSrc = heroSrc;
+        a.__cardSrc = cardSrc;
+        a.__info = info;
+
+        // Pré-carrega a imagem de hero (mobile vai mostrar imediatamente quando o picker focar)
+        if (heroSrc) { const img = new Image(); img.src = heroSrc; }
+
+        if (!isDesktop) return;
+
+        a.addEventListener('mouseenter', () => {
+          if (window.innerWidth > 1024) {
+            setRandomPosition();
+            if (cardSrc) previewImage.src = cardSrc;
+            if (heroSrc) setBgImage(heroSrc);
+            previewName.textContent = info.title;
+            previewDesc.textContent = info.desc;
+            document.body.classList.add('preview-active');
+          }
+        });
+        a.addEventListener('mouseleave', () => {
+          document.body.classList.remove('preview-active');
+        });
+      }
+
+      function init() {
+        const listContainer = document.getElementById('category-list');
+        const isDesktop = window.innerWidth > 1024;
+        const cards = [];
+
+        for (const key in CARD_INFO) {
+          const info = CARD_INFO[key];
+          const el = createListItem(info, isDesktop);
+          listContainer.appendChild(el);
+          cards.push({ el, info });
+        }
+
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('in-view');
+          });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
+
+        cards.forEach(({ el, info }) => { hydrateCard(el, info, isDesktop); });
+      }
+
+      let heroTicking = false;
+      function updateHeroScroll() {
+        const scrollY = window.scrollY;
+        const vh = window.innerHeight;
+        const progress = Math.min(scrollY / vh, 1);
+        document.documentElement.style.setProperty('--scroll-progress', progress);
+        heroTicking = false;
+      }
+
+      let pickerTicking = false;
+      function updatePicker() {
+        pickerTicking = false;
+        if (window.innerWidth > 1024) return;
+
+        const section = document.getElementById('categories-section');
+        const list = document.getElementById('category-list');
+        if (!section || !list) return;
+
+        const cards = list.querySelectorAll('.category-link');
+        if (!cards.length) return;
+
+        const vh = window.innerHeight;
+        const sectionRect = section.getBoundingClientRect();
+        const sectionTop = window.scrollY + sectionRect.top;
+        const scrollDistance = section.offsetHeight - vh;
+        if (scrollDistance <= 0) return;
+
+        const scrollWithin = Math.max(0, Math.min(scrollDistance, window.scrollY - sectionTop));
+        const progress = scrollWithin / scrollDistance;
+        const focalIndex = progress * (cards.length - 1);
+
+        const cardHeight = cards[0].offsetHeight;
+        const gap = parseFloat(getComputedStyle(list).rowGap || '12') || 12;
+        const stride = cardHeight + gap;
+        const naturalCenter = (cards.length - 1) / 2;
+        const listOffset = (naturalCenter - focalIndex) * stride;
+        list.style.setProperty('--list-y', `${listOffset.toFixed(1)}px`);
+
+        let activeCard = null;
+        let minAbsDist = Infinity;
+
+        cards.forEach((card, i) => {
+          const distance = i - focalIndex;
+          const absDist = Math.abs(distance);
+
+          const scale = Math.max(0.62, 1 - absDist * 0.18);
+          const opacity = Math.max(0.18, 1 - absDist * 0.5);
+          const translateZ = -absDist * 200;
+
+          card.style.setProperty('--pick-scale', scale.toFixed(3));
+          card.style.setProperty('--pick-opacity', opacity.toFixed(3));
+          card.style.setProperty('--pick-z', `${translateZ.toFixed(0)}px`);
+
+          if (absDist < minAbsDist) {
+            minAbsDist = absDist;
+            activeCard = card;
+          }
+        });
+
+        cards.forEach(c => c.classList.toggle('is-active', c === activeCard));
+
+        // Mobile: o fundo é a imagem da categoria ativa (sempre visível durante o picker)
+        if (activeCard && activeCard.__heroSrc) {
+          setBgImage(activeCard.__heroSrc);
+        }
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!heroTicking) {
+          requestAnimationFrame(updateHeroScroll);
+          heroTicking = true;
+        }
+        if (!pickerTicking) {
+          requestAnimationFrame(updatePicker);
+          pickerTicking = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', () => { updateHeroScroll(); updatePicker(); });
+      function initSearchButton() {
+        const btn = document.getElementById('categories-search-btn');
+        const section = document.getElementById('categories-section');
+        if (!btn || !section) return;
+        btn.addEventListener('click', () => {
+          const trigger = document.querySelector('parket-nav [data-action="open-search"]');
+          if (trigger) trigger.click();
+        });
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            btn.classList.toggle('is-visible', e.isIntersecting);
+          });
+        }, { threshold: 0.6 });
+        io.observe(section);
+      }
+
+      window.addEventListener('load', () => { init(); updateHeroScroll(); updatePicker(); initSearchButton(); });
+    })();
+  </script>
+</body>
+</html>

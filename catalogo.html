@@ -1,540 +1,669 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html class="dark" lang="pt-BR">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parket — Catálogo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://parket.com.br">
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preload" as="image" href="autoload/Hero.webp">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <script src="assets/js/components.js"></script>
   <parket-seo is-main></parket-seo>
-  <script id="tailwind-config">
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
-          "colors": {
-            "outline": "#919191",
-            "surface-container-highest": "#353535",
-            "inverse-surface": "#e2e2e2",
-            "primary-fixed": "#5d5f5f",
-            "on-primary-fixed-variant": "#e2e2e2",
-            "surface-dim": "#131313",
-            "tertiary-fixed": "#5d5f5f",
-            "surface-bright": "#393939",
-            "inverse-primary": "#5d5f5f",
-            "tertiary-fixed-dim": "#454747",
-            "on-secondary-container": "#e2e2e2",
-            "error-container": "#93000a",
-            "surface-variant": "#353535",
-            "primary-fixed-dim": "#454747",
-            "secondary-container": "#454747",
-            "on-surface-variant": "#c6c6c6",
-            "on-surface": "#e2e2e2",
-            "error": "#ffb4ab",
-            "surface": "#131313",
-            "on-tertiary-fixed-variant": "#e2e2e2",
-            "tertiary": "#e2e2e2",
-            "secondary": "#c6c6c7",
-            "background": "#131313",
-            "on-primary": "#1a1c1c",
-            "secondary-fixed": "#c6c6c7",
-            "on-secondary": "#1a1c1c",
-            "secondary-fixed-dim": "#aaabab",
-            "primary": "#ffffff",
-            "on-error": "#690005",
-            "on-secondary-fixed": "#1a1c1c",
-            "primary-container": "#d4d4d4",
-            "outline-variant": "#474747",
-            "on-primary-fixed": "#ffffff",
-            "tertiary-container": "#909191",
-            "inverse-on-surface": "#303030",
-            "on-tertiary-container": "#000000",
-            "on-tertiary-fixed": "#ffffff",
-            "on-background": "#e2e2e2",
-            "on-secondary-fixed-variant": "#3a3c3c",
-            "on-tertiary": "#1a1c1c",
-            "surface-container-high": "#2a2a2a",
-            "surface-container-low": "#1b1b1b",
-            "surface-container": "#1f1f1f",
-            "surface-tint": "#c6c6c7",
-            "on-error-container": "#ffdad6",
-            "surface-container-lowest": "#0e0e0e",
-            "on-primary-container": "#000000"
-          },
-          "borderRadius": {
-            "DEFAULT": "0px",
-            "lg": "0px",
-            "xl": "0px",
-            "full": "9999px"
-          },
-          "fontFamily": {
-            "headline": ["Inter"],
-            "body": ["Inter"],
-            "label": ["Inter"]
-          }
-        },
-      },
+          borderRadius: { "DEFAULT": "0", "lg": "0", "xl": "0", "full": "9999px" },
+          colors: { "surface": "#131313", "background": "#000000", "primary": "#ffffff" },
+          fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] }
+        }
+      }
     }
   </script>
   <style>
-    :root {
-      --scroll-progress: 0;
-    }
+    :root { --scroll-progress: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      background-color: #000000;
-      color: #FFFFFF;
+      background-color: #000;
+      color: #fff;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
     }
 
-    /* ── Global Transitions ── */
-    .transition-expo {
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    parket-nav > nav { display: none !important; }
 
-    /* ── Hero Zoom ── */
-    #hero-viewport {
-      height: 100vh;
-      position: relative;
-    }
+    /* ── Hero with parallax zoom ── */
+    #hero-viewport { height: 100vh; position: relative; background: #000; }
     #hero-sticky {
-      position: fixed;
-      inset: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      z-index: 1;
+      position: fixed; inset: 0; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; z-index: 1;
     }
     #hero-bg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
       transform: scale(calc(1 + var(--scroll-progress) * 0.5));
       filter: brightness(0.4);
       will-change: transform;
     }
-    #hero-content {
-      position: relative;
-      z-index: 10;
+    #hero-content { position: relative; z-index: 10; color: #fff; }
+
+    /* ── Generic editorial typography ── */
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      font-weight: 400;
+    }
+    .display-title {
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      line-height: 0.88;
     }
 
-    /* Hide parket-nav bar; reuse only the search overlay */
-    parket-nav > nav { display: none !important; }
-
-    /* Floating search button — minimal icon that expands on hover */
-    #categories-search-btn {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 60;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      height: 32px;
-      width: 32px;
-      padding: 0;
-      border-radius: 9999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: transparent;
-      color: rgba(255,255,255,0.55);
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.04em;
-      overflow: hidden;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-6px);
-      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                  gap 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                  padding 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                  opacity 0.5s ease,
-                  transform 0.5s ease,
-                  visibility 0.5s ease,
-                  color 0.4s ease,
-                  border-color 0.4s ease;
-    }
-    #categories-search-btn.is-visible {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    #categories-search-btn:hover {
-      color: #fff;
-      border-color: rgba(255,255,255,0.30);
-      width: 130px;
-      gap: 8px;
-      padding: 0 14px;
-    }
-    #categories-search-btn .material-symbols-outlined {
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-    #categories-search-btn .label {
-      opacity: 0;
-      max-width: 0;
-      white-space: nowrap;
-      transition: opacity 0.5s ease 0.15s, max-width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    #categories-search-btn:hover .label {
-      opacity: 1;
-      max-width: 100px;
-    }
-
-    /* ── Categories Section (MetaLab Style) ── */
-    #categories-section {
-      position: relative;
-      z-index: 10;
-      background: #000;
+    /* ── Products index (Escolha um produto) ── */
+    .index-block {
       min-height: 100vh;
       display: flex;
       align-items: center;
-    }
-
-    .category-list-container {
-      width: 100%;
-      padding-left: 10vw;
-      z-index: 20;
-    }
-
-    .category-link {
-      display: inline-block;
-      width: 160px; /* Fixed width for alignment */
-      text-align: center;
-      font-size: 13.5px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      padding: 7.5px 0; /* Padding only vertical since width is fixed */
-      margin-bottom: 7.5px;
-      color: rgba(255, 255, 255, 0.7);
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 0;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
-      text-transform: none;
-    }
-
-    .category-link:hover {
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* ── Dolly Zoom Preview (MetaLab Wipe Reveal) ── */
-    #preview-viewport {
-      position: fixed;
-      width: 22vw;
-      aspect-ratio: 3/4;
-      pointer-events: none;
-      z-index: 50;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      will-change: transform, opacity;
-    }
-
-    #preview-reveal-wrapper {
-      width: 100%;
-      height: 100%;
-      clip-path: inset(50% 50% 50% 50%);
-      transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      transform: scale(0.9);
-      will-change: clip-path, transform;
-    }
-
-    .dolly-container {
-      width: 100%;
-      height: 100%;
+      justify-content: center;
+      padding: 6rem 6vw;
+      position: relative;
+      z-index: 5;
+      background: #000;
+      isolation: isolate;
       overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.8);
     }
-
-    .preview-active #preview-viewport {
-      opacity: 1;
-    }
-    .preview-active #preview-reveal-wrapper {
-      clip-path: inset(0% 0% 0% 0%);
-      transform: scale(1);
-    }
-
-    /* Fixed Info Box on the Right */
-    #fixed-info-box {
-      position: fixed;
-      right: 5vw;
-      top: 50%;
-      transform: translateY(-50%);
-      width: min(560px, 38vw);
-      z-index: 100;
-      opacity: 0;
+    .index-block::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('autoload/index-bg.jpg') center / cover no-repeat;
+      opacity: 0.20;
+      z-index: -1;
       pointer-events: none;
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      text-align: left;
+    }
+    .index-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: flex-start;
+    }
+    .index-link {
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1), letter-spacing 0.6s ease;
+      padding: 0.15em 0;
+      display: inline-block;
+    }
+    .index-link:hover {
+      color: #fff;
+      transform: translateX(14px);
+    }
+    .index-link .num {
+      display: inline-block;
+      font-size: 0.18em;
+      letter-spacing: 0.3em;
+      vertical-align: top;
+      margin-right: 0.6em;
+      opacity: 0.4;
+      font-weight: 400;
+      transform: translateY(0.6em);
+    }
+    /* Products index: fixed pill dimensions */
+    #products-nav .index-link {
+      width: 137px;
+      height: 65.23px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      font-size: 50.2px;
+    }
+    #products-nav .index-link .num {
+      font-size: 0.2em;
+      transform: none;
     }
 
-    .preview-active #fixed-info-box {
-      opacity: 1;
-      transition-delay: 0.4s;
+    /* ── Product cover (full-bleed editorial) ── */
+    .product-cover {
+      position: relative;
+      width: 100%;
+      min-height: 92vh;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      isolation: isolate;
+      color: #fff;
     }
+    .product-cover .eyebrow { color: rgba(255,255,255,0.55); }
+    .product-cover::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0) 100%);
+      z-index: 1;
+    }
+    .product-cover-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transform: scale(1.05);
+      filter: brightness(0.7);
+      transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .product-cover.in-view .product-cover-bg { transform: scale(1); }
 
-    #preview-category-name {
+    .product-cover-content {
+      position: relative;
+      z-index: 2;
+      padding: 4rem 6vw 5rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .product-cover-content > * {
+      margin: 0;
+      padding-left: 0;
+      text-indent: 0;
+      align-self: flex-start;
+    }
+    .product-cover-content .eyebrow {
       display: block;
-      font-size: clamp(2.5rem, 6vw, 7rem);
+      margin-bottom: 1.25rem;
+      margin-left: -0.25em; /* compensa letter-spacing 0.5em do uppercase */
+    }
+    .product-cover-title {
+      font-size: 50.2px;
+      font-weight: 200;
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+    }
+    .product-cover-content > p { margin-top: 1.5rem; }
+
+    /* ── Collections index inside a product ── */
+    .collections-index {
+      min-height: 100vh;
+      width: 100%;
+      padding: 6rem 6vw;
+      background: #000;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .collections-index::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('autoload/_FJR5431.jpg') center / cover no-repeat;
+      opacity: 0.15;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .collections-index > * {
+      max-width: 90rem;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .collections-index .index-list { gap: 0.25rem; }
+    .collections-index .index-link { font-size: 50.2px; }
+
+    /* ── Collection cover ── */
+    .collection-cover {
+      position: relative;
+      width: 100%;
+      min-height: 78vh;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      isolation: isolate;
+      color: #fff;
+    }
+    .collection-cover .eyebrow { color: rgba(255,255,255,0.55); }
+    .collection-cover::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+      z-index: 1;
+    }
+    .collection-cover-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transform: scale(1.08);
+      filter: brightness(0.75);
+      transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .collection-cover.in-view .collection-cover-bg { transform: scale(1); }
+
+    .collection-cover-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem 6vw 4rem;
+      width: 100%;
+      max-width: 90rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .collection-cover-content > * {
+      margin: 0;
+      padding-left: 0;
+      text-indent: 0;
+      align-self: flex-start;
+    }
+    .collection-cover-content .eyebrow {
+      display: block;
+      margin-bottom: 1.25rem;
+      margin-left: -0.25em; /* compensa letter-spacing 0.5em do uppercase */
+    }
+    .collection-cover-title {
+      font-size: clamp(2.5rem, 7vw, 6rem);
       font-weight: 200;
       letter-spacing: -0.04em;
       line-height: 0.85;
-      color: #fff;
-      margin-bottom: 28px;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.5);
     }
-
-    #preview-description {
-      display: block;
-      font-size: 17px;
+    .collection-cover-desc {
+      margin-top: 1.6rem !important;
+      max-width: 38rem;
+      color: rgba(255,255,255,0.72);
       font-weight: 300;
+      font-size: 1.05rem;
       line-height: 1.6;
-      color: rgba(255,255,255,0.75);
-      text-shadow: 0 4px 30px rgba(0,0,0,0.5);
     }
 
-    .dolly-image {
+    /* ── Photo stream (replaces carousel — full-screen photos) ── */
+    .photo-stream {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scale(1.1);
-      transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* MetaLab Reveal State */
-    .preview-active #preview-viewport {
-      opacity: 1;
-      clip-path: inset(0% 0% 0% 0%);
-      transform: scale(1);
-    }
-
-    .preview-active .dolly-image {
-      transform: scale(1.3);
-    }
-
-    /* ── Background Video & Image Layer ── */
-    #categories-bg-container {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    #categories-bg-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.4;
-      transition: opacity 1s ease;
-    }
-
-    #category-bg-image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 1.2s ease, transform 2s ease;
-      transform: scale(1.05);
-    }
-    .cbg-layer {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-      filter: grayscale(0.55) saturate(0.9) contrast(1.05) brightness(0.45);
-      will-change: opacity;
-    }
-    .cbg-layer.is-active { opacity: 1; }
-
-    .preview-active #category-bg-image {
-      opacity: 1; /* Fully opaque */
-      transform: scale(1);
-    }
-    .preview-active #categories-bg-video {
-      opacity: 0; /* Hide video */
-    }
-
-    /* ── UI Elements ── */
-    #page-curtain {
-      position: fixed;
-      inset: 0;
       background: #000;
     }
-
-    .reveal-card {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    .photo-stream-item {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+      cursor: zoom-in;
     }
-    .reveal-card.in-view {
-      opacity: 1;
-      transform: translateY(0);
+    .photo-stream-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      transition: transform 1.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .photo-stream-item.in-view img { transform: scale(1); }
+    .photo-stream-caption {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 6vw;
+      color: rgba(255,255,255,0.95);
+      font-size: 16.5px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+      pointer-events: none;
+      z-index: 2;
+    }
+    /* Temporary inline photo number — appears next to the name */
+    .photo-num-inline {
+      display: inline-block;
+      margin-right: 0.8em;
+      padding: 3px 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      letter-spacing: 0.15em;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      .photo-stream-item { height: 70vh; }
+      .photo-stream-caption { bottom: 1.5rem; left: 7vw; font-size: 15px; letter-spacing: 0.26em; }
     }
 
-    /* Mobile: sticky section + page-scroll-driven picker */
+    /* ── Video section ── */
+    .video-block-wrap {
+      max-width: 90rem;
+      margin: 0 auto;
+      padding: 4rem 6vw 7rem;
+      background: #000;
+    }
+    .video-section-header {
+      margin-bottom: 2.5rem;
+    }
+    /* Carousel: shows 3 videos at a time (responsive) */
+    .video-carousel {
+      position: relative;
+    }
+    .video-row {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding-bottom: 0.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Center when there's only one video */
+    .video-row:has(> .video-block:only-child) {
+      justify-content: center;
+    }
+    .video-row::-webkit-scrollbar { display: none; }
+    .video-row { scrollbar-width: none; }
+    .video-block {
+      flex: 0 0 auto;
+      width: calc((100% - 2rem) / 3); /* 3 per view, minus 2 gaps of 1rem */
+      max-width: none;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      cursor: pointer;
+      background: #000;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+    .video-block.vertical {
+      width: calc((100% - 2rem) / 3);
+      max-width: none;
+      aspect-ratio: 9 / 16;
+    }
     @media (max-width: 1024px) {
-      html {
-        scroll-snap-type: y proximity;
-      }
+      .video-block,
+      .video-block.vertical { width: calc((100% - 1rem) / 2); }
+    }
+    @media (max-width: 640px) {
+      .video-block,
+      .video-block.vertical { width: 80%; }
+    }
 
-      #hero-viewport,
-      #categories-section {
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-      }
+    /* Navigation bar BELOW the video row, never overlapping videos */
+    .video-nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .video-nav {
+      background: transparent;
+      border: 0;
+      padding: 6px;
+      color: rgba(255,255,255,0.55);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    }
+    .video-nav:hover { color: #fff; transform: translateX(0) scale(1.15); }
+    .video-nav.prev:hover { transform: translateX(-4px) scale(1.15); }
+    .video-nav.next:hover { transform: translateX(4px) scale(1.15); }
+    .video-nav.is-disabled { opacity: 0.2; pointer-events: none; }
+    .video-nav .material-symbols-outlined { font-size: 24px; }
+    .video-progress {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.45);
+      font-variant-numeric: tabular-nums;
+      min-width: 70px;
+      text-align: center;
+    }
+    .video-carousel.no-overflow .video-nav-bar { display: none; }
+    .video-block img.video-poster,
+    .video-block video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .video-block img.video-poster { opacity: 0.92; }
+    .video-block:hover img.video-poster { opacity: 1; transform: scale(1.02); }
+    .video-block iframe {
+      width: 100%; height: 100%; border: 0; display: block;
+    }
+    .video-block .video-play {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px; height: 48px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .video-block:hover .video-play {
+      background: #cc0000;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+    .video-block .video-play::before {
+      content: '';
+      border-style: solid;
+      border-width: 10px 0 10px 16px;
+      border-color: transparent transparent transparent #fff;
+      margin-left: 4px;
+    }
+    .video-block.custom-player.playing { cursor: default; }
+    .video-block.custom-player.playing .video-play { display: none; }
 
-      #preview-viewport, #fixed-info-box {
-        display: none !important;
-      }
+    /* ── Side index (fixed right, transparent until hover) ── */
+    .side-index {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: flex-end;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      pointer-events: none;
+      max-height: 70vh;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+      mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+    }
+    .side-index::-webkit-scrollbar { display: none; }
+    .side-index { scrollbar-width: none; }
+    .side-index.is-revealed {
+      opacity: 0.25;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .side-index.is-revealed:hover { opacity: 1; }
+    .side-index a {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 0;
+      transition: color 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+      opacity: 0.7;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .side-index a::after {
+      content: '';
+      width: 16px; height: 1px;
+      background: currentColor;
+      opacity: 0.4;
+      transition: width 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+    }
+    .side-index a:hover { opacity: 1; transform: translateX(-6px); }
+    .side-index a:hover::after { width: 28px; opacity: 1; }
+    .side-index a.is-active { opacity: 1; font-weight: 500; }
+    .side-index a.is-active::after { width: 32px; opacity: 1; }
 
-      #categories-section {
-        display: block;
-        height: 320vh;
-        min-height: 320vh;
-        position: relative;
-      }
+    .side-index .side-collection {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      margin-right: 14px;
+      opacity: 0.4;
+      padding: 3px 0;
+    }
+    .side-index .side-collection.is-active { opacity: 0.85; }
+    .side-index .side-collection::after { display: none; }
 
-      #categories-bg-container {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        width: 100%;
-        margin-bottom: -100vh;
-      }
+    @media (max-width: 1024px) {
+      .side-index { display: none; }
+    }
 
-      .category-list-container {
-        position: sticky;
-        top: 0;
-        width: 100%;
-        height: 100vh;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        perspective: 1100px;
-        perspective-origin: 50% 50%;
-      }
+    /* ── Floating actions (search + back to top) ── */
+    .floating-action {
+      position: fixed;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease,
+                  background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .floating-action.is-visible {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .floating-action:hover {
+      background: #fff; color: #000; border-color: #fff;
+    }
+    .floating-action .material-symbols-outlined { font-size: 20px; }
 
-      #category-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        height: auto;
-        overflow: visible;
-        transform: translateY(var(--list-y, 0px));
-        will-change: transform;
-      }
+    #floating-search { top: 22px; right: 22px; }
+    #back-to-top {
+      bottom: 22px; right: 22px;
+      transform: translateY(6px);
+    }
+    #back-to-top.is-visible { transform: translateY(0); }
 
-      .category-link {
-        flex: 0 0 auto;
-        width: auto !important;
-        min-width: 144px;
-        max-width: 204px;
-        font-size: 18px;
-        padding: 7px 19px !important;
-        margin-bottom: 0;
-        color: rgba(255, 255, 255, 0.7);
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 0;
-        text-align: center;
-        text-decoration: none;
-        transform-origin: 50% 50%;
-        transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
-        opacity: var(--pick-opacity, 1);
-        transition: color 0.25s ease-out,
-                    background 0.25s ease-out,
-                    border-color 0.25s ease-out;
-        will-change: transform, opacity;
-      }
+    /* ── Section dividers ── */
+    .section-divider {
+      max-width: 90rem;
+      margin: 0 auto;
+      padding: 0 6vw;
+      background: #000;
+    }
+    .section-divider > div {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.10), transparent);
+    }
 
-      .category-link:hover {
-        transform: translateZ(var(--pick-z, 0px)) scale(var(--pick-scale, 1));
-      }
+    /* ── Fade-up reveal ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-      .category-link.is-active {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.18);
-        border-color: rgba(255, 255, 255, 0.4);
-      }
+    /* ── Lightbox ── */
+    #lightbox {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: none;
+      align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    #lightbox.active { display: flex; opacity: 1; }
+    #lightbox-img {
+      max-width: 92vw; max-height: 88vh;
+      object-fit: contain;
+      transform: scale(0.96);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    #lightbox.active #lightbox-img { transform: scale(1); }
+    .lb-btn {
+      position: absolute; z-index: 1010;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+    .lb-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.06); }
+    .lb-close { top: 32px; right: 32px; }
+    .lb-prev { left: 28px; top: 50%; transform: translateY(-50%); }
+    .lb-next { right: 28px; top: 50%; transform: translateY(-50%); }
+    .lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.06); }
 
-      .category-link::before,
-      .category-link::after {
-        display: none;
-      }
-
-      .category-link .mobile-title {
-        display: inline-block;
-        font-size: inherit;
-        font-weight: 500;
-        letter-spacing: 0.04em;
-        color: inherit;
-        text-shadow: none;
-      }
-
-      /* Mobile: vídeo de fundo é removido, fundo é a imagem da categoria ativa */
-      #categories-bg-video {
-        display: none;
-      }
-
-      #category-bg-image {
-        opacity: 1;
-        transform: none;
-      }
-      .cbg-layer {
-        filter: grayscale(0.3) saturate(1) contrast(1) brightness(0.55);
-      }
+    /* ── Mobile tweaks ── */
+    @media (max-width: 768px) {
+      .index-block { padding: 5rem 7vw; }
+      .product-cover-content { padding: 3rem 7vw 4rem; }
+      .product-cover-title { font-size: clamp(3rem, 16vw, 6rem); }
+      .collections-index { padding: 5rem 7vw 2rem; }
+      .collection-cover { min-height: 65vh; }
+      .collection-cover-content { padding: 2.5rem 7vw 3rem; }
+      .carousel-block { padding: 3rem 5vw 5rem; }
+      .carousel-viewport { aspect-ratio: 4/5; }
+      .slide-caption { padding: 1.25rem 1.5rem 1.25rem; font-size: 10px; letter-spacing: 0.26em; }
+      .thumb { width: 48px; height: 48px; }
     }
   </style>
 </head>
 
 <body class="antialiased selection:bg-white selection:text-black">
 
-
-
-  <!-- Search overlay only (nav bar stays hidden) -->
   <parket-nav return-url="index.html" return-text=""></parket-nav>
 
-  <!-- Hero with Scroll Zoom -->
+  <!-- Side index (right) -->
+  <nav id="side-index" class="side-index" aria-label="Índice"></nav>
+
+  <!-- Floating actions -->
+  <button id="floating-search" class="floating-action" type="button" aria-label="Buscar">
+    <span class="material-symbols-outlined">search</span>
+  </button>
+  <button id="back-to-top" class="floating-action" type="button" aria-label="Voltar ao topo">
+    <span class="material-symbols-outlined">arrow_upward</span>
+  </button>
+
+  <!-- ─── HERO ─── -->
   <section id="hero-viewport">
     <div id="hero-sticky">
       <div id="hero-bg" style="background-image: url('autoload/Hero.webp');"></div>
       <div id="hero-content" class="text-center">
-        <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50 font-['Inter']">Coleção 2026</span>
+        <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50">Coleção 2026</span>
       </div>
       <img decoding="async" src="logo-parket.webp" alt="Parket" class="absolute top-6 left-1/2 -translate-x-1/2 h-4 md:h-5 w-auto opacity-80 z-10">
       <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
@@ -544,59 +673,30 @@
     </div>
   </section>
 
-  <!-- Floating search button (top-right) — appears when categories section is fully in view -->
-  <button id="categories-search-btn" type="button" aria-label="Buscar">
-    <span class="material-symbols-outlined">search</span>
-    <span class="label">Buscar...</span>
-  </button>
-
-  <!-- Interactive Categories Section -->
-  <section id="categories-section">
-    <div id="categories-bg-container">
-      <video id="categories-bg-video" src="autoload/hero.mp4?v=20260429" autoplay muted loop playsinline poster="autoload/Hero.webp"></video>
-      <div id="category-bg-image">
-        <div class="cbg-layer is-active" data-layer="a" style="background-image: url('autoload/Hero.webp');"></div>
-        <div class="cbg-layer" data-layer="b"></div>
-      </div>
-    </div>
-    
-    <div class="category-list-container">
-      <div id="category-list" class="flex flex-col items-start gap-1">
-        <!-- List items injected via JS -->
-      </div>
-    </div>
-
-    <!-- Dolly Zoom Preview (Floating) -->
-    <div id="preview-viewport">
-      <div id="preview-reveal-wrapper">
-        <div class="dolly-container">
-          <img decoding="async" id="preview-image" src="" class="dolly-image" alt="Preview">
-        </div>
-      </div>
-    </div>
-
-    <!-- Stable Info Box -->
-    <div id="fixed-info-box">
-      <span id="preview-category-name">Categoria</span>
-      <p id="preview-description">Descrição da categoria.</p>
+  <!-- ─── ESCOLHA UM PRODUTO ─── -->
+  <section id="products-index" class="index-block">
+    <div class="w-full max-w-screen-xl mx-auto">
+      <span class="eyebrow block mb-10 fade-up">Índice</span>
+      <h2 class="display-title text-[clamp(1.5rem,3vw,2.4rem)] mb-14 text-white/70 fade-up" style="transition-delay: 0.05s">
+        Escolha um produto:
+      </h2>
+      <nav id="products-nav" class="index-list fade-up" style="transition-delay: 0.12s"></nav>
     </div>
   </section>
 
-  <!-- Technical Section -->
-  <main class="relative z-20 bg-black">
-    <section class="px-12 max-w-screen-2xl mx-auto pt-16 pb-32">
+  <!-- ─── PRODUCT SECTIONS (injected) ─── -->
+  <main id="products" class="relative z-10 bg-black"></main>
+
+  <!-- ─── GUIA TÉCNICO ─── -->
+  <section class="relative z-20 bg-black text-white">
+    <div class="px-12 max-w-screen-2xl mx-auto pt-32 pb-32">
       <div class="border-t border-white/10 pt-16">
-        <span class="font-label uppercase tracking-[0.5em] text-[10px] text-white/30 mb-6 block">Guia Técnico</span>
-        <h2 class="text-[clamp(2.5rem,4vw,5rem)] font-extralight tracking-[-0.04em] leading-[0.9] mb-20 max-w-3xl">
-          Madeira, um material vivo
-        </h2>
+        <span class="eyebrow block mb-6">Guia Técnico</span>
+        <h2 class="display-title text-[clamp(2.5rem,4vw,5rem)] mb-20 max-w-3xl">Madeira, um material vivo</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-20">
-
-          <!-- LEFT COLUMN -->
           <div class="flex flex-col gap-20">
-            <!-- Tone palette -->
-            <div class="reveal-card">
+            <div class="fade-up">
               <div class="w-fit">
                 <div class="flex items-center gap-2 mb-6">
                   <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#3a2414;"></div>
@@ -608,14 +708,12 @@
                   <div class="w-[40.8px] h-[40.8px] md:w-12 md:h-12 rounded-full border border-white/10" style="background:#ead8c3;"></div>
                 </div>
                 <div class="flex items-center justify-between text-[8.5px] md:text-[10px] uppercase tracking-[0.3em] text-white/40">
-                  <span>Escuro</span>
-                  <span>Claro</span>
+                  <span>Escuro</span><span>Claro</span>
                 </div>
               </div>
             </div>
 
-            <!-- Cor -->
-            <div class="reveal-card">
+            <div class="fade-up">
               <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
                 <span class="w-1 h-1 bg-white/50 rounded-full"></span> Cor
               </h3>
@@ -626,8 +724,7 @@
               </div>
             </div>
 
-            <!-- Grão Prateado -->
-            <div class="reveal-card">
+            <div class="fade-up">
               <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
                 <span class="w-1 h-1 bg-white/50 rounded-full"></span> Grão Prateado
               </h3>
@@ -638,10 +735,8 @@
             </div>
           </div>
 
-          <!-- RIGHT COLUMN -->
           <div class="flex flex-col gap-20">
-            <!-- Amostras -->
-            <div class="reveal-card">
+            <div class="fade-up">
               <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
                 <span class="w-1 h-1 bg-white/50 rounded-full"></span> Amostras
               </h3>
@@ -651,28 +746,25 @@
               </div>
             </div>
 
-            <!-- Climate diagram -->
-            <div class="reveal-card liquid-glass p-10 flex flex-col items-center">
+            <div class="fade-up p-10 flex flex-col items-center" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
               <div class="flex items-center gap-12 mb-4 text-2xl">
-                <span>☀️</span>
-                <span>🌧️</span>
+                <span>☀️</span><span>🌧️</span>
               </div>
               <div class="flex items-center gap-4 w-full">
                 <span class="text-[10px] uppercase tracking-[0.3em] text-white/50 whitespace-nowrap">Clima<br>Seco</span>
-                <svg class="w-2.5 h-2.5 text-white/40 flex-shrink-0" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="8,1 8,9 2,5"/></svg>
+                <svg class="w-2.5 h-2.5 text-white/40 flex-shrink-0" viewBox="0 0 10 10" fill="currentColor"><polygon points="8,1 8,9 2,5"/></svg>
                 <div class="flex-1 h-12" style="background: linear-gradient(to right, #b98862 0%, #d9ab87 50%, #b98862 100%); clip-path: polygon(0 30%, 100% 10%, 100% 90%, 0 70%);"></div>
-                <svg class="w-2.5 h-2.5 text-white/40 flex-shrink-0" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="2,1 2,9 8,5"/></svg>
+                <svg class="w-2.5 h-2.5 text-white/40 flex-shrink-0" viewBox="0 0 10 10" fill="currentColor"><polygon points="2,1 2,9 8,5"/></svg>
                 <span class="text-[10px] uppercase tracking-[0.3em] text-white/50 whitespace-nowrap">Clima<br>Úmido</span>
               </div>
               <div class="mt-4 text-[10px] uppercase tracking-[0.3em] text-white/50 flex items-center gap-2">
-                <svg class="w-2 h-2" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,2 9,2 5,8"/></svg>
+                <svg class="w-2 h-2" viewBox="0 0 10 10" fill="currentColor"><polygon points="1,2 9,2 5,8"/></svg>
                 Retração / Dilatação
-                <svg class="w-2 h-2" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="5,2 9,8 1,8"/></svg>
+                <svg class="w-2 h-2" viewBox="0 0 10 10" fill="currentColor"><polygon points="5,2 9,8 1,8"/></svg>
               </div>
             </div>
 
-            <!-- Condições Climáticas -->
-            <div class="reveal-card">
+            <div class="fade-up">
               <h3 class="font-label uppercase tracking-[0.3em] text-[10px] text-white/50 mb-6 flex items-center gap-2">
                 <span class="w-1 h-1 bg-white/50 rounded-full"></span> Condições Climáticas
               </h3>
@@ -683,274 +775,808 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
+  <!-- ─── Lightbox ─── -->
+  <div id="lightbox">
+    <button class="lb-btn lb-close" onclick="closeLightbox()"><span class="material-symbols-outlined">close</span></button>
+    <button class="lb-btn lb-prev" onclick="lbPrev()"><span class="material-symbols-outlined">chevron_left</span></button>
+    <img decoding="async" id="lightbox-img" src="" alt="Zoom">
+    <button class="lb-btn lb-next" onclick="lbNext()"><span class="material-symbols-outlined">chevron_right</span></button>
+  </div>
 
   <script>
-    (function () {
-      // Mobile: impede o vídeo de fundo de carregar (não vai aparecer mesmo)
-      if (window.matchMedia('(max-width: 1024px)').matches) {
-        const v = document.getElementById('categories-bg-video');
-        if (v) {
-          v.removeAttribute('autoplay');
-          v.removeAttribute('src');
-          v.pause && v.pause();
-          v.load && v.load();
-        }
-      }
-
-      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
-      const CARD_INFO = {
-        1: { title: 'Escadas', folder: 'escadas', desc: 'A ascensão da forma. Design esculpido em madeira para conectar níveis com elegância absoluta.' },
-        2: { title: 'Decks', folder: 'decks', desc: 'O exterior elevado. Resistência e beleza natural para transformar terraços em refúgios atemporais.' },
-        3: { title: 'Portas', folder: 'portas', desc: 'O limiar da sofisticação. Portas que narram a identidade do ambiente desde o primeiro toque.' },
-        4: { title: 'Pisos', folder: 'pisos', desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.' },
-        5: { title: 'Painéis', folder: 'paineis', desc: 'Geometria viva. Revestimentos que trazem ritmo e profundidade às paredes através da marcenaria fina.' },
-        6: { title: 'Forros', folder: 'forros', desc: 'Perspectiva superior. Detalhes em madeira que elevam o teto a uma obra de arte arquitetônica.' },
-        7: { title: 'Download Texturas', folder: 'texturas', image: 'texturas/autoload/chevron-naturalle.webp', hero: 'texturas/autoload/espinha-de-peixe-mont-blanc.webp', desc: 'Padrões e desenhos autorais. Cortes, chevrons e espinhas de peixe que transformam a superfície em expressão.' },
-      };
-
-      async function findImage(folder, pattern = 'image') {
-        for (const ext of EXTS) {
-          const src = `${folder}/${pattern}.${ext}`;
-          try {
-            const res = await fetch(src, { method: 'HEAD' });
-            if (res.ok) return src;
-          } catch (e) {}
-        }
-        
-        if (pattern === 'hero') {
-          const subfolders = ['brazil', 'carvalhos', 'unicos'];
-          for (const sub of subfolders) {
-            for (const ext of EXTS) {
-              const src = `${folder}/${sub}/02.${ext}`;
-              try {
-                const res = await fetch(src, { method: 'HEAD' });
-                if (res.ok) return src;
-              } catch (e) {}
+    (async function () {
+      // ─── DATA ────────────────────────────────────────────────────
+      const PRODUCTS = [
+        {
+          key: 'pisos',
+          title: 'Pisos',
+          desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.',
+          cover: 'pisos/image.webp',
+          videos: [
+            { type: 'youtube', id: '9HUVFWeCxsQ', vertical: true, title: 'Carvalho Europeu em espinha de peixe · Projeto Loja Carol Bassi' },
+            { type: 'youtube', id: '6AU-gNo13zc', vertical: true, title: 'Paginação Chevron em Carvalho Europeu Natural' },
+            { type: 'youtube', id: 'aWqu-yIJ1H4', vertical: true, title: 'Residência em piso Chevron Carvalho Europeu tom escuro' },
+            { type: 'youtube', id: 'EBua9XEj78g', vertical: true, title: 'Cliente Parket voltou para uma nova obra' },
+            { type: 'youtube', id: 'i4gXTyMsTZo', vertical: true, title: 'Coleção Brazil: o espectro tonal da madeira brasileira' },
+            { type: 'youtube', id: 'j6ptdgucfRs', vertical: true, poster: 'pisos/brazil/01.webp', title: 'Brazil' },
+            { type: 'youtube', id: 'RtGx42_LvDk', vertical: true, title: 'Carvalho Europeu em chevron, mármore Mont Blanc e latão num mesmo plano' },
+            { type: 'youtube', id: '9W65gsFseU4', vertical: true, title: 'Régua de 11 metros de comprimento, fabricada pela Parket. Sem emenda' }
+          ],
+          collections: [
+            {
+              key: 'brazil', title: 'Brazil',
+              desc: 'A autenticidade das madeiras brasileiras traduzida em réguas de beleza única. Uma coleção que exalta a alma tropical com cores profundas e fibras marcantes.',
+              localFolder: 'pisos/brazil',
+              names: { 1: 'Sucupira', 2: 'Canela', 3: 'Peroba Mica', 4: 'Peroba Mica', 5: 'Cumaru', 6: 'Cumaru', 7: 'Tauari Naturalle', 8: 'Cumaru', 9: 'Chevron de Tauari', 10: 'Cumaru', 11: 'Sucupira Rústica' }
+            },
+            {
+              key: 'eternos', title: 'Eternos',
+              desc: 'Tons e texturas que atravessam o tempo. Uma coleção concebida para durar visualmente e estruturalmente, em qualquer cenário.',
+              localFolder: 'pisos/eternos',
+              names: { 1: 'Bambu Demolição', 2: 'Canela Demolição', 4: 'Canela Demolição', 5: 'Canela Demolição' }
+            },
+            {
+              key: 'unicos', title: 'Únicos',
+              desc: 'Peças raras com desenhos irrepetíveis. Cada régua é assinada pela natureza com veios, nós e matizes singulares.',
+              localFolder: 'pisos/unicos',
+              names: { 1: 'Pau ferro', 2: 'Lapacho', 3: 'Momoki de Marrocos', 4: 'Nogueira' }
+            },
+            {
+              key: 'carvalhos', title: 'Carvalhos',
+              desc: 'A nobreza do Carvalho Europeu em texturas que contam histórias. Tons orgânicos e toques acetinados que trazem o equilíbrio perfeito entre tradição e modernidade.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg", name: "Carvalho Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/27e09f2b-808a-4ecb-b60d-c2702e023383-1.jpg", name: "Carvalho Europeu Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/aa120b24-69d4-48d5-b47f-b73099b875ef-2-1.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/european-oak-capuccino-1.jpeg", name: "Carvalho Europeu Cappuccino" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/European-Oak-Giant-1.jpg", name: "Carvalho Europeu Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/Imagem_7-30-1.webp", focus: 'bottom' },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/IMG_0150-1-scaled.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/IMG_6862-1-scaled.jpg", name: "Carvalho Europeu Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/IMG_8925-2-1.jpeg", name: "Carvalho Europeu Capuccino" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/IMG_8932-2-1.jpeg", name: "Carvalho Europeu Capuccino" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/oak-flooring-dinesen-victoria-miro-gallery-wide-wooden-floorboards-02-1.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2026/03/sao_paulo_tch1-1.jpg", name: "Carvalho Europeu Marrone" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-01.jpg", name: "Carvalho Europeu Milano" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-03.jpg", name: "Carvalho Europeu Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-05.jpg", name: "Carvalho Europeu Nevado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-06.jpg", name: "Carvalho Europeu Batman" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-07.jpg", name: "Carvalho Europeu Armani" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-08.jpg", name: "Carvalho Europeu Armani" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-09.jpg", name: "Carvalho Europeu Smoke" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-11.jpg", name: "Carvalho Europeu Giz" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-12.jpg", name: "Carvalho Europeu Wild Grey" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-13.jpg", name: "Carvalho Europeu Armani" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-15.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-16.jpg", name: "Carvalho Europeu Smoke" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-18.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-20.jpg", name: "Carvalho Europeu Milano" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-21.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-22.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-24.jpg", name: "Carvalho Europeu Nevado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CA-25.jpg", name: "Carvalho Europeu Batman" }
+              ]
+            },
+            {
+              key: 'grandiosos', title: 'Grandiosos',
+              desc: 'Réguas de proporções imponentes que ampliam e valorizam o espaço. Uma coleção que celebra o impacto do formato XL e a continuidade visual da madeira.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg", name: "Carvalho Europeu Smoke" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-05.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-06.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-07.jpg", name: "Pinho de Riga Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-08.jpg", name: "Pinho de Riga Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-09.jpg", name: "Pinho de Riga" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-11.jpg", name: "Pinho de Riga Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-12.jpg", name: "Carvalho Europeu Naturalle" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-13.jpg", name: "Carvalho Europeu Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-03.jpg", name: "Pinho de Riga Mont Blanc" }
+              ]
+            },
+            {
+              key: 'pinho-de-riga', title: 'Pinho de Riga',
+              desc: 'Resgatado de antigas construções europeias, o Pinho de Riga é sinônimo de história e resiliência. Uma madeira com alma que traz profundidade a qualquer projeto contemporâneo.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg", name: "Pinho de Riga" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-02.jpg", name: "Pinho de Riga" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-03.jpg", name: "Pinho de Riga" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-04.jpg", name: "Pinho de Riga" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-05.jpg", name: "Pinho de Riga" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-06.jpg", name: "Pinho de Riga" }
+              ]
+            },
+            {
+              key: 'classicos', title: 'Clássicos',
+              desc: 'Padrões atemporais que definem a sofisticação residencial. Uma linha dedicada à elegância contínua que transcende tendências passageiras.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-02.jpg", name: "Chevron Naturale" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-03.jpg", name: "Chevron" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-05.jpg", name: "Chevron" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-06.jpg", name: "Paginação especial" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-04.jpg", name: "Chevron Smoked" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-07.jpg", name: "Espinha de Peixe em Carvalho Europeu" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-01.jpg", name: "Chevron em Nogueira" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-08.jpg", name: "Chevron em Carvalho Europeu Mont Blanc" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-09.jpg", name: "Carvalho Europeu Batman" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-10.jpg", name: "Carvalho Europeu Mont Blanc" }
+              ]
+            },
+            {
+              key: 'listone-giordano',
+              title: 'Wood + Stone',
+              titleHtml: 'Wood + <span class="italic font-normal">Stone</span>',
+              desc: 'A fusão sublime entre a madeira nobre e a imponência mineral. Uma experiência tátil e visual única que redefine a elegância nos detalhes.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg", name: "Carvalho Europeu Smoke + Travertino Navona" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-05.jpg", name: "Carvalho Europeu All Black + Carrara" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-06.jpg", name: "Nogueira + Nero Marquina + Latão" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-07.jpg", name: "Carvalho Europeu Naturalle + Travertino Navona" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-09.jpg", name: "Nogueira + Latão" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-10.jpg", name: "Carvalho Europeu Armani com paginação petala" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-11.jpg", name: "Nogueira + Nero Marquina + Latão" }
+              ]
             }
-          }
+          ]
+        },
+        {
+          key: 'decks',
+          title: 'Decks',
+          desc: 'O exterior elevado. Resistência e beleza natural para transformar terraços em refúgios atemporais.',
+          cover: 'decks/image.webp',
+          collections: [
+            {
+              key: 'brazil', title: 'Brazil',
+              desc: 'Nossa homenagem às raízes tropicais. A Coleção Brazil traz o calor e a beleza duradoura da madeira nativa brasileira para áreas externas.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg", name: "Itaúba" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-10.jpg", name: "Cumaru Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-09.jpg", name: "Cumaru Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-06.jpg", name: "Ipê Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-05.jpg", name: "Cumaru" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-04.jpg", name: "Ipê Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-03.jpg", name: "Ipê" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-01.jpg", name: "Ipê Oxidado + Cumaru" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-08.jpg", name: "Itaúba Oxidada" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-07.jpg", name: "Cumaru Oxidado" }
+              ]
+            },
+            {
+              key: 'eurodeck', title: 'Eurodeck',
+              desc: 'Engenharia de precisão com peças longas e uniformes. Uma seleção premium que alia simetria impecável e refinamento absoluto para o seu deck.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-01.jpg", name: "Eurodeck Preto" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-02.jpg", name: "Eurodeck Marrom" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-03.jpg", name: "Eurodeck Cinza" }
+              ]
+            },
+            {
+              key: 'kebony', title: 'Kebony',
+              desc: 'Tecnologia norueguesa de modificação que transforma madeiras sustentáveis em joias estéticas e duráveis. O Kebony ganha uma belíssima pátina prateada atemporal.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-01.jpg", name: "Kebony Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-02.jpg", name: "Kebony Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-03.jpg", name: "Kebony Oxidado" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-04.jpg", name: "Kebony Clear" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-05.jpg", name: "Deck de Mamoki" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-06.jpg", name: "Kebony Clear" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-07.jpg", name: "Kebony Clear" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-08.jpg", name: "Kebony Clear" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-09.jpg", name: "Kebony Clear" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-10.jpg", name: "Kebony Clear" }
+              ]
+            },
+            {
+              key: 'unicos', title: 'Únicos',
+              desc: 'Projetos de decks que vão além do convencional. Peças de arte natural e padrões sob medida desenhados para áreas molhadas que respiram vanguarda e ousadia.',
+              images: [
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-05.jpg", name: "Teca" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-06.jpg", name: "Teca" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-03.jpg", name: "Teca Oxidada" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-04.jpg", name: "Teca Oxidada" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-01.jpg" },
+                { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-02.jpg", name: "Peroba Demolição" }
+              ]
+            }
+          ]
+        },
+        {
+          key: 'escadas',
+          title: 'Escadas',
+          desc: 'A ascensão da forma. Design esculpido em madeira para conectar níveis com elegância absoluta.',
+          cover: 'escadas/hero.webp',
+          videos: [
+            { type: 'youtube', id: 'J82KxeHE1Yg', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' }
+          ],
+          images: [
+            { src: "https://parket.com.br/wp-content/uploads/2026/05/IMG_1848.jpeg", name: "Wide Grey" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-03.jpg", name: "Peroba do Campo" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-05.jpg", name: "Peroba Demolição" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-07.jpg", name: "Peroba Demolição" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-09.jpg", name: "Carvalho Europeu Naturalle" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-10.jpg", name: "Carvalho Europeu Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-11.jpg", name: "Pinho de Riga" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-13.jpg", name: "Carvalho Europeu Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-14.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_ESC-16.jpg", name: "Carvalho Europeu Black" }
+          ]
+        },
+        {
+          key: 'portas',
+          title: 'Portas',
+          desc: 'O limiar da sofisticação. Portas que narram a identidade do ambiente desde o primeiro toque.',
+          cover: 'portas/image.webp',
+          images: [
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-01.jpg", name: "Muxarabi de Cumaru Premium" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-02.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-04.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-05.jpg", name: "Laca Branca" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-06.jpg", name: "Muxarabie em Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-07.jpg", name: "Muxarabi de Carvalho Naturalle" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-09.jpg", name: "Carvalho Europeu Mont Blanc + Muxarabi de Itaúba" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-10.jpg", name: "Shou Sugi Ban" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-16.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-03.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-08.jpg" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PO-15.jpg" }
+          ]
+        },
+        {
+          key: 'paineis',
+          title: 'Painéis',
+          desc: 'Geometria viva. Revestimentos que trazem ritmo e profundidade às paredes através da marcenaria fina.',
+          cover: 'paineis/image.webp',
+          images: [
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-01.jpg", name: "Carvalho Europeu Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-02.jpg", name: "Ripado de Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-03.jpg", name: "Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-06.jpg", name: "Freijó Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-08.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-09.jpg", name: "Carvalho Europeu Mont Blanc" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-10.jpg", name: "Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-11.jpg", name: "Shou Sugi Ban" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-12.jpg", name: "Carvalho Europeu Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-13.jpg", name: "Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-14.jpg", name: "Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-15.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-16.jpg", name: "Shou Sugi Ban" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-17.jpg", name: "Shou Sugi Ban + Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PA-18.jpg", name: "Carvalho Europeu Customizado" }
+          ]
+        },
+        {
+          key: 'forros',
+          title: 'Forros',
+          desc: 'Perspectiva superior. Detalhes em madeira que elevam o teto a uma obra de arte arquitetônica.',
+          cover: 'forros/image.webp',
+          videos: [
+            { type: 'mp4', src: 'https://parket.com.br/wp-content/uploads/2026/05/Parket-LaminaCarvalho.mp4', vertical: true, poster: 'forros/video-1-cover.jpg' },
+            { type: 'mp4', src: 'https://parket.com.br/wp-content/uploads/2026/05/ApKikoVertical-1.mp4', vertical: true },
+            { type: 'mp4', src: 'https://parket.com.br/wp-content/uploads/2026/05/ForroObraFelipe.mp4', vertical: true },
+            { type: 'youtube', id: 'ILvIX68_muY', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: 'RtGx42_LvDk', vertical: true, title: 'Carvalho Europeu em chevron, mármore Mont Blanc e latão num mesmo plano' },
+            { type: 'youtube', id: 's31ibiYfs_E', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: 'zImd4pl2yJo', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: '-EvbDbcaFds', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: 'l3ER_9_misQ', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: 'a5RUs8M3E-0', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: 'pWWP7BRaN5A', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' },
+            { type: 'youtube', id: 'z4GFZJSSNw4', vertical: true, title: 'O detalhe que define o projeto premium é aquele que ninguém vê' }
+          ],
+          images: [
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-01.jpg", name: "Carvalho Europeu" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-02.jpg", name: "Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-03.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-04.jpg", name: "Tauari Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-05.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-06.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-07.jpg", name: "Carvalho Europeu Light Brown" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-08.jpg", name: "Peroba do Campo" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-09.jpg", name: "Milano" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-10.jpg", name: "Carvalho Europeu" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-12.jpg", name: "Tauari" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-13.jpg", name: "Cabreúva Dourada" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-14.jpg", name: "Cabreúva Dourada" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-15.jpg", name: "Cabreúva Dourada" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-16.jpg", name: "Cabreúva Dourada" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-17.jpg", name: "Cabreúva Dourada" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-19.jpg", name: "Peroba de Demolição" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-20.jpg", name: "Cumaru" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-21.jpg", name: "Carvalho Europeu Customizado" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-22.jpg", name: "Toblerone de Cabreúva Branca" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-23.jpg", name: "Freijó" },
+            { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_FO-25.jpg", name: "Cumaru" }
+          ]
         }
-        return null;
-      }
+      ];
 
-      const previewViewport = document.getElementById('preview-viewport');
-      const previewImage = document.getElementById('preview-image');
-      const previewName = document.getElementById('preview-category-name');
-      const previewDesc = document.getElementById('preview-description');
-      const bgImageLayer = document.getElementById('category-bg-image');
-      const bgLayers = bgImageLayer ? bgImageLayer.querySelectorAll('.cbg-layer') : [];
-      let activeBgKey = 'a';
+      // ─── HELPERS ─────────────────────────────────────────────────
+      const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
+      const MAX_LOCAL = 30;
 
-      // Cross-fade entre as duas layers para troca suave de imagem
-      function setBgImage(src) {
-        if (!src || !bgImageLayer || bgImageLayer.dataset.src === src) return;
-        const nextKey = activeBgKey === 'a' ? 'b' : 'a';
-        const nextLayer = bgImageLayer.querySelector(`.cbg-layer[data-layer="${nextKey}"]`);
-        const currentLayer = bgImageLayer.querySelector(`.cbg-layer[data-layer="${activeBgKey}"]`);
-        if (!nextLayer || !currentLayer) return;
-        nextLayer.style.backgroundImage = `url('${src}')`;
-        // Garante que o background carregou antes de iniciar o fade
-        requestAnimationFrame(() => {
-          nextLayer.classList.add('is-active');
-          currentLayer.classList.remove('is-active');
-        });
-        activeBgKey = nextKey;
-        bgImageLayer.dataset.src = src;
-      }
+      const probe = (src) => new Promise((res, rej) => {
+        const img = new Image();
+        img.onload = () => res(src);
+        img.onerror = () => rej();
+        img.src = src;
+      });
 
-      const infoBoxEl = document.getElementById('fixed-info-box');
-
-      function setRandomPosition() {
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-
-        // Photo dimensions (matches CSS: width 22vw, aspect-ratio 3/4)
-        const photoWidth = vw * 0.22;
-        const photoHeight = photoWidth * (4 / 3);
-
-        // Right-side info box: right:5vw, width from CSS, plus -30px shift when active
-        const infoBoxWidth = infoBoxEl ? infoBoxEl.offsetWidth : Math.min(400, vw * 0.30);
-        const infoBoxLeftEdge = vw - (vw * 0.05) - infoBoxWidth - 30;
-        // Left-side buttons: padding-left:10vw, width:160px (+ small hover translate)
-        const buttonsRightEdge = (vw * 0.10) + 160 + 8;
-
-        const safeMargin = 40;
-        const minLeft = buttonsRightEdge + safeMargin;
-        const maxLeft = infoBoxLeftEdge - photoWidth - safeMargin;
-
-        // Fallback when viewport is too narrow: center the photo between the two zones
-        const left = maxLeft > minLeft
-          ? minLeft + Math.random() * (maxLeft - minLeft)
-          : Math.max(0, (vw - photoWidth) / 2);
-
-        // Vertical: center the photo vertically so it aligns with the info-box
-        const top = Math.max(0, (vh - photoHeight) / 2);
-
-        previewViewport.style.left = `${left}px`;
-        previewViewport.style.top = `${top}px`;
-      }
-
-      function createListItem(info, withReveal) {
-        const a = document.createElement('a');
-        a.href = `${info.folder}.html`;
-        a.className = withReveal ? 'category-link reveal-card' : 'category-link';
-        a.innerHTML = `<span class="mobile-title">${info.title}</span>`;
-        return a;
-      }
-
-      async function hydrateCard(a, info, isDesktop) {
-        const cardSrc = info.image || await findImage(info.folder, 'image');
-        const heroSrc = info.hero || (await findImage(info.folder, 'hero')) || cardSrc;
-
-        // Guarda no próprio elemento pra mobile e desktop usarem
-        a.__heroSrc = heroSrc;
-        a.__cardSrc = cardSrc;
-        a.__info = info;
-
-        // Pré-carrega a imagem de hero (mobile vai mostrar imediatamente quando o picker focar)
-        if (heroSrc) { const img = new Image(); img.src = heroSrc; }
-
-        if (!isDesktop) return;
-
-        a.addEventListener('mouseenter', () => {
-          if (window.innerWidth > 1024) {
-            setRandomPosition();
-            if (cardSrc) previewImage.src = cardSrc;
-            if (heroSrc) setBgImage(heroSrc);
-            previewName.textContent = info.title;
-            previewDesc.textContent = info.desc;
-            document.body.classList.add('preview-active');
+      async function findLocalImages(folder) {
+        const found = [];
+        let misses = 0;
+        for (let i = 1; i <= MAX_LOCAL; i++) {
+          const num = String(i).padStart(2, '0');
+          let hit = false;
+          for (const ext of EXTS) {
+            try { const src = await probe(`${folder}/${num}.${ext}`); found.push(src); hit = true; break; } catch {}
           }
-        });
-        a.addEventListener('mouseleave', () => {
-          document.body.classList.remove('preview-active');
-        });
+          if (!hit) { if (++misses >= 3) break; } else { misses = 0; }
+        }
+        return found;
       }
 
-      function init() {
-        const listContainer = document.getElementById('category-list');
-        const isDesktop = window.innerWidth > 1024;
-        const cards = [];
+      const getImg = (item) => typeof item === 'string' ? { src: item } : item;
 
-        for (const key in CARD_INFO) {
-          const info = CARD_INFO[key];
-          const el = createListItem(info, isDesktop);
-          listContainer.appendChild(el);
-          cards.push({ el, info });
-        }
+      // ─── LIGHTBOX ────────────────────────────────────────────────
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      let lbImages = [], lbIndex = 0;
+      window.openLightbox = (images, idx) => {
+        lbImages = images; lbIndex = idx;
+        lbImg.src = getImg(lbImages[lbIndex]).src;
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+      window.closeLightbox = () => { lb.classList.remove('active'); document.body.style.overflow = ''; };
+      window.lbNext = () => { lbIndex = (lbIndex + 1) % lbImages.length; lbImg.src = getImg(lbImages[lbIndex]).src; };
+      window.lbPrev = () => { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; lbImg.src = getImg(lbImages[lbIndex]).src; };
+      document.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') lbNext();
+        if (e.key === 'ArrowLeft') lbPrev();
+      });
 
+      // ─── PHOTO STREAM ────────────────────────────────────────────
+      // Sequence of full-screen photos, lazy-loaded, with reveal animation
+      function buildPhotoStream(container, images, title, names) {
+        names = names || {};
+        const photos = images.map(getImg);
 
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('in-view');
+        const inViewIo = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('in-view');
           });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal-card').forEach(c => observer.observe(c));
+        }, { threshold: 0.25 });
 
-        cards.forEach(({ el, info }) => { hydrateCard(el, info, isDesktop); });
+        photos.forEach((img, i) => {
+          const caption = img.name || names[i + 1];
+          const num = String(i + 1).padStart(2, '0');
+          const item = document.createElement('figure');
+          item.className = 'photo-stream-item';
+          const label = caption ? `<span class="photo-num-inline">${num}</span> ${caption}` : `<span class="photo-num-inline">${num}</span>`;
+          const focusStyle = img.focus ? ` style="object-position: center ${img.focus};"` : '';
+          item.innerHTML = `
+            <img decoding="async" loading="lazy" src="${img.src}" alt="${caption || title + ' ' + (i + 1)}"${focusStyle}>
+            <figcaption class="photo-stream-caption">${label}</figcaption>
+          `;
+          item.addEventListener('click', () => openLightbox(photos, i));
+          container.appendChild(item);
+          inViewIo.observe(item);
+        });
       }
 
+      // ─── VIDEO BLOCK ─────────────────────────────────────────────
+      function buildVideos(videos) {
+        if (!videos || !videos.length) return null;
+        const wrap = document.createElement('div');
+        wrap.className = 'video-block-wrap fade-up';
+        const row = videos.map(v => {
+          if (v.type === 'youtube') {
+            const poster = v.poster || `https://i.ytimg.com/vi/${v.id}/${v.vertical ? 'maxresdefault' : 'hqdefault'}.jpg`;
+            return `
+              <div class="video-block${v.vertical ? ' vertical' : ''}" data-yt="${v.id}" role="button" aria-label="Reproduzir vídeo">
+                <img class="video-poster" loading="lazy" decoding="async" src="${poster}" alt="Vídeo">
+                <div class="video-play" aria-hidden="true"></div>
+              </div>`;
+          }
+          // mp4
+          return `
+            <div class="video-block custom-player${v.vertical ? ' vertical' : ''}">
+              <video preload="metadata" playsinline${v.poster ? ` poster="${v.poster}"` : ''}>
+                <source src="${v.src}" type="video/mp4">
+              </video>
+              <div class="video-play" aria-hidden="true"></div>
+            </div>`;
+        }).join('');
+        wrap.innerHTML = `
+          <div class="video-section-header">
+            <span class="eyebrow block mb-3">Em movimento</span>
+            <h3 class="display-title text-[clamp(1.5rem,3vw,2.4rem)] text-white/80">Vídeos</h3>
+          </div>
+          <div class="video-carousel">
+            <div class="video-row">${row}</div>
+            <div class="video-nav-bar">
+              <button class="video-nav prev" type="button" aria-label="Anterior"><span class="material-symbols-outlined">chevron_left</span></button>
+              <span class="video-progress">01 / ${String(videos.length).padStart(2, '0')}</span>
+              <button class="video-nav next" type="button" aria-label="Próximo"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+          </div>
+        `;
+
+        // Carousel: scroll N items at a time (responsive)
+        const carousel = wrap.querySelector('.video-carousel');
+        const rowEl = wrap.querySelector('.video-row');
+        const prevBtn = wrap.querySelector('.video-nav.prev');
+        const nextBtn = wrap.querySelector('.video-nav.next');
+        const progressEl = wrap.querySelector('.video-progress');
+
+        function updateNav() {
+          const max = rowEl.scrollWidth - rowEl.clientWidth - 1;
+          prevBtn.classList.toggle('is-disabled', rowEl.scrollLeft <= 1);
+          nextBtn.classList.toggle('is-disabled', rowEl.scrollLeft >= max);
+          // Progress: which item is currently leftmost-visible
+          const first = rowEl.querySelector('.video-block');
+          if (first && progressEl) {
+            const w = first.getBoundingClientRect().width + 16;
+            const idx = Math.min(videos.length, Math.round(rowEl.scrollLeft / w) + 1);
+            progressEl.textContent = `${String(idx).padStart(2, '0')} / ${String(videos.length).padStart(2, '0')}`;
+          }
+        }
+        function pageScroll(direction) {
+          const firstItem = rowEl.querySelector('.video-block');
+          if (!firstItem) return;
+          const itemWidth = firstItem.getBoundingClientRect().width + 16; // + gap
+          const visibleCount = Math.max(1, Math.round(rowEl.clientWidth / itemWidth));
+          rowEl.scrollBy({ left: direction * itemWidth * visibleCount, behavior: 'smooth' });
+        }
+        prevBtn.addEventListener('click', () => pageScroll(-1));
+        nextBtn.addEventListener('click', () => pageScroll(1));
+        rowEl.addEventListener('scroll', updateNav, { passive: true });
+        // Hide buttons entirely if nothing to scroll. Use ResizeObserver
+        // because the element isn't in the DOM yet at this point (clientWidth=0).
+        const checkOverflow = () => {
+          const hasOverflow = rowEl.scrollWidth > rowEl.clientWidth + 1;
+          carousel.classList.toggle('no-overflow', !hasOverflow);
+          updateNav();
+        };
+        if (window.ResizeObserver) {
+          new ResizeObserver(checkOverflow).observe(rowEl);
+        } else {
+          requestAnimationFrame(checkOverflow);
+        }
+        window.addEventListener('resize', checkOverflow);
+
+        // YouTube lite — replaces poster with iframe on click
+        wrap.querySelectorAll('.video-block[data-yt]').forEach(block => {
+          block.addEventListener('click', () => {
+            const id = block.dataset.yt;
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+            iframe.title = 'Vídeo';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            block.replaceChildren(iframe);
+          }, { once: true });
+        });
+
+        // MP4 custom player — click toggles play
+        wrap.querySelectorAll('.video-block.custom-player').forEach(block => {
+          const video = block.querySelector('video');
+          block.addEventListener('click', () => {
+            if (video.paused) {
+              // Pause other playing videos
+              document.querySelectorAll('.video-block.custom-player video').forEach(v => {
+                if (v !== video && !v.paused) { v.pause(); v.closest('.video-block').classList.remove('playing'); }
+              });
+              video.controls = true;
+              video.play();
+              block.classList.add('playing');
+            } else {
+              video.pause();
+              block.classList.remove('playing');
+            }
+          });
+          video.addEventListener('ended', () => { block.classList.remove('playing'); video.controls = false; });
+        });
+
+        return wrap;
+      }
+
+      // ─── BUILDERS ────────────────────────────────────────────────
+
+      function buildProductCover(product) {
+        const sec = document.createElement('section');
+        sec.className = 'product-cover';
+        sec.id = `produto-${product.key}`;
+        sec.innerHTML = `
+          <div class="product-cover-bg" style="background-image: url('${product.cover}');"></div>
+          <div class="product-cover-content">
+            <span class="eyebrow fade-up">Produto</span>
+            <h2 class="product-cover-title fade-up" style="transition-delay: 0.08s">${product.title}</h2>
+            ${product.desc ? `<p class="fade-up mt-6 max-w-xl text-white/70 font-light leading-relaxed text-base md:text-lg" style="transition-delay: 0.16s">${product.desc}</p>` : ''}
+          </div>
+        `;
+        return sec;
+      }
+
+      function buildCollectionsIndex(product) {
+        const wrap = document.createElement('div');
+        wrap.className = 'collections-index';
+        const items = product.collections.map((c, i) => `
+          <a class="index-link fade-up" href="#colecao-${product.key}-${c.key}" style="transition-delay: ${0.05 + i * 0.04}s">
+            <span class="num">${String(i + 1).padStart(2, '0')}</span>${c.titleHtml || c.title}
+          </a>
+        `).join('');
+        wrap.innerHTML = `
+          <span class="eyebrow block mb-8 fade-up">${product.title} · coleções</span>
+          <h3 class="display-title text-[clamp(1.4rem,2.6vw,2.2rem)] mb-12 text-white/70 fade-up" style="transition-delay: 0.05s">
+            Escolha a coleção desejada:
+          </h3>
+          <nav class="index-list">${items}</nav>
+        `;
+        return wrap;
+      }
+
+      function buildCollection(product, col) {
+        const wrap = document.createElement('div');
+        wrap.id = `colecao-${product.key}-${col.key}`;
+
+        const cover = document.createElement('section');
+        cover.className = 'collection-cover';
+        cover.dataset.collection = col.key;
+        cover.innerHTML = `
+          <div class="collection-cover-bg"></div>
+          <div class="collection-cover-content">
+            <span class="eyebrow fade-up">Coleção</span>
+            <h3 class="collection-cover-title fade-up" style="transition-delay: 0.08s">${col.titleHtml || col.title}</h3>
+            ${col.desc ? `<p class="collection-cover-desc fade-up" style="transition-delay: 0.16s">${col.desc}</p>` : ''}
+          </div>
+        `;
+        wrap.appendChild(cover);
+
+        const stream = document.createElement('div');
+        stream.className = 'photo-stream';
+        wrap.appendChild(stream);
+
+        const videoBlock = buildVideos(col.videos);
+        if (videoBlock) wrap.appendChild(videoBlock);
+
+        // Build DOM immediately so page has correct full height
+        // (images still lazy-load via native loading="lazy")
+        (async () => {
+          let imgs = col.images;
+          if (!imgs && col.localFolder) {
+            const local = await findLocalImages(col.localFolder);
+            imgs = local.map((src, i) => ({ src, name: (col.names || {})[i + 1] }));
+          }
+          if (!imgs || !imgs.length) {
+            stream.remove();
+            return;
+          }
+          const bg = cover.querySelector('.collection-cover-bg');
+          if (bg && !bg.style.backgroundImage) bg.style.backgroundImage = `url('${getImg(imgs[0]).src}')`;
+          buildPhotoStream(stream, imgs, col.title);
+        })();
+
+        return wrap;
+      }
+
+      function buildSimpleProduct(product) {
+        // Product cover + photo stream (no nested collections)
+        const wrap = document.createElement('div');
+        wrap.appendChild(buildProductCover(product));
+
+        const stream = document.createElement('div');
+        stream.className = 'photo-stream';
+        wrap.appendChild(stream);
+
+        // Build photos immediately for accurate page height (browser still lazy-loads images)
+        buildPhotoStream(stream, product.images, product.title);
+
+        const videoBlock = buildVideos(product.videos);
+        if (videoBlock) wrap.appendChild(videoBlock);
+
+        return wrap;
+      }
+
+      // ─── BUILD PRODUCTS NAV ──────────────────────────────────────
+      const productsNav = document.getElementById('products-nav');
+      PRODUCTS.forEach((p, i) => {
+        const a = document.createElement('a');
+        a.className = 'index-link';
+        a.href = `#produto-${p.key}`;
+        a.innerHTML = `<span class="num">${String(i + 1).padStart(2, '0')}</span>${p.title}`;
+        productsNav.appendChild(a);
+      });
+
+      // ─── BUILD SIDE INDEX (right, fixed) ─────────────────────────
+      const sideIndex = document.getElementById('side-index');
+      const sideEntries = []; // [{el, targetId}]
+      PRODUCTS.forEach((p) => {
+        const a = document.createElement('a');
+        a.href = `#produto-${p.key}`;
+        a.textContent = p.title;
+        a.dataset.target = `produto-${p.key}`;
+        sideIndex.appendChild(a);
+        sideEntries.push({ el: a, targetId: `produto-${p.key}` });
+
+        if (p.collections && p.collections.length) {
+          p.collections.forEach(c => {
+            const sub = document.createElement('a');
+            sub.href = `#colecao-${p.key}-${c.key}`;
+            sub.className = 'side-collection';
+            sub.textContent = c.title;
+            sub.dataset.target = `colecao-${p.key}-${c.key}`;
+            sideIndex.appendChild(sub);
+            sideEntries.push({ el: sub, targetId: `colecao-${p.key}-${c.key}` });
+          });
+        }
+      });
+
+      // Explicit click handler for internal anchor links — reliable smooth scroll
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+        const id = link.getAttribute('href').slice(1);
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.replaceState(null, '', '#' + id);
+        }
+      });
+
+      // ─── PRE-RESOLVE LOCAL-FOLDER IMAGES (parallel) ─────────────
+      // Inlines the resolved image list into col.images so all sections render synchronously
+      await Promise.all(PRODUCTS.flatMap(product =>
+        (product.collections || []).map(async (col) => {
+          if (!col.images && col.localFolder) {
+            const local = await findLocalImages(col.localFolder);
+            col.images = local.map((src, i) => ({ src, name: (col.names || {})[i + 1] }));
+          }
+        })
+      ));
+
+      // ─── BUILD PRODUCT SECTIONS ──────────────────────────────────
+      const productsContainer = document.getElementById('products');
+      PRODUCTS.forEach((product, idx) => {
+        const productSection = document.createElement('section');
+        productSection.dataset.product = product.key;
+
+        if (product.collections && product.collections.length) {
+          productSection.appendChild(buildProductCover(product));
+          productSection.appendChild(buildCollectionsIndex(product));
+          product.collections.forEach(col => {
+            productSection.appendChild(buildCollection(product, col));
+          });
+          // Product-level videos (after all collections)
+          const productVideos = buildVideos(product.videos);
+          if (productVideos) productSection.appendChild(productVideos);
+        } else if (product.images && product.images.length) {
+          productSection.appendChild(buildSimpleProduct(product));
+        } else {
+          productSection.appendChild(buildProductCover(product));
+        }
+
+        productsContainer.appendChild(productSection);
+
+        // Divider between products
+        if (idx < PRODUCTS.length - 1) {
+          const d = document.createElement('div');
+          d.className = 'section-divider';
+          d.innerHTML = '<div></div>';
+          productsContainer.appendChild(d);
+        }
+      });
+
+      // ─── FADE-UP OBSERVER ────────────────────────────────────────
+      const fadeIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.fade-up').forEach(el => fadeIo.observe(el));
+
+      // ─── COVER REVEAL (scale-down on enter) ──────────────────────
+      const coverIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+      }, { threshold: 0.25 });
+      document.querySelectorAll('.product-cover, .collection-cover').forEach(el => coverIo.observe(el));
+
+      // ─── REVEAL side index after "Pisos · coleções" (first collections-index) ─
+      const firstProduct = PRODUCTS[0];
+      const firstCollection = firstProduct.collections && firstProduct.collections[0];
+      const firstCollectionEl = firstCollection
+        ? document.getElementById(`colecao-${firstProduct.key}-${firstCollection.key}`)
+        : null;
+      if (firstCollectionEl) {
+        const checkReveal = () => {
+          const rect = firstCollectionEl.getBoundingClientRect();
+          // Reveal when the first collection (Brazil) starts entering the viewport
+          const entering = rect.top < window.innerHeight * 0.85;
+          sideIndex.classList.toggle('is-revealed', entering);
+        };
+        window.addEventListener('scroll', checkReveal, { passive: true });
+        checkReveal();
+      }
+
+      // ─── SCROLL-SPY for side index ───────────────────────────────
+      function updateSideIndex() {
+        const centerY = window.innerHeight / 2;
+        let best = null, bestDist = Infinity;
+        for (const entry of sideEntries) {
+          const target = document.getElementById(entry.targetId);
+          if (!target) continue;
+          const rect = target.getBoundingClientRect();
+          const center = rect.top + rect.height / 2;
+          const dist = Math.abs(center - centerY);
+          if (dist < bestDist && rect.bottom > 0 && rect.top < window.innerHeight) {
+            bestDist = dist;
+            best = entry;
+          }
+        }
+        sideEntries.forEach(e => e.el.classList.toggle('is-active', e === best));
+        // Auto-scroll the side-index to keep the active item visible
+        if (best) {
+          const idxRect = sideIndex.getBoundingClientRect();
+          const elRect = best.el.getBoundingClientRect();
+          if (elRect.top < idxRect.top + 30 || elRect.bottom > idxRect.bottom - 30) {
+            sideIndex.scrollTo({
+              top: sideIndex.scrollTop + (elRect.top - idxRect.top) - idxRect.height / 2 + elRect.height / 2,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+      let spyTicking = false;
+      window.addEventListener('scroll', () => {
+        if (!spyTicking) {
+          requestAnimationFrame(() => { updateSideIndex(); spyTicking = false; });
+          spyTicking = true;
+        }
+      }, { passive: true });
+      updateSideIndex();
+
+      // ─── HERO PARALLAX ───────────────────────────────────────────
       let heroTicking = false;
-      function updateHeroScroll() {
+      function updateHero() {
         const scrollY = window.scrollY;
         const vh = window.innerHeight;
         const progress = Math.min(scrollY / vh, 1);
         document.documentElement.style.setProperty('--scroll-progress', progress);
         heroTicking = false;
       }
-
-      let pickerTicking = false;
-      function updatePicker() {
-        pickerTicking = false;
-        if (window.innerWidth > 1024) return;
-
-        const section = document.getElementById('categories-section');
-        const list = document.getElementById('category-list');
-        if (!section || !list) return;
-
-        const cards = list.querySelectorAll('.category-link');
-        if (!cards.length) return;
-
-        const vh = window.innerHeight;
-        const sectionRect = section.getBoundingClientRect();
-        const sectionTop = window.scrollY + sectionRect.top;
-        const scrollDistance = section.offsetHeight - vh;
-        if (scrollDistance <= 0) return;
-
-        const scrollWithin = Math.max(0, Math.min(scrollDistance, window.scrollY - sectionTop));
-        const progress = scrollWithin / scrollDistance;
-        const focalIndex = progress * (cards.length - 1);
-
-        const cardHeight = cards[0].offsetHeight;
-        const gap = parseFloat(getComputedStyle(list).rowGap || '12') || 12;
-        const stride = cardHeight + gap;
-        const naturalCenter = (cards.length - 1) / 2;
-        const listOffset = (naturalCenter - focalIndex) * stride;
-        list.style.setProperty('--list-y', `${listOffset.toFixed(1)}px`);
-
-        let activeCard = null;
-        let minAbsDist = Infinity;
-
-        cards.forEach((card, i) => {
-          const distance = i - focalIndex;
-          const absDist = Math.abs(distance);
-
-          const scale = Math.max(0.62, 1 - absDist * 0.18);
-          const opacity = Math.max(0.18, 1 - absDist * 0.5);
-          const translateZ = -absDist * 200;
-
-          card.style.setProperty('--pick-scale', scale.toFixed(3));
-          card.style.setProperty('--pick-opacity', opacity.toFixed(3));
-          card.style.setProperty('--pick-z', `${translateZ.toFixed(0)}px`);
-
-          if (absDist < minAbsDist) {
-            minAbsDist = absDist;
-            activeCard = card;
-          }
-        });
-
-        cards.forEach(c => c.classList.toggle('is-active', c === activeCard));
-
-        // Mobile: o fundo é a imagem da categoria ativa (sempre visível durante o picker)
-        if (activeCard && activeCard.__heroSrc) {
-          setBgImage(activeCard.__heroSrc);
-        }
-      }
-
       window.addEventListener('scroll', () => {
-        if (!heroTicking) {
-          requestAnimationFrame(updateHeroScroll);
-          heroTicking = true;
-        }
-        if (!pickerTicking) {
-          requestAnimationFrame(updatePicker);
-          pickerTicking = true;
-        }
+        if (!heroTicking) { requestAnimationFrame(updateHero); heroTicking = true; }
       }, { passive: true });
+      updateHero();
 
-      window.addEventListener('resize', () => { updateHeroScroll(); updatePicker(); });
-      function initSearchButton() {
-        const btn = document.getElementById('categories-search-btn');
-        const section = document.getElementById('categories-section');
-        if (!btn || !section) return;
-        btn.addEventListener('click', () => {
-          const trigger = document.querySelector('parket-nav [data-action="open-search"]');
-          if (trigger) trigger.click();
-        });
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            btn.classList.toggle('is-visible', e.isIntersecting);
-          });
-        }, { threshold: 0.6 });
-        io.observe(section);
+      // ─── FLOATING ACTIONS: SEARCH + BACK TO TOP ──────────────────
+      const searchBtn = document.getElementById('floating-search');
+      const topBtn = document.getElementById('back-to-top');
+
+      searchBtn.addEventListener('click', () => {
+        const trigger = document.querySelector('parket-nav [data-action="open-search"]');
+        if (trigger) trigger.click();
+      });
+
+      topBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Show both buttons after scrolling past hero
+      function updateFloating() {
+        const past = window.scrollY > window.innerHeight * 0.7;
+        searchBtn.classList.toggle('is-visible', past);
+        topBtn.classList.toggle('is-visible', past);
       }
+      window.addEventListener('scroll', updateFloating, { passive: true });
+      updateFloating();
 
-      window.addEventListener('load', () => { init(); updateHeroScroll(); updatePicker(); initSearchButton(); });
     })();
   </script>
 </body>
