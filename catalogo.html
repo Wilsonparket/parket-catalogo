@@ -71,6 +71,130 @@
       line-height: 0.88;
     }
 
+    /* ── Processo Parket (5 pilares · BG preto · ilustrações animadas) ── */
+    .processo-section {
+      background: #000;
+      color: #fff;
+      padding: 9rem 0 7rem;
+      position: relative;
+      z-index: 5;
+    }
+    .processo-section .eyebrow { color: rgba(255,255,255,0.50); }
+    .processo-wrap {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 6vw;
+    }
+    .processo-header { margin-bottom: 5rem; }
+    .processo-header .display-title { color: rgba(255,255,255,0.90); }
+    .processo-header p { color: rgba(255,255,255,0.55); }
+    .processo-pillar {
+      display: grid;
+      grid-template-columns: 80px 160px 1fr;
+      gap: 2.5rem;
+      padding: 3.5rem 0;
+      border-top: 1px solid rgba(255,255,255,0.10);
+      align-items: center;
+    }
+    .processo-pillar:last-child { border-bottom: 1px solid rgba(255,255,255,0.10); }
+    .processo-num {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: rgba(255,255,255,0.30);
+      font-variant-numeric: tabular-nums;
+    }
+    .processo-illustration {
+      width: 160px;
+      color: rgba(255,255,255,0.85);
+    }
+    .processo-illustration svg { width: 100%; height: auto; display: block; }
+    .processo-content { max-width: 38rem; }
+    .processo-title {
+      font-size: 13px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.95);
+      font-weight: 500;
+      margin: 0 0 1.25rem;
+    }
+    .processo-text {
+      color: rgba(255,255,255,0.62);
+      font-weight: 300;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+    .processo-text strong {
+      color: rgba(255,255,255,0.92);
+      font-weight: 400;
+    }
+
+    /* ── SVG animations ── */
+    /* All stroked elements start invisible; "draw in" when pillar enters viewport */
+    .processo-illustration [data-anim] {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 1.4s cubic-bezier(0.65,0,0.35,1);
+    }
+    .processo-pillar.visible .processo-illustration [data-anim] {
+      stroke-dashoffset: 0;
+    }
+    /* staggered draw with custom delays via inline style or class */
+    .processo-pillar.visible .processo-illustration [data-delay="1"] { transition-delay: 0.20s; }
+    .processo-pillar.visible .processo-illustration [data-delay="2"] { transition-delay: 0.40s; }
+    .processo-pillar.visible .processo-illustration [data-delay="3"] { transition-delay: 0.60s; }
+    .processo-pillar.visible .processo-illustration [data-delay="4"] { transition-delay: 0.80s; }
+    .processo-pillar.visible .processo-illustration [data-delay="5"] { transition-delay: 1.00s; }
+    .processo-pillar.visible .processo-illustration [data-delay="6"] { transition-delay: 1.20s; }
+    .processo-pillar.visible .processo-illustration [data-delay="7"] { transition-delay: 1.40s; }
+    .processo-pillar.visible .processo-illustration [data-delay="8"] { transition-delay: 1.60s; }
+
+    /* Filled rects (color swatches in pillar 04) — opacity reveal */
+    .processo-illustration [data-fade] {
+      opacity: 0;
+      transition: opacity 1.0s ease;
+    }
+    .processo-pillar.visible .processo-illustration [data-fade] { opacity: 1; }
+
+    /* Text labels inside SVG — fade in last */
+    .processo-illustration text {
+      opacity: 0;
+      transition: opacity 0.6s ease 1.4s;
+    }
+    .processo-pillar.visible .processo-illustration text { opacity: 1; }
+
+    /* Subtle continuous motion (pillar 03: magnifying glass slides) */
+    .processo-pillar.visible .lupa-glass {
+      animation: slideMag 6s ease-in-out 2s infinite;
+    }
+    @keyframes slideMag {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-22px); }
+    }
+
+    @media (max-width: 768px) {
+      .processo-section { padding: 5rem 0 4rem; }
+      .processo-wrap { padding: 0 7vw; }
+      .processo-header { margin-bottom: 3rem; }
+      .processo-pillar {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        padding: 2.5rem 0;
+      }
+      .processo-num { font-size: 1.5rem; }
+      .processo-illustration { width: 100px; }
+      .processo-title { font-size: 11px; letter-spacing: 0.26em; }
+      .processo-text { font-size: 0.95rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .processo-illustration [data-anim],
+      .processo-illustration [data-fade],
+      .processo-illustration text { transition: none; }
+      .processo-pillar.visible .lupa-glass { animation: none; }
+    }
+
     /* ── Products index (Escolha um produto) ── */
     .index-block {
       min-height: 100vh;
@@ -816,6 +940,136 @@
         <span class="font-label text-[11px] uppercase tracking-[0.4em]">Scroll</span>
         <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ─── PROCESSO PARKET (5 pilares) ─── -->
+  <section id="processo" class="processo-section">
+    <div class="processo-wrap">
+      <header class="processo-header fade-up">
+        <span class="eyebrow">Processo</span>
+        <h2 class="display-title text-[clamp(2rem,4.5vw,3.5rem)] mt-4 mb-2 text-white/85">O método Parket</h2>
+        <p class="text-white/55 font-light max-w-xl mt-4 text-base md:text-lg leading-relaxed">
+          Cinco decisões que separam um piso de madeira de um piso Parket.
+        </p>
+      </header>
+
+      <article class="processo-pillar fade-up">
+        <span class="processo-num">01</span>
+        <div class="processo-illustration" aria-hidden="true">
+          <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="12" y="56" width="96" height="14" pathLength="1" data-anim/>
+            <path d="M16 60 L104 60" stroke-opacity="0.4" pathLength="1" data-anim data-delay="2"/>
+            <path d="M16 64 L104 64" stroke-opacity="0.3" pathLength="1" data-anim data-delay="3"/>
+            <path d="M16 68 L104 68" stroke-opacity="0.4" pathLength="1" data-anim data-delay="4"/>
+            <path d="M12 44 L108 44" pathLength="1" data-anim data-delay="5"/>
+            <path d="M12 41 L12 47" pathLength="1" data-anim data-delay="5"/>
+            <path d="M108 41 L108 47" pathLength="1" data-anim data-delay="5"/>
+            <text x="60" y="40" text-anchor="middle" fill="currentColor" stroke="none" font-size="6" letter-spacing="1.5">4 — 8 M</text>
+            <path d="M114 56 L114 70" pathLength="1" data-anim data-delay="6"/>
+            <path d="M111 56 L117 56" pathLength="1" data-anim data-delay="6"/>
+            <path d="M111 70 L117 70" pathLength="1" data-anim data-delay="6"/>
+          </svg>
+        </div>
+        <div class="processo-content">
+          <h3 class="processo-title">Dimensão</h3>
+          <p class="processo-text">Réguas de <strong>30 a 40 cm de largura</strong> e <strong>4 a 8 metros de comprimento</strong>. Tábua larga: menos emendas, paginação valorizada, proporção mantida em projetos de grande porte.</p>
+        </div>
+      </article>
+
+      <article class="processo-pillar fade-up">
+        <span class="processo-num">02</span>
+        <div class="processo-illustration" aria-hidden="true">
+          <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M60 20 L42 44 L78 44 Z" pathLength="1" data-anim/>
+            <path d="M60 36 L36 60 L84 60 Z" pathLength="1" data-anim data-delay="1"/>
+            <path d="M60 52 L30 78 L90 78 Z" pathLength="1" data-anim data-delay="2"/>
+            <rect x="56" y="78" width="8" height="14" pathLength="1" data-anim data-delay="3"/>
+            <circle cx="22" cy="100" r="1.5" pathLength="1" data-anim data-delay="4"/>
+            <circle cx="34" cy="100" r="1.5" pathLength="1" data-anim data-delay="4"/>
+            <circle cx="46" cy="100" r="1.5" pathLength="1" data-anim data-delay="5"/>
+            <circle cx="58" cy="100" r="1.5" pathLength="1" data-anim data-delay="5"/>
+            <circle cx="70" cy="100" r="1.5" pathLength="1" data-anim data-delay="6"/>
+            <circle cx="82" cy="100" r="1.5" pathLength="1" data-anim data-delay="6"/>
+            <circle cx="94" cy="100" r="1.5" pathLength="1" data-anim data-delay="7"/>
+            <circle cx="106" cy="100" r="1.5" pathLength="1" data-anim data-delay="7"/>
+          </svg>
+        </div>
+        <div class="processo-content">
+          <h3 class="processo-title">Seleção da madeira</h3>
+          <p class="processo-text"><strong>8 florestas próprias</strong> no Brasil, Bolívia e Peru. <strong>54 anos de manejo</strong> documentado, sem passivo ambiental. Nenhuma espécie entra na linha sem aprovação técnica.</p>
+        </div>
+      </article>
+
+      <article class="processo-pillar fade-up">
+        <span class="processo-num">03</span>
+        <div class="processo-illustration" aria-hidden="true">
+          <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 38 Q40 35 60 38 T108 38" stroke-opacity="0.3" pathLength="1" data-anim/>
+            <path d="M12 50 Q40 47 60 50 T108 50" stroke-opacity="0.3" pathLength="1" data-anim data-delay="1"/>
+            <path d="M12 62 Q40 59 60 62 T108 62" stroke-opacity="0.3" pathLength="1" data-anim data-delay="2"/>
+            <path d="M12 74 Q40 71 60 74 T108 74" stroke-opacity="0.3" pathLength="1" data-anim data-delay="3"/>
+            <path d="M12 86 Q40 83 60 86 T108 86" stroke-opacity="0.3" pathLength="1" data-anim data-delay="4"/>
+            <g class="lupa-glass" style="transform-box: fill-box; transform-origin: center;">
+              <circle cx="64" cy="62" r="24" pathLength="1" data-anim data-delay="5"/>
+              <line x1="82" y1="80" x2="98" y2="96" pathLength="1" data-anim data-delay="6"/>
+              <path d="M48 58 Q60 56 80 58" stroke-opacity="0.75" pathLength="1" data-anim data-delay="7"/>
+              <path d="M48 66 Q60 64 80 66" stroke-opacity="0.75" pathLength="1" data-anim data-delay="7"/>
+            </g>
+          </svg>
+        </div>
+        <div class="processo-content">
+          <h3 class="processo-title">Curadoria da lâmina</h3>
+          <p class="processo-text"><strong>Cada lâmina inspecionada peça a peça</strong> e classificada por veio, nó e recorte. O que não atende ao padrão sai da linha. O que segue, segue como assinatura.</p>
+        </div>
+      </article>
+
+      <article class="processo-pillar fade-up">
+        <span class="processo-num">04</span>
+        <div class="processo-illustration" aria-hidden="true">
+          <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="42" width="24" height="36" fill="currentColor" fill-opacity="0.12" stroke="none" data-fade/>
+            <rect x="42" y="42" width="24" height="36" fill="currentColor" fill-opacity="0.26" stroke="none" data-fade style="transition-delay: 0.3s"/>
+            <rect x="70" y="42" width="24" height="36" fill="currentColor" fill-opacity="0.42" stroke="none" data-fade style="transition-delay: 0.6s"/>
+            <rect x="14" y="42" width="24" height="36" pathLength="1" data-anim/>
+            <rect x="42" y="42" width="24" height="36" pathLength="1" data-anim data-delay="1"/>
+            <rect x="70" y="42" width="24" height="36" pathLength="1" data-anim data-delay="2"/>
+            <path d="M22 90 L86 90" pathLength="1" data-anim data-delay="3"/>
+            <path d="M82 87 L86 90 L82 93" pathLength="1" data-anim data-delay="4"/>
+            <text x="54" y="102" text-anchor="middle" fill="currentColor" stroke="none" font-size="5" letter-spacing="1.2">LOTE A LOTE</text>
+          </svg>
+        </div>
+        <div class="processo-content">
+          <h3 class="processo-title">Controle de tonalidade</h3>
+          <p class="processo-text"><strong>Cor controlada lote a lote</strong> antes da entrega. Cada projeto recebe réguas compatibilizadas visualmente — continuidade total da paginação, sem surpresas na obra.</p>
+        </div>
+      </article>
+
+      <article class="processo-pillar fade-up">
+        <span class="processo-num">05</span>
+        <div class="processo-illustration" aria-hidden="true">
+          <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="14" cy="60" r="6" pathLength="1" data-anim/>
+            <line x1="20" y1="60" x2="32" y2="60" pathLength="1" data-anim data-delay="1"/>
+            <circle cx="38" cy="60" r="6" pathLength="1" data-anim data-delay="2"/>
+            <line x1="44" y1="60" x2="56" y2="60" pathLength="1" data-anim data-delay="3"/>
+            <circle cx="62" cy="60" r="6" pathLength="1" data-anim data-delay="4"/>
+            <line x1="68" y1="60" x2="80" y2="60" pathLength="1" data-anim data-delay="5"/>
+            <circle cx="86" cy="60" r="6" pathLength="1" data-anim data-delay="6"/>
+            <line x1="92" y1="60" x2="104" y2="60" pathLength="1" data-anim data-delay="7"/>
+            <circle cx="110" cy="60" r="6" pathLength="1" data-anim data-delay="8"/>
+            <text x="14" y="80" text-anchor="middle" fill="currentColor" stroke="none" font-size="4" letter-spacing="0.6">FLORESTA</text>
+            <text x="38" y="80" text-anchor="middle" fill="currentColor" stroke="none" font-size="4" letter-spacing="0.6">FÁBRICA</text>
+            <text x="62" y="80" text-anchor="middle" fill="currentColor" stroke="none" font-size="4" letter-spacing="0.6">ENGENHARIA</text>
+            <text x="86" y="80" text-anchor="middle" fill="currentColor" stroke="none" font-size="4" letter-spacing="0.6">LOGÍSTICA</text>
+            <text x="110" y="80" text-anchor="middle" fill="currentColor" stroke="none" font-size="4" letter-spacing="0.6">OBRA</text>
+          </svg>
+        </div>
+        <div class="processo-content">
+          <h3 class="processo-title">Cadeia integrada</h3>
+          <p class="processo-text">Da floresta ao último encaixe da obra, <strong>tudo sob o mesmo comando</strong>. Fábrica desde 2015, marcenaria desde 2016, <strong>9 arquitetos</strong> técnicos em obra.</p>
+        </div>
+      </article>
     </div>
   </section>
 
