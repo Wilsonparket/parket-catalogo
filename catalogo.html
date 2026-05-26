@@ -288,6 +288,43 @@
       line-height: 1.6;
     }
 
+    /* ── Collection specs strip (under cover description) ── */
+    .collection-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem !important;
+      padding-top: 1.75rem;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      max-width: 60rem;
+      width: 100%;
+    }
+    .collection-spec-label {
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.40);
+      margin: 0 0 0.5rem;
+      font-weight: 400;
+    }
+    .collection-spec-value {
+      font-size: 14px;
+      color: rgba(255,255,255,0.88);
+      font-weight: 300;
+      line-height: 1.4;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      .collection-specs {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        margin-top: 2rem !important;
+        padding-top: 1.25rem;
+      }
+      .collection-spec-label { font-size: 9px; letter-spacing: 0.3em; }
+      .collection-spec-value { font-size: 13px; }
+    }
+
     /* ── Photo stream (replaces carousel — full-screen photos) ── */
     .photo-stream {
       width: 100%;
@@ -813,23 +850,47 @@
               key: 'brazil', title: 'Brazil',
               desc: 'A autenticidade das madeiras brasileiras traduzida em réguas de beleza única. Uma coleção que exalta a alma tropical com cores profundas e fibras marcantes.',
               localFolder: 'pisos/brazil',
-              names: { 1: 'Sucupira', 2: 'Canela', 3: 'Peroba Mica', 4: 'Peroba Mica', 5: 'Cumaru', 6: 'Cumaru', 7: 'Tauari Naturalle', 8: 'Cumaru', 9: 'Chevron de Tauari', 10: 'Cumaru', 11: 'Sucupira Rústica' }
+              names: { 1: 'Sucupira', 2: 'Canela', 3: 'Peroba Mica', 4: 'Peroba Mica', 5: 'Cumaru', 6: 'Cumaru', 7: 'Tauari Naturalle', 8: 'Cumaru', 9: 'Chevron de Tauari', 10: 'Cumaru', 11: 'Sucupira Rústica' },
+              specs: [
+                { label: 'Espécies', value: 'Tauari, Cumaru, Sucupira, Canela, Peroba Mica' },
+                { label: 'Origem', value: 'Brasil · manejo sustentável' },
+                { label: 'Acabamento', value: 'Óleo natural ou verniz UV' },
+                { label: 'Indicação', value: 'Residencial · comercial' }
+              ]
             },
             {
               key: 'eternos', title: 'Eternos',
               desc: 'Tons e texturas que atravessam o tempo. Uma coleção concebida para durar visualmente e estruturalmente, em qualquer cenário.',
               localFolder: 'pisos/eternos',
-              names: { 1: 'Bambu Demolição', 2: 'Canela Demolição', 4: 'Canela Demolição', 5: 'Canela Demolição' }
+              names: { 1: 'Bambu Demolição', 2: 'Canela Demolição', 4: 'Canela Demolição', 5: 'Canela Demolição' },
+              specs: [
+                { label: 'Espécies', value: 'Bambu, Canela' },
+                { label: 'Origem', value: 'Madeira de reaproveitamento' },
+                { label: 'Característica', value: 'Aspecto envelhecido natural' },
+                { label: 'Indicação', value: 'Projetos com pegada autoral' }
+              ]
             },
             {
               key: 'unicos', title: 'Únicos',
               desc: 'Peças raras com desenhos irrepetíveis. Cada régua é assinada pela natureza com veios, nós e matizes singulares.',
               localFolder: 'pisos/unicos',
-              names: { 1: 'Pau ferro', 2: 'Lapacho', 3: 'Momoki de Marrocos', 4: 'Nogueira' }
+              names: { 1: 'Pau ferro', 2: 'Lapacho', 3: 'Momoki de Marrocos', 4: 'Nogueira' },
+              specs: [
+                { label: 'Espécies', value: 'Pau Ferro, Lapacho, Nogueira, Momoki' },
+                { label: 'Origem', value: 'Seleção curada · diversas procedências' },
+                { label: 'Característica', value: 'Veios, nós e matizes singulares' },
+                { label: 'Indicação', value: 'Projetos exclusivos' }
+              ]
             },
             {
               key: 'carvalhos', title: 'Carvalhos',
               desc: 'A nobreza do Carvalho Europeu em texturas que contam histórias. Tons orgânicos e toques acetinados que trazem o equilíbrio perfeito entre tradição e modernidade.',
+              specs: [
+                { label: 'Espécie', value: 'Carvalho Europeu (Quercus robur)' },
+                { label: 'Origem', value: 'Europa' },
+                { label: 'Acabamentos', value: 'Naturalle, Mont Blanc, Smoke, Armani, Capuccino e outros' },
+                { label: 'Indicação', value: 'Residencial · comercial' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg", name: "Carvalho Mont Blanc" },
                 { src: "https://parket.com.br/wp-content/uploads/2026/03/27e09f2b-808a-4ecb-b60d-c2702e023383-1.jpg", name: "Carvalho Europeu<br>Mont Blanc" },
@@ -866,6 +927,12 @@
             {
               key: 'grandiosos', title: 'Grandiosos',
               desc: 'Réguas de proporções imponentes que ampliam e valorizam o espaço. Uma coleção que celebra o impacto do formato XL e a continuidade visual da madeira.',
+              specs: [
+                { label: 'Espécies', value: 'Carvalho Europeu, Pinho de Riga' },
+                { label: 'Formato', value: 'Réguas extragrandes (XL)' },
+                { label: 'Acabamentos', value: 'Naturalle, Mont Blanc, Smoke' },
+                { label: 'Indicação', value: 'Espaços amplos · continuidade visual' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg", name: "Carvalho Europeu Smoke" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-05.jpg", name: "Carvalho Europeu Naturalle" },
@@ -882,6 +949,12 @@
             {
               key: 'pinho-de-riga', title: 'Pinho de Riga',
               desc: 'Resgatado de antigas construções europeias, o Pinho de Riga é sinônimo de história e resiliência. Uma madeira com alma que traz profundidade a qualquer projeto contemporâneo.',
+              specs: [
+                { label: 'Espécie', value: 'Pinho de Riga' },
+                { label: 'Origem', value: 'Reaproveitamento de construções europeias' },
+                { label: 'Característica', value: 'Densidade e narrativa histórica' },
+                { label: 'Indicação', value: 'Projetos com pegada autoral' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg", name: "Pinho de Riga" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-02.jpg", name: "Pinho de Riga" },
@@ -894,6 +967,12 @@
             {
               key: 'classicos', title: 'Clássicos',
               desc: 'Padrões atemporais que definem a sofisticação residencial. Uma linha dedicada à elegância contínua que transcende tendências passageiras.',
+              specs: [
+                { label: 'Padrões', value: 'Chevron, Espinha de Peixe, Versalles, Mosaico' },
+                { label: 'Espécies', value: 'Carvalho Europeu, Nogueira' },
+                { label: 'Acabamentos', value: 'Naturalle, Mont Blanc, Batman, Smoked' },
+                { label: 'Indicação', value: 'Projetos refinados · alta sofisticação' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-02.jpg", name: "Chevron Naturale" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-03.jpg", name: "Chevron" },
@@ -912,6 +991,12 @@
               title: 'Wood + Stone',
               titleHtml: 'Wood + <span class="italic font-normal">Stone</span>',
               desc: 'A fusão sublime entre a madeira nobre e a imponência mineral. Uma experiência tátil e visual única que redefine a elegância nos detalhes.',
+              specs: [
+                { label: 'Composição', value: 'Madeira + Pedra + Latão' },
+                { label: 'Espécies', value: 'Carvalho Europeu, Nogueira' },
+                { label: 'Pedras', value: 'Travertino, Carrara, Nero Marquina, Quartzitos' },
+                { label: 'Indicação', value: 'Projetos exclusivos sob medida' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg", name: "Carvalho Europeu Smoke + Travertino Navona" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-05.jpg", name: "Carvalho Europeu<br>all black + Carrara" },
@@ -933,6 +1018,12 @@
             {
               key: 'brazil', title: 'Brazil',
               desc: 'Nossa homenagem às raízes tropicais. A Coleção Brazil traz o calor e a beleza duradoura da madeira nativa brasileira para áreas externas.',
+              specs: [
+                { label: 'Espécies', value: 'Itaúba, Cumaru, Ipê' },
+                { label: 'Origem', value: 'Brasil · manejo sustentável' },
+                { label: 'Acabamentos', value: 'Natural e oxidado' },
+                { label: 'Indicação', value: 'Áreas externas · alta durabilidade' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg", name: "Itaúba" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-10.jpg", name: "Cumaru Oxidado" },
@@ -949,6 +1040,12 @@
             {
               key: 'eurodeck', title: 'Eurodeck',
               desc: 'Engenharia de precisão com peças longas e uniformes. Uma seleção premium que alia simetria impecável e refinamento absoluto para o seu deck.',
+              specs: [
+                { label: 'Tons', value: 'Preto, Marrom, Cinza' },
+                { label: 'Origem', value: 'Engenharia europeia' },
+                { label: 'Característica', value: 'Peças longas e uniformes' },
+                { label: 'Indicação', value: 'Áreas externas · acabamento premium' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-01.jpg", name: "Eurodeck Preto" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-02.jpg", name: "Eurodeck Marrom" },
@@ -958,6 +1055,12 @@
             {
               key: 'kebony', title: 'Kebony',
               desc: 'Tecnologia norueguesa de modificação que transforma madeiras sustentáveis em joias estéticas e duráveis. O Kebony ganha uma belíssima pátina prateada atemporal.',
+              specs: [
+                { label: 'Tecnologia', value: 'Modificação Kebony® (Noruega)' },
+                { label: 'Acabamentos', value: 'Kebony Clear, Kebony Oxidado' },
+                { label: 'Característica', value: 'Pátina prateada atemporal' },
+                { label: 'Indicação', value: 'Áreas externas de alto desempenho' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-01.jpg", name: "Kebony Oxidado" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-02.jpg", name: "Kebony Oxidado" },
@@ -974,6 +1077,12 @@
             {
               key: 'unicos', title: 'Únicos',
               desc: 'Projetos de decks que vão além do convencional. Peças de arte natural e padrões sob medida desenhados para áreas molhadas que respiram vanguarda e ousadia.',
+              specs: [
+                { label: 'Espécies', value: 'Teca, Peroba Demolição, Momoki' },
+                { label: 'Característica', value: 'Soluções sob medida · padrões autorais' },
+                { label: 'Acabamentos', value: 'Natural e oxidado' },
+                { label: 'Indicação', value: 'Áreas molhadas · piscinas' }
+              ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-05.jpg", name: "Teca" },
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-06.jpg", name: "Teca" },
@@ -1330,12 +1439,23 @@
         const cover = document.createElement('section');
         cover.className = 'collection-cover';
         cover.dataset.collection = col.key;
+        const specsHtml = col.specs && col.specs.length
+          ? `<div class="collection-specs fade-up" style="transition-delay: 0.22s">
+              ${col.specs.map(s => `
+                <div>
+                  <p class="collection-spec-label">${s.label}</p>
+                  <p class="collection-spec-value">${s.value}</p>
+                </div>
+              `).join('')}
+            </div>`
+          : '';
         cover.innerHTML = `
           <div class="collection-cover-bg"></div>
           <div class="collection-cover-content">
             <span class="eyebrow fade-up">Coleção</span>
             <h3 class="collection-cover-title fade-up" style="transition-delay: 0.08s">${col.titleHtml || col.title}</h3>
             ${col.desc ? `<p class="collection-cover-desc fade-up" style="transition-delay: 0.16s">${col.desc}</p>` : ''}
+            ${specsHtml}
           </div>
         `;
         wrap.appendChild(cover);
