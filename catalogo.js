@@ -1,11 +1,17 @@
     (async function () {
+      // ─── SINGLE-CATEGORY FILTER ─────────────────────────────────
+      // When this page is served from a category folder (/pisos/, /decks/...),
+      // the folder's index.html sets window.PARKET_FILTER to that product key.
+      // We then hide cross-category navigation and only render that one product.
+      const SINGLE_CATEGORY = typeof window !== 'undefined' && window.PARKET_FILTER ? String(window.PARKET_FILTER) : null;
+
       // ─── DATA ────────────────────────────────────────────────────
-      const PRODUCTS = [
+      const ALL_PRODUCTS = [
         {
           key: 'pisos',
           title: 'Pisos',
           desc: 'A base do luxo. Texturas orgânicas e padrões exclusivos que definem o caráter do seu espaço.',
-          cover: 'pisos/image.webp',
+          cover: 'pisos/piso.png',
           videos: [
             { type: 'youtube', id: '9HUVFWeCxsQ', vertical: true, title: 'Carvalho Europeu em espinha de peixe · Projeto Loja Carol Bassi' },
             { type: 'youtube', id: '6AU-gNo13zc', vertical: true, title: 'Paginação Chevron em Carvalho Europeu Natural' },
@@ -375,6 +381,17 @@
         }
       ];
 
+      // Filter products if a single-category mode is active. Also hides the
+      // products-index section ("Escolha um produto:") since there's only one.
+      const PRODUCTS = SINGLE_CATEGORY
+        ? ALL_PRODUCTS.filter(p => p.key === SINGLE_CATEGORY)
+        : ALL_PRODUCTS;
+      if (SINGLE_CATEGORY) {
+        document.documentElement.classList.add('single-category');
+        const pi = document.getElementById('products-index');
+        if (pi) pi.style.display = 'none';
+      }
+
       // ─── HELPERS ─────────────────────────────────────────────────
       const EXTS = ['jpg', 'jpeg', 'png', 'webp'];
       const MAX_LOCAL = 30;
@@ -704,12 +721,16 @@
       const sideIndex = document.getElementById('side-index');
       const sideEntries = []; // [{el, targetId}]
       PRODUCTS.forEach((p) => {
-        const a = document.createElement('a');
-        a.href = `#produto-${p.key}`;
-        a.textContent = p.title;
-        a.dataset.target = `produto-${p.key}`;
-        sideIndex.appendChild(a);
-        sideEntries.push({ el: a, targetId: `produto-${p.key}` });
+        // In single-category mode, skip the product-level anchor — it would be
+        // a redundant single entry. Only the collection sub-links matter.
+        if (!SINGLE_CATEGORY) {
+          const a = document.createElement('a');
+          a.href = `#produto-${p.key}`;
+          a.textContent = p.title;
+          a.dataset.target = `produto-${p.key}`;
+          sideIndex.appendChild(a);
+          sideEntries.push({ el: a, targetId: `produto-${p.key}` });
+        }
 
         if (p.collections && p.collections.length) {
           p.collections.forEach(c => {
@@ -723,6 +744,11 @@
           });
         }
       });
+
+      // Hide side-index entirely if it has no entries (single-product page without collections)
+      if (sideEntries.length === 0) {
+        sideIndex.style.display = 'none';
+      }
 
       // Explicit click handler for internal anchor links — reliable smooth scroll
       document.addEventListener('click', (e) => {
@@ -875,82 +901,12 @@
       });
 
       // Show both buttons after scrolling past hero
-      const filterBtn = document.getElementById('filter-btn');
-      const filterPanel = document.getElementById('filter-panel');
-      const filterCount = filterBtn.querySelector('.filter-count');
-      const filterClear = filterPanel.querySelector('.filter-clear-btn');
-      const filterChips = filterPanel.querySelector('.filter-chips');
-
       function updateFloating() {
         const past = window.scrollY > window.innerHeight * 0.7;
         searchBtn.classList.toggle('is-visible', past);
         topBtn.classList.toggle('is-visible', past);
-        filterBtn.classList.toggle('is-visible', past);
       }
       window.addEventListener('scroll', updateFloating, { passive: true });
       updateFloating();
-
-      // ─── WOOD FILTER ─────────────────────────────────────────────
-      // Build chip list from common woods present in the data
-      const WOOD_LIST = [
-        'Carvalho Europeu', 'Cumaru', 'Tauari', 'Itaúba', 'Ipê',
-        'Pinho de Riga', 'Nogueira', 'Sucupira', 'Canela',
-        'Peroba', 'Freijó', 'Bambu', 'Kebony', 'Teca',
-        'Cabreúva', 'Lapacho', 'Pau Ferro', 'Shou Sugi Ban', 'Momoki'
-      ];
-
-      const activeFilters = new Set();
-
-      WOOD_LIST.forEach(wood => {
-        const chip = document.createElement('button');
-        chip.className = 'filter-chip';
-        chip.type = 'button';
-        chip.dataset.wood = wood;
-        chip.textContent = wood;
-        chip.addEventListener('click', () => {
-          if (activeFilters.has(wood)) {
-            activeFilters.delete(wood);
-            chip.classList.remove('is-active');
-          } else {
-            activeFilters.add(wood);
-            chip.classList.add('is-active');
-          }
-          applyFilter();
-        });
-        filterChips.appendChild(chip);
-      });
-
-      function applyFilter() {
-        const items = document.querySelectorAll('.photo-stream-item');
-        filterCount.textContent = activeFilters.size;
-        filterBtn.classList.toggle('has-active', activeFilters.size > 0);
-        if (!activeFilters.size) {
-          document.body.removeAttribute('data-filtered');
-          items.forEach(i => i.classList.remove('is-match'));
-          return;
-        }
-        document.body.setAttribute('data-filtered', '');
-        const lowerFilters = [...activeFilters].map(w => w.toLowerCase());
-        items.forEach(item => {
-          const caption = (item.querySelector('.photo-stream-caption')?.textContent || '').toLowerCase();
-          const matches = lowerFilters.some(w => caption.includes(w));
-          item.classList.toggle('is-match', matches);
-        });
-      }
-
-      filterBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        filterPanel.classList.toggle('is-open');
-      });
-      filterClear.addEventListener('click', () => {
-        activeFilters.clear();
-        filterChips.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('is-active'));
-        applyFilter();
-      });
-      document.addEventListener('click', (e) => {
-        if (!filterPanel.contains(e.target) && !filterBtn.contains(e.target)) {
-          filterPanel.classList.remove('is-open');
-        }
-      });
 
     })();
