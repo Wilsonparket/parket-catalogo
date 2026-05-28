@@ -648,9 +648,11 @@
         return wrap;
       }
 
-      function buildCollection(product, col) {
+      function buildCollection(product, col, colIndex) {
         const wrap = document.createElement('div');
         wrap.id = `colecao-${product.key}-${col.key}`;
+        // Sem parallax nas capas de coleção (todas estáticas, incluindo Brazil).
+        const coverParallax = '';
 
         const cover = document.createElement('section');
         cover.className = 'collection-cover';
@@ -666,7 +668,7 @@
             </div>`
           : '';
         cover.innerHTML = `
-          <div class="collection-cover-bg" data-mouse-parallax="30"></div>
+          <div class="collection-cover-bg"${coverParallax}></div>
           <div class="collection-cover-content">
             <span class="eyebrow fade-up">Coleção</span>
             <h3 class="collection-cover-title fade-up" style="transition-delay: 0.08s">${col.titleHtml || col.title}</h3>
@@ -798,8 +800,8 @@
         if (product.collections && product.collections.length) {
           productSection.appendChild(buildProductCover(product));
           productSection.appendChild(buildCollectionsIndex(product));
-          product.collections.forEach(col => {
-            productSection.appendChild(buildCollection(product, col));
+          product.collections.forEach((col, ci) => {
+            productSection.appendChild(buildCollection(product, col, ci));
           });
           // Product-level videos (after all collections)
           const productVideos = buildVideos(product.videos);
