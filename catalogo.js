@@ -390,6 +390,20 @@
         document.documentElement.classList.add('single-category');
         const pi = document.getElementById('products-index');
         if (pi) pi.style.display = 'none';
+        // Replace hero subtitle "Coleção 2026" with two-line "Catálogo / <Category>"
+        const heroContent = document.getElementById('hero-content');
+        const catTitle = (PRODUCTS[0] && PRODUCTS[0].title) || SINGLE_CATEGORY;
+        if (heroContent) {
+          heroContent.innerHTML = `
+            <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50 block">Catálogo</span>
+            <span class="font-label uppercase tracking-[0.6em] text-[22.5px] text-white block mt-3">${catTitle}</span>
+          `;
+        }
+        // Use category-specific hero image (each /<cat>/autoload/ has its own)
+        const heroBg = document.getElementById('hero-bg');
+        if (heroBg) {
+          heroBg.style.backgroundImage = `url('${SINGLE_CATEGORY}/autoload/Hero.webp')`;
+        }
       }
 
       // ─── HELPERS ─────────────────────────────────────────────────
@@ -606,7 +620,7 @@
         sec.className = 'product-cover';
         sec.id = `produto-${product.key}`;
         sec.innerHTML = `
-          <div class="product-cover-bg" style="background-image: url('${product.cover}');"></div>
+          <div class="product-cover-bg" data-mouse-parallax="30" style="background-image: url('${product.cover}');"></div>
           <div class="product-cover-content">
             <span class="eyebrow fade-up">Produto</span>
             <h2 class="product-cover-title fade-up" style="transition-delay: 0.08s">${product.title}</h2>
@@ -652,7 +666,7 @@
             </div>`
           : '';
         cover.innerHTML = `
-          <div class="collection-cover-bg"></div>
+          <div class="collection-cover-bg" data-mouse-parallax="30"></div>
           <div class="collection-cover-content">
             <span class="eyebrow fade-up">Coleção</span>
             <h3 class="collection-cover-title fade-up" style="transition-delay: 0.08s">${col.titleHtml || col.title}</h3>
@@ -819,6 +833,39 @@
       }, { threshold: 0.25 });
       document.querySelectorAll('.product-cover, .collection-cover').forEach(el => coverIo.observe(el));
 
+      // ─── PROCESSO HERO: reveal animations + scroll parallax ──────
+      const processoHero = document.querySelector('.processo-hero');
+      if (processoHero) {
+        // Reveal once when visible
+        new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) processoHero.classList.add('is-revealed'); });
+        }, { threshold: 0.2 }).observe(processoHero);
+
+        // Parallax: shift elements by a factor of their distance to viewport center
+        const parallaxEls = Array.from(processoHero.querySelectorAll('[data-parallax]'));
+        let parallaxTicking = false;
+        function updateParallax() {
+          parallaxTicking = false;
+          const heroRect = processoHero.getBoundingClientRect();
+          // Only animate when hero is near/in viewport
+          if (heroRect.bottom < 0 || heroRect.top > window.innerHeight) return;
+          const heroCenter = heroRect.top + heroRect.height / 2;
+          const viewportCenter = window.innerHeight / 2;
+          const distance = viewportCenter - heroCenter;
+          parallaxEls.forEach(el => {
+            const factor = parseFloat(el.dataset.parallax) || 0.15;
+            el.style.transform = `translate3d(0, ${(distance * factor).toFixed(1)}px, 0)`;
+          });
+        }
+        window.addEventListener('scroll', () => {
+          if (!parallaxTicking) {
+            requestAnimationFrame(updateParallax);
+            parallaxTicking = true;
+          }
+        }, { passive: true });
+        updateParallax();
+      }
+
       // ─── REVEAL side index after "Pisos · coleções" (first collections-index) ─
       const firstProduct = PRODUCTS[0];
       const firstCollection = firstProduct.collections && firstProduct.collections[0];
@@ -887,6 +934,92 @@
       }, { passive: true });
       updateHero();
 
+      // ─── MOUSE PARALLAX (reutilizável)
+      // Qualquer elemento com [data-mouse-parallax] segue o mouse devagar
+      // dentro do seu container (closest [data-mouse-parallax-host] ou parentElement)
+      function attachMouseParallax(bgEl) {
+        if (!bgEl || bgEl.__mouseParallaxAttached) return;
+        bgEl.__mouseParallaxAttached = true;
+
+        const container = bgEl.closest('[data-mouse-parallax-host]') || bgEl.parentElement;
+        if (!container) return;
+
+        // Sobrescreve transition pra remover atraso no transform.
+        // Mantém opacidade (fade-up) e outras propriedades animadas — só o transform fica instantâneo.
+        bgEl.style.transition = 'opacity 0.9s cubic-bezier(0.16,1,0.3,1)';
+
+        const MAX = parseFloat(bgEl.dataset.mouseParallax) || 40; // px máximo
+        const EASE = 0.06;
+        let targetX = 0, targetY = 0;
+        let currentX = 0, currentY = 0;
+        let active = false;
+
+        container.addEventListener('mousemove', (e) => {
+          const rect = container.getBoundingClientRect();
+          const nx = ((e.clientX - rect.left) / rect.width) - 0.5;
+          const ny = ((e.clientY - rect.top) / rect.height) - 0.5;
+          targetX = nx * MAX;
+          targetY = ny * MAX;
+          if (!active) { active = true; loop(); }
+        }, { passive: true });
+
+        container.addEventListener('mouseleave', () => {
+          targetX = 0; targetY = 0;
+          if (!active) { active = true; loop(); }
+        });
+
+        function loop() {
+          currentX += (targetX - currentX) * EASE;
+          currentY += (targetY - currentY) * EASE;
+          bgEl.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+          if (Math.abs(currentX - targetX) > 0.05 || Math.abs(currentY - targetY) > 0.05) {
+            requestAnimationFrame(loop);
+          } else {
+            active = false;
+          }
+        }
+      }
+
+      // Escaneia todos os elementos com data-mouse-parallax — atual e futuros
+      function scanMouseParallax() {
+        document.querySelectorAll('[data-mouse-parallax]').forEach(attachMouseParallax);
+      }
+      scanMouseParallax();
+      // Re-escanear de tempos em tempos (covers de coleção são adicionadas async)
+      const parallaxRescan = new MutationObserver(scanMouseParallax);
+      parallaxRescan.observe(document.body, { childList: true, subtree: true });
+
+      // ─── AUTO-SCROLL: se ficar 2s no hero sem interação, desce pra próxima seção
+      (function autoAdvanceHero() {
+        const nextSection = document.getElementById('sobre')
+          || document.getElementById('processo')
+          || document.getElementById('products-index')
+          || document.querySelector('main');
+        if (!nextSection) return;
+
+        let cancelled = false;
+        const cancel = () => {
+          cancelled = true;
+          window.removeEventListener('scroll', onInteract);
+          window.removeEventListener('wheel', onInteract);
+          window.removeEventListener('touchstart', onInteract);
+          window.removeEventListener('keydown', onInteract);
+        };
+        const onInteract = () => cancel();
+
+        // Qualquer interação cancela o auto-scroll
+        window.addEventListener('scroll', onInteract, { passive: true, once: true });
+        window.addEventListener('wheel', onInteract, { passive: true, once: true });
+        window.addEventListener('touchstart', onInteract, { passive: true, once: true });
+        window.addEventListener('keydown', onInteract, { once: true });
+
+        setTimeout(() => {
+          if (cancelled) return;
+          if (window.scrollY > 10) return; // já saiu do topo (interagiu)
+          nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 2000);
+      })();
+
       // ─── FLOATING ACTIONS: SEARCH + BACK TO TOP ──────────────────
       const searchBtn = document.getElementById('floating-search');
       const topBtn = document.getElementById('back-to-top');
@@ -908,5 +1041,48 @@
       }
       window.addEventListener('scroll', updateFloating, { passive: true });
       updateFloating();
+
+      // ─── BRAND LOCK: impede tradução automática da palavra "Parket"
+      (function lockBrand() {
+        const BRAND = 'Parket';
+        const re = new RegExp(`(${BRAND})`, 'g');
+        function wrap(root) {
+          if (!root || root.nodeType !== 1) return;
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+              if (!node.nodeValue || !node.nodeValue.includes(BRAND)) return NodeFilter.FILTER_REJECT;
+              const p = node.parentElement;
+              if (!p) return NodeFilter.FILTER_REJECT;
+              if (['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
+              if (p.closest('[translate="no"]')) return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          });
+          const nodes = [];
+          let n;
+          while ((n = walker.nextNode())) nodes.push(n);
+          nodes.forEach(node => {
+            const parts = node.nodeValue.split(re);
+            if (parts.length <= 1) return;
+            const frag = document.createDocumentFragment();
+            parts.forEach(part => {
+              if (part === BRAND) {
+                const span = document.createElement('span');
+                span.setAttribute('translate', 'no');
+                span.className = 'notranslate';
+                span.textContent = BRAND;
+                frag.appendChild(span);
+              } else if (part) {
+                frag.appendChild(document.createTextNode(part));
+              }
+            });
+            node.parentNode.replaceChild(frag, node);
+          });
+        }
+        wrap(document.body);
+        new MutationObserver((muts) => {
+          muts.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) wrap(n); }));
+        }).observe(document.body, { childList: true, subtree: true });
+      })();
 
     })();

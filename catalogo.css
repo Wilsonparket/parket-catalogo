@@ -21,9 +21,7 @@
     #hero-bg {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
-      transform: scale(calc(1 + var(--scroll-progress) * 0.5));
       filter: brightness(0.4);
-      will-change: transform;
     }
     #hero-content { position: relative; z-index: 10; color: #fff; }
 
@@ -41,6 +39,326 @@
       line-height: 0.88;
     }
 
+    /* ── Sobre a Parket (entre hero e processo) ── */
+    .sobre-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 4;
+      isolation: isolate;
+      padding: 8rem 8vw;
+      background: #000; /* camada preta fixa atrás de tudo */
+    }
+    .sobre-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('sobre%20a%20parket/Madeira.png');
+      background-size: 70% auto;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -2;
+      will-change: transform;
+      transform: rotate(0deg);
+    }
+    .sobre-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.85) 100%);
+      z-index: -1;
+    }
+    .sobre-content {
+      max-width: 50rem;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+    }
+    .sobre-content .eyebrow {
+      display: block;
+      margin-bottom: 2rem;
+      color: rgba(255,255,255,0.65);
+    }
+    .sobre-text {
+      font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+      font-weight: 300;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.92);
+      margin: 0;
+      letter-spacing: 0.005em;
+    }
+    @media (max-width: 768px) {
+      .sobre-section { padding: 5rem 7vw; min-height: 80vh; }
+      .sobre-text { font-size: 1rem; line-height: 1.7; }
+    }
+
+    /* ── O que está por trás da Parket ── (fundo branco · texto preto) */
+    .por-tras-section {
+      background: #fff;
+      color: #111;
+      padding: 12rem 8vw 16rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      position: relative;
+      z-index: 4;
+    }
+    .por-tras-content {
+      max-width: 60rem;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .por-tras-question {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 200;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: rgba(0,0,0,0.55);
+      margin: 0 0 3rem;
+    }
+    .por-tras-answer {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #111;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      .por-tras-section { padding: 5rem 7vw; min-height: 60vh; }
+      .por-tras-question { margin-bottom: 2rem; }
+    }
+
+    /* Bloco madeira + card (foto à esquerda · card preto sobreposto à direita) */
+    .madeira-feature {
+      max-width: 82rem;
+      margin: 6rem auto 0;
+      padding: 0 0 7rem;
+      width: 100%;
+      position: relative;
+    }
+    .mf-photo {
+      width: 55%;
+      max-width: 38rem;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      will-change: transform;
+    }
+    .mf-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: grayscale(0.18) contrast(1.05);
+    }
+    .mf-plus {
+      position: absolute;
+      right: -42px;
+      bottom: -42px;
+      width: 84px;
+      height: 84px;
+      border: 1px solid rgba(43,38,31,0.5);
+      border-radius: 50%;
+      color: #2b261f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      font-weight: 200;
+      line-height: 1;
+      background: #c0bda6;
+      z-index: 4;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .mf-card {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 50%;
+      background: #111;
+      color: #fff;
+      padding: 3.5rem 3rem;
+      text-align: left;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      z-index: 2;
+      will-change: transform;
+    }
+    .mf-card h3 {
+      font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      margin: 0 0 1.5rem;
+      color: #fff;
+    }
+    .mf-card-body {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.78);
+      margin: 0;
+    }
+    @media (max-width: 900px) {
+      .madeira-feature { margin-top: 4rem; padding-bottom: 3rem; }
+      .mf-photo { width: 100%; }
+      .mf-plus { right: -22px; bottom: -22px; width: 56px; height: 56px; font-size: 24px; }
+      .mf-card {
+        position: relative;
+        width: 90%;
+        margin: -40px auto 0;
+        padding: 2.25rem 1.75rem;
+      }
+      .mf-card h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+      .mf-card-body { font-size: 0.95rem; }
+    }
+
+    /* Imagem da madeira (centrada na seção "Por trás da Parket") */
+    .por-tras-madeira {
+      max-width: 60rem;
+      width: 100%;
+      margin: 6rem auto 0;
+      padding: 0;
+      display: block;
+    }
+    .por-tras-madeira img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    @media (max-width: 900px) {
+      .por-tras-madeira { margin-top: 3rem; max-width: 92%; }
+    }
+
+    /* Foto da família + heading (foto centralizada, texto sobreposto à esquerda) */
+    .por-tras-feature {
+      max-width: 82rem;
+      margin: 8rem auto 0;
+      padding: 0 0 8rem;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+      position: relative;
+    }
+    .ptf-heading {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+      justify-self: start;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+      letter-spacing: -0.005em;
+      line-height: 1.1;
+      color: #c0bda6;
+      text-transform: uppercase;
+      margin: 0;
+      text-align: left;
+      max-width: 22rem;
+      z-index: 2;
+      will-change: transform;
+    }
+    .ptf-heading .w {
+      transition: color 0.3s ease;
+      cursor: default;
+    }
+    .ptf-heading .w:hover {
+      color: #000;
+    }
+    .ptf-photo {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      width: 55%;
+      max-width: 38rem;
+      margin: 0;
+      z-index: 1;
+    }
+    .ptf-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: grayscale(0.18) contrast(1.05);
+    }
+    .ptf-plus {
+      position: absolute;
+      right: -42px;
+      bottom: -42px;
+      width: 84px;
+      height: 84px;
+      border: 1px solid rgba(0,0,0,0.7);
+      border-radius: 50%;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      font-weight: 200;
+      line-height: 1;
+      background: #fff;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .ptf-card {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 46%;
+      background: #111;
+      color: #fff;
+      padding: 3.5rem 3rem;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+      z-index: 2;
+    }
+    .ptf-card h3 {
+      font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 1.5rem;
+      color: #fff;
+    }
+    .ptf-card-body {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin: 0;
+    }
+    @media (max-width: 900px) {
+      .por-tras-feature {
+        margin-top: 4rem;
+        padding-bottom: 4rem;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .ptf-heading {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+      .ptf-photo { width: 100%; max-width: 90%; margin: 0 auto; }
+      .ptf-plus {
+        right: -22px;
+        bottom: -22px;
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+      }
+      .ptf-card {
+        position: relative;
+        width: 90%;
+        margin: -40px auto 0;
+        padding: 2.25rem 1.75rem;
+      }
+      .ptf-card h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+      .ptf-card-body { font-size: 0.95rem; line-height: 1.65; }
+    }
+
     /* ── Processo Parket (5 pilares · BG preto · ilustrações animadas) ── */
     .processo-section {
       background: #000;
@@ -48,14 +366,131 @@
       padding: 9rem 0 7rem;
       position: relative;
       z-index: 5;
+      overflow: hidden;
     }
     .processo-section .eyebrow { color: rgba(255,255,255,0.50); }
     .processo-wrap {
       max-width: 80rem;
       margin: 0 auto;
       padding: 0 6vw;
+      position: relative;
     }
-    .processo-header { margin-bottom: 5rem; }
+    .processo-header { margin-bottom: 5rem; position: relative; z-index: 3; }
+
+    /* ── Composição artística (anéis de carvalho + elementos parallax) ── */
+    .processo-hero {
+      position: relative;
+      width: 100%;
+      height: clamp(420px, 70vh, 720px);
+      margin: 0 0 8rem;
+      pointer-events: none;
+    }
+    .processo-hero-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .processo-hero-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 2;
+      padding: 0 6vw;
+    }
+    .processo-hero-text .eyebrow { margin-bottom: 1.5rem; }
+    .processo-hero-text h2 {
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: rgba(255,255,255,0.92);
+      margin: 0 0 1.5rem;
+    }
+    .processo-hero-text p {
+      max-width: 32rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* Tree rings expand from invisible to full when section enters viewport */
+    .ring-svg {
+      stroke: rgba(255,255,255,0.35);
+      fill: none;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transform-origin: center;
+      opacity: 0;
+      transition: stroke-dashoffset 2s cubic-bezier(0.16,1,0.3,1),
+                  opacity 1.5s ease,
+                  transform 2.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .processo-hero.is-revealed .ring-svg {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .processo-hero.is-revealed .ring-svg:nth-child(1) { transition-delay: 0s; }
+    .processo-hero.is-revealed .ring-svg:nth-child(2) { transition-delay: 0.12s; }
+    .processo-hero.is-revealed .ring-svg:nth-child(3) { transition-delay: 0.24s; }
+    .processo-hero.is-revealed .ring-svg:nth-child(4) { transition-delay: 0.36s; }
+    .processo-hero.is-revealed .ring-svg:nth-child(5) { transition-delay: 0.48s; }
+    .processo-hero.is-revealed .ring-svg:nth-child(6) { transition-delay: 0.60s; }
+    .processo-hero.is-revealed .ring-svg:nth-child(7) { transition-delay: 0.72s; }
+
+    /* Scattered original Parket elements with different parallax speeds */
+    .hero-scatter g, .hero-scatter > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .processo-hero.is-revealed .hero-scatter g,
+    .processo-hero.is-revealed .hero-scatter > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(1) { transition-delay: 0.8s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(2) { transition-delay: 0.95s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(3) { transition-delay: 1.10s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(4) { transition-delay: 1.25s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(5) { transition-delay: 1.40s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(6) { transition-delay: 1.55s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(7) { transition-delay: 1.70s; }
+    .processo-hero.is-revealed .hero-scatter > *:nth-child(8) { transition-delay: 1.85s; }
+
+    .hero-diagonal {
+      opacity: 0;
+      transition: opacity 2s ease 0.5s, stroke-dashoffset 2.5s cubic-bezier(0.16,1,0.3,1) 0.6s;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+    .processo-hero.is-revealed .hero-diagonal {
+      opacity: 1;
+      stroke-dashoffset: 0;
+    }
+
+    /* Parallax: applied via JS as inline transform */
+    [data-parallax] { will-change: transform; }
+
+    @media (max-width: 768px) {
+      .processo-hero { height: 60vh; margin-bottom: 4rem; }
+      .processo-hero-text h2 { font-size: 2rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ring-svg, .hero-scatter g, .hero-scatter > *, .hero-diagonal {
+        transition: none;
+        opacity: 1;
+        stroke-dashoffset: 0;
+        transform: none;
+      }
+    }
     .processo-header .display-title { color: rgba(255,255,255,0.90); }
     .processo-header p { color: rgba(255,255,255,0.55); }
     .processo-pillar {
@@ -231,6 +666,9 @@
       font-size: 0.2em;
       transform: none;
     }
+
+    /* Em modo single-category (/pisos/, /decks/, etc.), esconder o "Produto" cover */
+    html.single-category .product-cover { display: none; }
 
     /* ── Product cover (full-bleed editorial) ── */
     .product-cover {
