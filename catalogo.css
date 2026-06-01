@@ -1309,6 +1309,55 @@
     .lb-next { right: 28px; top: 50%; transform: translateY(-50%); }
     .lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.06); }
 
+    /* ── Parquet tradicional ou engenheirado? ── */
+    .tradicional-section {
+      position: relative;
+      z-index: 20;
+      background: #ffffff;
+      padding: 8rem 6vw;
+    }
+    .tradicional-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .tradicional-title {
+      font-family: 'Roboto', monospace;
+      font-size: 45px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: #000000;
+      margin: 0 0 4rem;
+    }
+    .tradicional-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .tradicional-sub {
+      margin-top: 8rem;
+      text-align: center;
+    }
+    .tradicional-subtitle {
+      font-family: 'Roboto', monospace;
+      font-size: 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: #000000;
+      margin: 0 0 3rem;
+    }
+    @media (max-width: 768px) {
+      .tradicional-sub { margin-top: 5rem; }
+      .tradicional-subtitle { font-size: clamp(1.4rem, 5vw, 2rem); margin-bottom: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .tradicional-section { padding: 5rem 7vw; }
+      .tradicional-title { font-size: clamp(1.8rem, 6vw, 2.5rem); margin-bottom: 2.5rem; }
+    }
+
     /* ── Árvore (após Sobre a Parket) ── */
     .arvore-section {
       position: relative;
@@ -1371,6 +1420,7 @@
       line-height: 1.55;
       color: #555555;
       font-weight: 400;
+      text-align: left;
     }
     .multicamadas-text p {
       margin: 0;
