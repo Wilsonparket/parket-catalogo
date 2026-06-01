@@ -31,8 +31,6 @@
               specs: [
                 { label: 'Espécies', value: 'Tauari, Cumaru, Sucupira, Canela, Peroba Mica' },
                 { label: 'Origem', value: 'Brasil · manejo sustentável' },
-                { label: 'Acabamento', value: 'Óleo natural ou verniz UV' },
-                { label: 'Indicação', value: 'Residencial · comercial' }
               ]
             },
             {
@@ -44,7 +42,6 @@
                 { label: 'Espécies', value: 'Bambu, Canela' },
                 { label: 'Origem', value: 'Madeira de reaproveitamento' },
                 { label: 'Característica', value: 'Aspecto envelhecido natural' },
-                { label: 'Indicação', value: 'Projetos com pegada autoral' }
               ]
             },
             {
@@ -56,7 +53,6 @@
                 { label: 'Espécies', value: 'Pau Ferro, Lapacho, Nogueira, Momoki' },
                 { label: 'Origem', value: 'Seleção curada · diversas procedências' },
                 { label: 'Característica', value: 'Veios, nós e matizes singulares' },
-                { label: 'Indicação', value: 'Projetos exclusivos' }
               ]
             },
             {
@@ -65,8 +61,6 @@
               specs: [
                 { label: 'Espécie', value: 'Carvalho Europeu (Quercus robur)' },
                 { label: 'Origem', value: 'Europa' },
-                { label: 'Acabamentos', value: 'Naturalle, Mont Blanc, Smoke, Armani, Capuccino e outros' },
-                { label: 'Indicação', value: 'Residencial · comercial' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2026/03/4D5A0231-b-1-scaled.jpg", name: "Carvalho Mont Blanc" },
@@ -107,8 +101,6 @@
               specs: [
                 { label: 'Espécies', value: 'Carvalho Europeu, Pinho de Riga' },
                 { label: 'Formato', value: 'Réguas extragrandes (XL)' },
-                { label: 'Acabamentos', value: 'Naturalle, Mont Blanc, Smoke' },
-                { label: 'Indicação', value: 'Espaços amplos · continuidade visual' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_GR-01.jpg", name: "Carvalho Europeu Smoke" },
@@ -130,7 +122,6 @@
                 { label: 'Espécie', value: 'Pinho de Riga' },
                 { label: 'Origem', value: 'Reaproveitamento de construções europeias' },
                 { label: 'Característica', value: 'Densidade e narrativa histórica' },
-                { label: 'Indicação', value: 'Projetos com pegada autoral' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_PR-07.jpg", name: "Pinho de Riga" },
@@ -147,8 +138,6 @@
               specs: [
                 { label: 'Padrões', value: 'Chevron, Espinha de Peixe, Versalles, Mosaico' },
                 { label: 'Espécies', value: 'Carvalho Europeu, Nogueira' },
-                { label: 'Acabamentos', value: 'Naturalle, Mont Blanc, Batman, Smoked' },
-                { label: 'Indicação', value: 'Projetos refinados · alta sofisticação' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_CL-02.jpg", name: "Chevron Naturale" },
@@ -172,7 +161,6 @@
                 { label: 'Composição', value: 'Madeira + Pedra + Latão' },
                 { label: 'Espécies', value: 'Carvalho Europeu, Nogueira' },
                 { label: 'Pedras', value: 'Travertino, Carrara, Nero Marquina, Quartzitos' },
-                { label: 'Indicação', value: 'Projetos exclusivos sob medida' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_PI_MA-04.jpg", name: "Carvalho Europeu Smoke + Travertino Navona" },
@@ -198,8 +186,6 @@
               specs: [
                 { label: 'Espécies', value: 'Itaúba, Cumaru, Ipê' },
                 { label: 'Origem', value: 'Brasil · manejo sustentável' },
-                { label: 'Acabamentos', value: 'Natural e oxidado' },
-                { label: 'Indicação', value: 'Áreas externas · alta durabilidade' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_BR-11.jpg", name: "Itaúba" },
@@ -221,7 +207,6 @@
                 { label: 'Tons', value: 'Preto, Marrom, Cinza' },
                 { label: 'Origem', value: 'Engenharia europeia' },
                 { label: 'Característica', value: 'Peças longas e uniformes' },
-                { label: 'Indicação', value: 'Áreas externas · acabamento premium' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_EU-01.jpg", name: "Eurodeck Preto" },
@@ -233,10 +218,9 @@
               key: 'kebony', title: 'Kebony',
               desc: 'Tecnologia norueguesa de modificação que transforma madeiras sustentáveis em joias estéticas e duráveis. O Kebony ganha uma belíssima pátina prateada atemporal.',
               specs: [
+                { label: 'Espécies', value: 'Momoki, Kebony®' },
                 { label: 'Tecnologia', value: 'Modificação Kebony® (Noruega)' },
-                { label: 'Acabamentos', value: 'Kebony Clear, Kebony Oxidado' },
                 { label: 'Característica', value: 'Pátina prateada atemporal' },
-                { label: 'Indicação', value: 'Áreas externas de alto desempenho' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_KE-01.jpg", name: "Kebony Oxidado" },
@@ -257,8 +241,6 @@
               specs: [
                 { label: 'Espécies', value: 'Teca, Peroba Demolição, Momoki' },
                 { label: 'Característica', value: 'Soluções sob medida · padrões autorais' },
-                { label: 'Acabamentos', value: 'Natural e oxidado' },
-                { label: 'Indicação', value: 'Áreas molhadas · piscinas' }
               ],
               images: [
                 { src: "https://parket.com.br/wp-content/uploads/2025/10/PRO_DE_UN-05.jpg", name: "Teca" },
@@ -390,13 +372,12 @@
         document.documentElement.classList.add('single-category');
         const pi = document.getElementById('products-index');
         if (pi) pi.style.display = 'none';
-        // Replace hero subtitle "Coleção 2026" with two-line "Catálogo / <Category>"
+        // Hero subtitle: só o nome da categoria
         const heroContent = document.getElementById('hero-content');
         const catTitle = (PRODUCTS[0] && PRODUCTS[0].title) || SINGLE_CATEGORY;
         if (heroContent) {
           heroContent.innerHTML = `
-            <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50 block">Catálogo</span>
-            <span class="font-label uppercase tracking-[0.6em] text-[22.5px] text-white block mt-3">${catTitle}</span>
+            <span class="font-label uppercase tracking-[0.6em] text-[22.5px] text-white block">${catTitle}</span>
           `;
         }
         // Use category-specific hero image (each /<cat>/autoload/ has its own)
@@ -490,7 +471,6 @@
             <img decoding="async" loading="${loadingAttr}"${priorityAttr} src="${proxiedSrc}" alt="${caption || title + ' ' + (i + 1)}"${focusStyle}>
             <figcaption class="photo-stream-caption">${label}</figcaption>
           `;
-          item.addEventListener('click', () => openLightbox(photos.map(p => ({...p, src: proxify(p.src, 2400)})), i));
           container.appendChild(item);
           inViewIo.observe(item);
         });
@@ -766,6 +746,55 @@
         sideIndex.style.display = 'none';
       }
 
+      // ─── HAMBÚRGUER: menu de coleções ───────────────────────────
+      (function buildMenu() {
+        const toggle = document.getElementById('menu-toggle');
+        const overlay = document.getElementById('menu-overlay');
+        const menuList = document.getElementById('menu-list');
+        if (!toggle || !overlay || !menuList) return;
+
+        // Coleções a exibir: do produto único (single-category) ou de todos
+        const menuItems = [];
+        PRODUCTS.forEach(p => {
+          (p.collections || []).forEach(c => {
+            menuItems.push({ label: c.titleHtml || c.title, target: `colecao-${p.key}-${c.key}` });
+          });
+        });
+
+        // Sem coleções → esconde o hambúrguer
+        if (!menuItems.length) { toggle.style.display = 'none'; return; }
+
+        menuItems.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="#${item.target}">${item.label}</a>`;
+          menuList.appendChild(li);
+        });
+
+        function openMenu() {
+          overlay.classList.add('is-open');
+          toggle.classList.add('is-open');
+          toggle.setAttribute('aria-expanded', 'true');
+          overlay.setAttribute('aria-hidden', 'false');
+        }
+        function closeMenu() {
+          overlay.classList.remove('is-open');
+          toggle.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          overlay.setAttribute('aria-hidden', 'true');
+        }
+        toggle.addEventListener('click', () => {
+          overlay.classList.contains('is-open') ? closeMenu() : openMenu();
+        });
+        // Clicar num link fecha o menu (o scroll é tratado pelo handler global de âncoras)
+        menuList.addEventListener('click', (e) => {
+          if (e.target.closest('a')) closeMenu();
+        });
+        // ESC fecha
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeMenu();
+        });
+      })();
+
       // Explicit click handler for internal anchor links — reliable smooth scroll
       document.addEventListener('click', (e) => {
         const link = e.target.closest('a[href^="#"]');
@@ -799,7 +828,6 @@
 
         if (product.collections && product.collections.length) {
           productSection.appendChild(buildProductCover(product));
-          productSection.appendChild(buildCollectionsIndex(product));
           product.collections.forEach((col, ci) => {
             productSection.appendChild(buildCollection(product, col, ci));
           });
@@ -1022,27 +1050,46 @@
         }, 2000);
       })();
 
-      // ─── FLOATING ACTIONS: SEARCH + BACK TO TOP ──────────────────
-      const searchBtn = document.getElementById('floating-search');
+      // ─── BACK TO TOP ─────────────────────────
       const topBtn = document.getElementById('back-to-top');
 
-      searchBtn.addEventListener('click', () => {
-        const trigger = document.querySelector('parket-nav [data-action="open-search"]');
-        if (trigger) trigger.click();
-      });
-
-      topBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // Show both buttons after scrolling past hero
-      function updateFloating() {
-        const past = window.scrollY > window.innerHeight * 0.7;
-        searchBtn.classList.toggle('is-visible', past);
-        topBtn.classList.toggle('is-visible', past);
+      if (topBtn) {
+        topBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        // "Voltar ao topo" aparece após rolar além do hero
+        const updateFloating = () => {
+          topBtn.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.7);
+        };
+        window.addEventListener('scroll', updateFloating, { passive: true });
+        updateFloating();
       }
-      window.addEventListener('scroll', updateFloating, { passive: true });
-      updateFloating();
+
+      // ─── FADE-OUT por scroll nas linhas de "Madeira multicamadas"
+      (function scrollFadeMulticamadas() {
+        const els = document.querySelectorAll('.multicamadas-line');
+        if (!els.length) return;
+        let ticking = false;
+        const update = () => {
+          const vh = window.innerHeight;
+          els.forEach(el => {
+            const r = el.getBoundingClientRect();
+            const fadeStart = vh * 0.45;
+            const fadeEnd = -r.height * 0.5;
+            const t = r.top;
+            let op;
+            if (t >= fadeStart) op = 1;
+            else if (t <= fadeEnd) op = 0;
+            else op = (t - fadeEnd) / (fadeStart - fadeEnd);
+            el.style.setProperty('--scroll-opacity', op.toFixed(3));
+          });
+          ticking = false;
+        };
+        window.addEventListener('scroll', () => {
+          if (!ticking) { requestAnimationFrame(update); ticking = true; }
+        }, { passive: true });
+        update();
+      })();
 
       // ─── BRAND LOCK: impede tradução automática da palavra "Parket"
       (function lockBrand() {

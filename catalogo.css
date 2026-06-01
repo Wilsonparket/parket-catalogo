@@ -11,6 +11,127 @@
 
     parket-nav > nav { display: none !important; }
 
+    /* ── Nav bar fixa transparente (sem faixa) ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 140;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem 6vw;
+      background: transparent;
+      pointer-events: none;
+    }
+    .topbar > * { pointer-events: auto; }
+    /* Hambúrguer (canto direito da navbar) */
+    .menu-toggle {
+      position: absolute;
+      right: 6vw;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+      z-index: 160;
+    }
+    .menu-toggle span {
+      display: block;
+      width: 100%;
+      height: 1.5px;
+      background: #fff;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+    }
+    .menu-toggle.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+    .menu-toggle.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    @media (max-width: 768px) {
+      .menu-toggle { right: 7vw; width: 26px; height: 20px; }
+    }
+
+    /* Menu overlay de coleções */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 145;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .menu-overlay.is-open { opacity: 1; visibility: visible; }
+    .menu-overlay-label {
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .menu-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.6rem;
+    }
+    .menu-list li {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .menu-overlay.is-open .menu-list li { opacity: 1; transform: translateY(0); }
+    .menu-overlay.is-open .menu-list li:nth-child(1) { transition-delay: 0.10s; }
+    .menu-overlay.is-open .menu-list li:nth-child(2) { transition-delay: 0.16s; }
+    .menu-overlay.is-open .menu-list li:nth-child(3) { transition-delay: 0.22s; }
+    .menu-overlay.is-open .menu-list li:nth-child(4) { transition-delay: 0.28s; }
+    .menu-overlay.is-open .menu-list li:nth-child(5) { transition-delay: 0.34s; }
+    .menu-overlay.is-open .menu-list li:nth-child(6) { transition-delay: 0.40s; }
+    .menu-overlay.is-open .menu-list li:nth-child(7) { transition-delay: 0.46s; }
+    .menu-overlay.is-open .menu-list li:nth-child(8) { transition-delay: 0.52s; }
+    .menu-list a {
+      font-weight: 200;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.8rem, 5vw, 3.25rem);
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.3s ease, letter-spacing 0.4s ease;
+      line-height: 1.15;
+    }
+    .menu-list a:hover { color: #fff; letter-spacing: 0.01em; }
+
+    .topbar-logo-link {
+      display: inline-flex;
+      line-height: 0;
+    }
+    .topbar-logo {
+      height: 18px;
+      width: auto;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
+    }
+    .topbar-logo-link:hover .topbar-logo { opacity: 1; }
+    @media (max-width: 768px) {
+      .topbar { padding: 1rem 7vw; }
+      .topbar-logo { height: 15px; }
+    }
+
     /* ── Hero with parallax zoom ── */
     #hero-viewport { height: 100vh; position: relative; background: #000; }
     #hero-sticky {
@@ -39,38 +160,18 @@
       line-height: 0.88;
     }
 
-    /* ── Sobre a Parket (entre hero e processo) ── */
+    /* ── Sobre a Parket (fundo preto, sem imagem) ── */
     .sobre-section {
       position: relative;
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       z-index: 4;
-      isolation: isolate;
       padding: 8rem 8vw;
-      background: #000; /* camada preta fixa atrás de tudo */
-    }
-    .sobre-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('sobre%20a%20parket/Madeira.png');
-      background-size: 70% auto;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: -2;
-      will-change: transform;
-      transform: rotate(0deg);
-    }
-    .sobre-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.85) 100%);
-      z-index: -1;
+      background: #000;
     }
     .sobre-content {
-      max-width: 50rem;
+      max-width: 52rem;
       text-align: center;
       color: #fff;
       position: relative;
@@ -79,19 +180,31 @@
     .sobre-content .eyebrow {
       display: block;
       margin-bottom: 2rem;
-      color: rgba(255,255,255,0.65);
+      color: rgba(255,255,255,0.55);
+    }
+    .sobre-headline {
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      font-size: clamp(1.27rem, 2.99vw, 2.42rem);
+      color: rgba(255,255,255,0.95);
+      margin: 0 0 1rem;
+      white-space: nowrap;
     }
     .sobre-text {
-      font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
       font-weight: 300;
       line-height: 1.75;
-      color: rgba(255,255,255,0.92);
-      margin: 0;
-      letter-spacing: 0.005em;
+      color: rgba(255,255,255,0.72);
+      margin: 0 auto;
+      max-width: 44rem;
     }
+    /* Espaço (linha em branco) entre os dois parágrafos */
+    .sobre-text + .sobre-text { margin-top: 1.75rem; }
     @media (max-width: 768px) {
       .sobre-section { padding: 5rem 7vw; min-height: 80vh; }
-      .sobre-text { font-size: 1rem; line-height: 1.7; }
+      .sobre-headline { font-size: 1.25rem; margin-bottom: 1.5rem; white-space: normal; }
+      .sobre-text { font-size: 0.98rem; line-height: 1.7; }
     }
 
     /* ── O que está por trás da Parket ── (fundo branco · texto preto) */
@@ -869,7 +982,6 @@
       height: 100vh;
       overflow: hidden;
       background: #000;
-      cursor: zoom-in;
     }
     .photo-stream-item img {
       width: 100%;
@@ -1196,6 +1308,141 @@
     .lb-prev { left: 28px; top: 50%; transform: translateY(-50%); }
     .lb-next { right: 28px; top: 50%; transform: translateY(-50%); }
     .lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.06); }
+
+    /* ── Árvore (após Sobre a Parket) ── */
+    .arvore-section {
+      position: relative;
+      z-index: 4;
+      background: #000;
+      padding: 0 6vw 6rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .arvore-img {
+      width: 109%;
+      max-width: none;
+      height: auto;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .arvore-section { padding: 4rem 7vw; }
+    }
+
+    /* ── Madeira Multicamadas (BG branco) ── */
+    .multicamadas-section {
+      position: relative;
+      z-index: 20;
+      background: #ffffff;
+      padding: 10rem 6vw;
+      font-family: 'Roboto', monospace;
+    }
+    .multicamadas-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .multicamadas-line {
+      font-size: 45px;
+      line-height: 1;
+      letter-spacing: 0;
+      font-weight: 700;
+      margin: 0;
+      color: #000000;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .multicamadas-accent {
+      color: #aaa391;
+    }
+    .multicamadas-line.fade-up.visible {
+      opacity: var(--scroll-opacity, 1);
+    }
+    .multicamadas-img {
+      display: block;
+      margin: 4rem auto 0;
+      max-width: 85%;
+      height: auto;
+    }
+    .multicamadas-text {
+      max-width: 880px;
+      margin: 4rem auto 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      line-height: 1.55;
+      color: #555555;
+      font-weight: 400;
+    }
+    .multicamadas-text p {
+      margin: 0;
+    }
+    /* ── Bloco "Você chamaria isso..." (texto + imagem CAMADAS MADEIRAS) ── */
+    .camadas-block {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 8rem auto 0;
+    }
+    .camadas-text {
+      width: 23%;
+      flex-shrink: 0;
+      margin-left: 8%;
+      margin-right: 2%;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      position: relative;
+      z-index: 2;
+    }
+    .camadas-line {
+      font-family: 'Roboto', monospace;
+      font-size: 45px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: 0;
+      color: #aaa391;
+      margin: 0;
+      text-align: left;
+    }
+    .camadas-img-wrap {
+      width: 38%;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .camadas-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .camadas-plantas {
+      position: absolute;
+      bottom: 8%;
+      left: 56%;
+      width: 120%;
+      height: auto;
+      pointer-events: none;
+      z-index: 3;
+    }
+    @media (max-width: 768px) {
+      .camadas-block {
+        flex-direction: column;
+        gap: 2.5rem;
+        margin-top: 5rem;
+        overflow: visible;
+      }
+      .camadas-text { width: 100%; margin: 0; align-items: center; text-align: center; }
+      .camadas-line { font-size: clamp(2rem, 8vw, 3.25rem); text-align: center; }
+      .camadas-img-wrap { width: 85%; }
+      .camadas-plantas { width: 75%; left: 50%; bottom: 8%; }
+    }
+    @media (max-width: 768px) {
+      .multicamadas-text { font-size: 17px; margin-top: 3rem; }
+    }
+    @media (max-width: 768px) {
+      .multicamadas-section { padding: 6rem 7vw; }
+      .multicamadas-line { font-size: clamp(2rem, 8vw, 3.25rem); }
+    }
 
     /* ── Mobile tweaks ── */
     @media (max-width: 768px) {

@@ -12,6 +12,7 @@
   <link rel="preload" as="image" href="autoload/Hero.webp">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <script src="assets/js/components.js"></script>
   <parket-seo is-main></parket-seo>
@@ -34,13 +35,26 @@
 
   <parket-nav return-url="index.html" return-text=""></parket-nav>
 
+  <!-- Nav bar fixa transparente -->
+  <header class="topbar">
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="#" class="topbar-logo-link" aria-label="Parket">
+      <img decoding="async" src="logo-parket.webp" alt="Parket" class="topbar-logo">
+    </a>
+  </header>
+
+  <!-- Menu de coleções (aberto pelo hambúrguer) -->
+  <nav id="menu-overlay" class="menu-overlay" aria-hidden="true" aria-label="Coleções">
+    <span class="menu-overlay-label">Coleções</span>
+    <ul id="menu-list" class="menu-list"></ul>
+  </nav>
+
   <!-- Side index (right) -->
   <nav id="side-index" class="side-index" aria-label="Índice"></nav>
 
   <!-- Floating actions -->
-  <button id="floating-search" class="floating-action" type="button" aria-label="Buscar">
-    <span class="material-symbols-outlined">search</span>
-  </button>
   <button id="back-to-top" class="floating-action" type="button" aria-label="Voltar ao topo">
     <span class="material-symbols-outlined">arrow_upward</span>
   </button>
@@ -52,7 +66,6 @@
       <div id="hero-content" class="text-center">
         <span class="font-label uppercase tracking-[0.6em] text-[15px] text-white/50">Coleção 2026</span>
       </div>
-      <img decoding="async" src="logo-parket.webp" alt="Parket" class="absolute top-6 left-1/2 -translate-x-1/2 h-4 md:h-5 w-auto opacity-80 z-10">
       <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
         <span class="font-label text-[11px] uppercase tracking-[0.4em]">Scroll</span>
         <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
@@ -62,68 +75,29 @@
 
   <!-- ─── SOBRE A PARKET ─── -->
   <section id="sobre" class="sobre-section">
-    <div class="sobre-bg" data-mouse-parallax="40"></div>
-    <div class="sobre-overlay"></div>
     <div class="sobre-content">
       <span class="eyebrow fade-up">Sobre a Parket</span>
-      <p class="sobre-text fade-up" style="transition-delay: 0.1s">
-        À primeira vista, pisos de madeira podem parecer iguais. Na Parket, porém,
-        a diferença está nos detalhes: tecnologia, matérias-primas selecionadas,
-        acabamento impecável e compromisso com a qualidade. Mais do que revestimentos,
-        criamos ambientes sofisticados, duráveis e atemporais.
+      <h2 class="sobre-headline fade-up" style="transition-delay: 0.08s">
+        Meio século transformando madeira em legado.
+      </h2>
+      <p class="sobre-text fade-up" style="transition-delay: 0.16s">
+        A Parket nasce da convicção de que a madeira é a linguagem mais autêntica da
+        arquitetura brasileira. Cada projeto que realizamos é uma tradução precisa entre
+        o desejo do arquiteto e a natureza do material.
+      </p>
+      <p class="sobre-text fade-up" style="transition-delay: 0.24s">
+        Trabalhamos com madeiras de manejo sustentável, processos industriais de altíssima
+        precisão e uma equipe técnica que entende que cada milímetro importa. Nosso compromisso
+        é entregar superfícies que envelhecem com beleza — e que resistem ao tempo com a mesma
+        elegância do primeiro dia.
       </p>
     </div>
   </section>
 
-  <!-- ─── O QUE ESTÁ POR TRÁS DA PARKET ─── -->
-  <section id="por-tras" class="por-tras-section">
-    <div class="por-tras-content">
-      <h2 class="por-tras-question fade-up">O que está por trás da Parket?</h2>
-      <p class="por-tras-answer fade-up" style="transition-delay: 0.15s">
-        Uma paixão de família,<br>
-        uma longa história de perspicácia empresarial.
-      </p>
-    </div>
-
-    <!-- Bloco família (card comentado temporariamente — será reativado em breve) -->
-    <div class="por-tras-feature" data-mouse-parallax-host>
-      <h3 class="ptf-heading fade-up" data-mouse-parallax="55">
-        <span class="w">As</span> <span class="w">origens</span><br>
-        <span class="w">de</span> <span class="w">uma</span> <span class="w">paixão</span><br>
-        <span class="w">familiar.</span>
-      </h3>
-      <figure class="ptf-photo fade-up" data-mouse-parallax="-18">
-        <img src="FOTO%20FAMILIA.png" alt="Família Parket — gerações de trabalho com madeira" loading="lazy" decoding="async">
-      </figure>
-      <!-- CARD TEMPORARIAMENTE OCULTO (será reativado em breve)
-      <aside class="ptf-card fade-up" data-mouse-parallax="35" style="transition-delay: 0.15s">
-        <h3>Séculos de trabalho<br>com madeira.</h3>
-        <p class="ptf-card-body">
-          Mais de meio século dedicado à madeira como matéria, como cultura e como ofício.
-          Cada peça que sai da Parket carrega o aprendizado de gerações sobre como tratar
-          a árvore desde a floresta até o último encaixe da obra.
-        </p>
-      </aside>
-      -->
-    </div>
-
-    <!-- Bloco madeira + card "Séculos de trabalho com madeira" -->
-    <div class="madeira-feature" data-mouse-parallax-host>
-      <figure class="mf-photo fade-up" data-mouse-parallax="-18">
-        <img src="Imagem%20madeira.png" alt="Madeira Parket" loading="lazy" decoding="async">
-      </figure>
-      <aside class="mf-card fade-up" data-mouse-parallax="35" style="transition-delay: 0.15s">
-        <h3>Séculos de trabalho<br>com madeira.</h3>
-        <p class="mf-card-body">
-          Mais de meio século dedicado à madeira como matéria, como cultura e como ofício.
-          Cada peça que sai da Parket carrega o aprendizado de gerações sobre como tratar
-          a árvore desde a floresta até o último encaixe da obra.
-        </p>
-      </aside>
-    </div>
-
+  <!-- ─── ARVORE ─── -->
+  <section id="arvore" class="arvore-section">
+    <img src="imagens descritivas/Arvore.png" alt="Árvore" class="arvore-img fade-up" data-mouse-parallax="40" loading="eager" decoding="async">
   </section>
-
 
   <!-- ─── ESCOLHA UM PRODUTO ─── -->
   <section id="products-index" class="index-block">
@@ -139,8 +113,35 @@
   <!-- ─── PRODUCT SECTIONS (injected) ─── -->
   <main id="products" class="relative z-10 bg-black"></main>
 
-  <!-- ─── GUIA TÉCNICO ─── -->
-  <section class="relative z-20 bg-black text-white">
+  <!-- ─── MADEIRA MULTICAMADAS ─── -->
+  <section id="multicamadas" class="multicamadas-section">
+    <div class="multicamadas-inner">
+      <p class="multicamadas-line fade-up">Madeira multicamadas.</p>
+      <p class="multicamadas-line fade-up">O que há por trás dela?</p>
+      <p class="multicamadas-line multicamadas-accent fade-up">Estrutura tecnológica</p>
+      <p class="multicamadas-line multicamadas-accent fade-up">e mecânica de ponta.</p>
+      <img src="imagens descritivas/Camadas.png" alt="Madeira multicamadas" class="multicamadas-img fade-up" data-mouse-parallax="40" loading="lazy" decoding="async">
+      <div class="multicamadas-text">
+        <p class="fade-up">Se você acredita que a substância é mais importante que a aparência, você está no lugar certo. O suporte subjacente é o verdadeiro núcleo da tecnologia do Piso da <span translate="no" class="notranslate">Parket</span>. A estrutura e a mecânica não são a base do valor de um carro esportivo de alta qualidade? A aderência à estrada e a segurança não são mais importantes do que a carroceria ao avaliar o desempenho de um carro? Bem, o mesmo se aplica a um piso da <span translate="no" class="notranslate">Parket</span> com estabilidade aprimorada. A tecnologia de suporte está oculta, mas é o que faz toda a diferença.</p>
+      </div>
+    </div>
+
+    <div class="camadas-block" data-mouse-parallax-host>
+      <div class="camadas-text" data-mouse-parallax="40">
+        <p class="camadas-line fade-up">Você chamaria</p>
+        <p class="camadas-line fade-up">isso</p>
+        <p class="camadas-line fade-up">simplesmente</p>
+        <p class="camadas-line fade-up">de piso de madeira?</p>
+      </div>
+      <div class="camadas-img-wrap">
+        <img src="CAMADAS MADEIRAS.png" alt="Camadas madeiras" class="camadas-img fade-up" data-mouse-parallax="-50" loading="lazy" decoding="async">
+        <img src="PLANTAS.png" alt="" aria-hidden="true" class="camadas-plantas fade-up" data-mouse-parallax="-50" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── GUIA TÉCNICO (oculto temporariamente — reativar removendo o atributo hidden) ─── -->
+  <section hidden class="relative z-20 bg-black text-white">
     <div class="px-12 max-w-screen-2xl mx-auto pt-32 pb-32">
       <div class="border-t border-white/10 pt-16">
         <span class="eyebrow block mb-6">Guia Técnico</span>
