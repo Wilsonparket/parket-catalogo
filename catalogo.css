@@ -1374,10 +1374,10 @@
       text-align: center;
     }
     .porque-title {
-      font-family: 'Roboto', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 45px;
-      font-weight: 700;
-      text-transform: uppercase;
+      font-weight: 200;
+      letter-spacing: -0.03em;
       line-height: 1.1;
       color: #ffffff;
       margin: 0 0 4rem;
@@ -1402,7 +1402,7 @@
       align-items: center;
     }
     .arvore-img {
-      width: 109%;
+      width: 75.21%;
       max-width: none;
       height: auto;
       display: block;
